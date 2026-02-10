@@ -235,7 +235,7 @@
             .stat-box { text-align: center; }
             .ticker-wrap { height: 35px; }
             .ticker__item { font-size: 0.75rem; }
-            #live-toast-container { bottom: 50px; right: 10px; left: 10px; align-items: center; } /* Mobile Notification fix */
+            #live-toast-container { bottom: 50px; right: 10px; left: 10px; align-items: center; }
         }
     </style>
 </head>
@@ -248,7 +248,9 @@
     </div>
 
     <div id="particles"></div>
-    <div id="live-toast-container"></div> <video autoplay muted loop playsinline id="bg-video">
+    <div id="live-toast-container"></div> 
+
+    <video autoplay muted loop playsinline id="bg-video">
         <source src="https://static.videezy.com/system/resources/previews/000/042/179/original/Traffic_lights_timelapse.mp4" type="video/mp4">
     </video>
 
@@ -399,7 +401,6 @@
     </div>
 
     <script>
-        // === SERVERIO NUSTATYMAI ===
         const SERVER_CONFIG = {
             server_ip: 'connect cfx.re/join/SOON',
             status: { policija: false, medikai: false, mechanikai: false },
@@ -408,7 +409,6 @@
             redirect: 'https://twoside.lt'
         };
 
-        // === FAKE LIVE NOTIFICATIONS (GENERATORIUS) ===
         const fakeNames = ["Jonas_K.", "Lukas_P.", "Karolis_B.", "Mantas_S.", "Tomas_G.", "Deividas_M.", "Paulius_A.", "Rokas_Z."];
         const fakeActions = [
             { text: "nusipirko VIP Gold", icon: "fa-crown", color: "#ffc107" },
@@ -434,34 +434,24 @@
             `;
 
             container.appendChild(toast);
-
-            // Panaikinti po 4 sekundžių
-            setTimeout(() => {
-                toast.classList.add('hide');
-                setTimeout(() => toast.remove(), 500);
-            }, 4000);
+            setTimeout(() => { toast.classList.add('hide'); setTimeout(() => toast.remove(), 500); }, 4000);
         }
 
-        // === ANIMACIJA SKAIČIAMS ===
-        function animateValue(obj, start, end, duration) {
+        function animateValue(obj, start, end, duration, suffix) {
             let startTimestamp = null;
             const step = (timestamp) => {
                 if (!startTimestamp) startTimestamp = timestamp;
                 const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                obj.innerHTML = Math.floor(progress * (end - start) + start) + obj.innerHTML.replace(/[0-9]/g, '');
-                if (progress < 1) {
-                    window.requestAnimationFrame(step);
-                } else {
-                    obj.innerHTML = end + obj.innerHTML.replace(/[0-9]/g, '');
-                }
+                const val = Math.floor(progress * (end - start) + start);
+                obj.innerHTML = val + suffix;
+                if (progress < 1) window.requestAnimationFrame(step);
             };
             window.requestAnimationFrame(step);
         }
 
-        // === DALELĖS (PARTICLES) ===
         function createParticles() {
             const container = document.getElementById('particles');
-            const particleCount = 20; // Kiekis
+            const particleCount = 20;
             for(let i=0; i<particleCount; i++) {
                 let part = document.createElement('div');
                 part.className = 'particle';
@@ -476,7 +466,6 @@
             }
         }
 
-        // === 3D TILT EFFECT ===
         function initTilt() {
             const cards = document.querySelectorAll('.rule-card, .vip-card');
             cards.forEach(card => {
@@ -486,7 +475,7 @@
                     const y = e.clientY - rect.top;
                     const centerX = rect.width / 2;
                     const centerY = rect.height / 2;
-                    const rotateX = ((y - centerY) / centerY) * -5; // Max 5 deg
+                    const rotateX = ((y - centerY) / centerY) * -5;
                     const rotateY = ((x - centerX) / centerX) * 5;
                     card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
                 });
@@ -496,7 +485,6 @@
             });
         }
 
-        // === DASHBOARD LOGIKA ===
         function initDashboard() {
             const setupCard = (id, isOpen, openText) => {
                 const btn = document.getElementById(`btn-${id}`);
@@ -516,14 +504,11 @@
             setupCard('mechanikai', SERVER_CONFIG.status.mechanikai, 'Mechanikai');
         }
 
-        // --- PAKEISTA: AUTO SCROLL FUNKCIJA ---
         function showSection(id) {
             document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
             document.getElementById(`link-${id}`)?.classList.add('active');
             const element = document.getElementById(id);
-            if(element) {
-                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
+            if(element) element.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         const modal = document.getElementById('appModal');
@@ -539,22 +524,14 @@
             fetch(SERVER_CONFIG.webhook, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: "Website Bot", avatar_url: "https://i.imgur.com/AfFp7pu.png", embeds: [{ title: `📄 Nauja Anketa: ${document.getElementById('appType').value}`, color: 3447003, fields: [{ name: "Discord", value: document.getElementById('user-name').innerText || "?", inline: true }, { name: "Vardas (IC)", value: document.getElementById('ign').value, inline: true }, { name: "Amžius", value: document.getElementById('age').value, inline: true }, { name: "Motyvacija", value: document.getElementById('reason').value }, { name: "Patirtis", value: document.getElementById('experience').value }], footer: { text: "TwoSide RP Sistema" }, timestamp: new Date().toISOString() }] }) }).then(() => { alert('Anketa gauta!'); closeApp(); document.getElementById('applicationForm').reset(); }).finally(() => btn.innerText = originalText);
         }
 
-        // --- PAKEISTA COPY FUNKCIJA (Fix) ---
         function copyIP() {
-            // Paimam IP is konfigo
             const ip = SERVER_CONFIG.server_ip;
-
-            // 1. Nukopijuojam
             navigator.clipboard.writeText(ip).then(() => {
                 const toast = document.getElementById("toast");
                 toast.className = "show";
                 setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
             });
-
-            // 2. Bandom atidaryti FiveM (su 0.5s delsimu)
-            setTimeout(() => {
-                window.location.href = `fivem://${ip}`;
-            }, 500);
+            setTimeout(() => { window.location.href = `fivem://${ip}`; }, 500);
         }
 
         function loginWithDiscord() { window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${SERVER_CONFIG.client_id}&redirect_uri=${encodeURIComponent(SERVER_CONFIG.redirect)}&response_type=token&scope=identify`; }
@@ -570,27 +547,16 @@
         }
 
         window.onload = () => {
-            // Krovimo ekranas
             setTimeout(() => { document.getElementById('preloader').classList.add('hidden'); }, 1500);
-            
-            createParticles();
-            initTilt();
-            initDashboard();
-
-            // Paleidžiam live notifikacijas (pradeda veikti po 10s, kad negąsdintų iškart)
-            setTimeout(() => {
-                setInterval(showFakeNotification, 12000); // Kas 12 sekundžių
-                showFakeNotification(); // Pirmas kartas iškart
-            }, 10000);
+            createParticles(); initTilt(); initDashboard();
+            setTimeout(() => { setInterval(showFakeNotification, 12000); showFakeNotification(); }, 10000);
 
             const token = new URLSearchParams(window.location.hash.slice(1)).get('access_token') || localStorage.getItem('discord_token');
             if(token) { localStorage.setItem('discord_token', token); if(window.location.hash) window.history.replaceState({}, document.title, "/"); fetchDiscordUser(token); }
             
-            // Animacija skaičiams
             const pCount = document.getElementById('pCount');
             const pPing = document.getElementById('pPing');
             const randCount = 60 + Math.floor(Math.random() * 15);
-            
             const spanCount = '<span style="font-size:1.5rem; color:#888;">/128</span>';
             const spanPing = '<span style="font-size:1.5rem; color:#888;">ms</span>';
             
@@ -598,8 +564,8 @@
             pPing.innerHTML = '0' + spanPing;
             
             setTimeout(() => {
-                animateValue(pCount, 0, randCount, 2000);
-                animateValue(pPing, 0, 24, 2000);
+                animateValue(pCount, 0, randCount, 2000, spanCount);
+                animateValue(pPing, 0, 24, 2000, spanPing);
             }, 1600);
         };
     </script>
