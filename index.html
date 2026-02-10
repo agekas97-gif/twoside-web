@@ -196,8 +196,8 @@
         <div class="nav-right">
             <div class="nav-links">
                 <a onclick="showSection('home')" id="link-home" class="active">PAGRINDINIS</a>
-                <a onclick="showSection('about')" id="link-about">APRAŠYMAS</a>
-                <a onclick="showSection('rules')" id="link-rules">TAISYKLĖS</a>
+                <a onclick="showSection('about')" id="link-about">SERVERIO APRAŠYMAS</a>
+                <a onclick="showSection('rules')" id="link-rules">SERVERIO TAISYKLĖS</a>
             </div>
             
             <div id="auth-container">
@@ -273,9 +273,9 @@
             <div class="glass-card">
                 <h2 style="font-size: 3rem; margin-bottom: 40px;">KODĖL <span class="blue-gradient">TWOSIDE?</span></h2>
                 <div class="dash-grid">
-                    <div class="rule-card"><i class="fas fa-tachometer-alt"></i><h4>Optimizuota</h4><p>Serveris sukurtas veikti be trikdžių net ir su silpnesniais kompiuteriais.</p></div>
+                    <div class="rule-card"><i class="fas fa-tachometer-alt"></i><h4>Optimizuota</h4><p>Serveris kurtas galvojant apie stabilumą, ne apie bereikalingus efektus.</p></div>
                     <div class="rule-card"><i class="fas fa-users"></i><h4>Bendruomenė</h4><p>Draugiška ir brandi bendruomenė. Čia rasite draugų, o ne priešų.</p></div>
-                    <div class="rule-card"><i class="fas fa-briefcase"></i><h4>Ekonomika</h4><p>Realistinė ekonomika. Pinigai neauga ant medžių, bet uždarbis teikia malonumą.</p></div>
+                    <div class="rule-card"><i class="fas fa-briefcase"></i><h4>Ekonomika</h4><p>Realistiška ekonomika. Pinigai neuždirbami per minutę, bet kiekvienas uždarbis turi vertę.</p></div>
                 </div>
             </div>
         </section>
@@ -287,9 +287,9 @@
                     <div class="rule-card"><h4><i class="fas fa-skull"></i> RDM</h4><p>Griežtai draudžiama žudyti ar žaloti kitus žaidėjus be svarios RP priežasties.</p></div>
                     <div class="rule-card"><h4><i class="fas fa-car-crash"></i> VDM</h4><p>Draudžiama naudoti transporto priemonę kaip ginklą traiškant žmones.</p></div>
                     <div class="rule-card"><h4><i class="fas fa-theater-masks"></i> Power Gaming</h4><p>Draudžiama atlikti veiksmus, kurie fiziškai neįmanomi realiame gyvenime.</p></div>
-                    <div class="rule-card"><h4><i class="fas fa-sync-alt"></i> NLR (New Life)</h4><p>Jei mirštate, jūs neatsimenate paskutinės RP situacijos.</p></div>
-                    <div class="rule-card"><h4><i class="fas fa-exclamation-triangle"></i> Fear RP</h4><p>Privalote branginti savo gyvybę. Jei jums grasina ginklu, privalote paklusti.</p></div>
-                    <div class="rule-card"><h4><i class="fas fa-headset"></i> Meta Gaming</h4><p>Draudžiama naudoti informaciją, gautą ne žaidimo būdu (Discord ir t.t.).</p></div>
+                    <div class="rule-card"><h4><i class="fas fa-sync-alt"></i> NLR (New Life Rule)</h4><p>Jei mirštate, jūs neatsimenate paskutinės RP situacijos.</p></div>
+                    <div class="rule-card"><h4><i class="fas fa-exclamation-triangle"></i> Fear RP</h4><p>Privalote branginti savo gyvybę. Jei jums grasina ginklu, turite paklusti.</p></div>
+                    <div class="rule-card"><h4><i class="fas fa-headset"></i> Meta Gaming</h4><p>Draudžiama naudoti informaciją, gautą ne žaidime būdu (Discord ir t.t.).</p></div>
                 </div>
             </div>
         </section>
@@ -301,9 +301,9 @@
             <h2 id="modalTitle" style="margin-bottom: 20px; font-weight: 800;">Pildyti Anketą</h2>
             <form id="applicationForm" onsubmit="submitForm(event)">
                 <input type="hidden" id="appType" value="">
-                <div class="input-group"><label>Vardas_Pavardė (Žaidime)</label><input type="text" id="ign" class="custom-input" placeholder="Vardenis_Pavardenis" required><i class="fas fa-user input-icon"></i></div>
+                <div class="input-group"><label>Vardas Pavardė (Žaidime)</label><input type="text" id="ign" class="custom-input" placeholder="Vardenis_Pavardenis" required><i class="fas fa-user input-icon"></i></div>
                 <div class="input-group"><label>Tikras Amžius</label><input type="number" id="age" class="custom-input" placeholder="Pvz: 17" required><i class="fas fa-birthday-cake input-icon"></i></div>
-                <div class="input-group"><label>Motyvacija</label><textarea id="reason" class="custom-input" placeholder="Kodėl norite prisijungti?" required></textarea><i class="fas fa-comment-dots input-icon"></i></div>
+                <div class="input-group"><label>Motyvacinis laiškelis</label><textarea id="reason" class="custom-input" placeholder="Kodėl norite prisijungti?" required></textarea><i class="fas fa-comment-dots input-icon"></i></div>
                 <div class="input-group"><label>RP Patirtis</label><textarea id="experience" class="custom-input" placeholder="Kur žaidei?" required></textarea><i class="fas fa-history input-icon"></i></div>
                 <button type="submit" class="submit-btn" style="margin-top: 20px;">SIŲSTI ANKETĄ</button>
             </form>
