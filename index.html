@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1200"> <title>TwoSide RP | Modernus Serveris</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --blue: #0070f3; 
+            --bg: #050505;
+            --card-bg: rgba(12, 12, 12, 0.85);
+            --text-main: #ffffff;
+            --text-dim: #999999;
+            --border: rgba(255, 255, 255, 0.1);
+            --success: #00ff88;
+            --danger: #ff4444;
+            --gold: #ffd700;
+            --silver: #c0c0c0;
+            --bronze: #cd7f32;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        body { background-color: var(--bg); color: var(--text-main); min-height: 100vh; overflow-x: hidden; }
+
+        #bg-video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; filter: brightness(0.25); }
+
+        /* --- NAVIGACIJA (KAIP 1 FOTO) --- */
+        nav { 
+            position: fixed; top: 0; width: 100%; padding: 20px 50px; /* Platesni tarpai šonuose */
+            display: flex; justify-content: space-between; align-items: center; 
+            backdrop-filter: blur(15px); z-index: 1000; 
+            border-bottom: 1px solid var(--border); 
+            background: rgba(0,0,0,0.6); /* Tamsesnis fonas */
+            height: 90px;
+        }
+
+        /* Kairė pusė: Logo */
+        .logo { 
+            font-weight: 800; font-size: 1.8rem; letter-spacing: -1px; text-transform: uppercase; 
+            display: flex; align-items: center; gap: 15px; color: white;
+        }
+        .logo span { color: var(--blue); text-shadow: 0 0 20px rgba(0, 112, 243, 0.6); }
+        
+        /* Žalias taškas prie logo */
+        .status-dot { 
+            width: 12px; height: 12px; background-color: var(--success); border-radius: 50%; 
+            box-shadow: 0 0 15px var(--success); animation: pulse 2s infinite; 
+        }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.3); opacity: 0.6; } 100% { transform: scale(1); opacity: 1; } }
+
+        /* Dešinė pusė: Nuorodos + Profilis kartu */
+        .nav-right { display: flex; align-items: center; gap: 50px; } /* Tarpas tarp nuorodų ir profilio */
+
+        .nav-links { display: flex; gap: 35px; }
+        .nav-links a { 
+            color: #ccc; text-decoration: none; font-weight: 700; font-size: 0.9rem; 
+            text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; 
+        }
+        .nav-links a:hover, .nav-links a.active { color: #fff; border-bottom: 2px solid var(--blue); padding-bottom: 5px; }
+
+        /* Profilio mygtukas (Pill shape) */
+        #auth-container { display: flex; align-items: center; }
+        
+        #discord-btn { 
+            background: #5865F2; color: white; border: none; padding: 10px 25px; border-radius: 50px; 
+            font-weight: 700; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 10px; font-size: 0.9rem;
+        }
+        #discord-btn:hover { background: #4752c4; transform: translateY(-2px); }
+
+        #user-profile { 
+            display: none; align-items: center; gap: 15px; 
+            background: rgba(255,255,255,0.05); padding: 6px 20px 6px 6px; 
+            border-radius: 50px; border: 1px solid var(--border); 
+        }
+        #user-avatar { width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--blue); }
+        #user-name { font-weight: 700; font-size: 0.95rem; color: white; }
+
+
+        /* --- LAYOUT --- */
+        .main-wrapper { padding-top: 160px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; gap: 60px; padding-bottom: 100px; width: 100%; max-width: 1400px; margin: 0 auto; }
+        section { display: none; width: 100%; animation: fadeIn 0.5s ease forwards; }
+        section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* KORTELĖS */
+        .glass-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 30px; padding: 60px; position: relative; overflow: hidden; backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+        
+        h1 { font-size: 5rem; font-weight: 900; line-height: 0.95; margin-bottom: 30px; letter-spacing: -3px; }
+        .blue-gradient { background: linear-gradient(135deg, #fff 30%, var(--blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* GRID */
+        .dash-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 40px; }
+
+        /* JOB CARDS */
+        .rule-card { background: rgba(20, 20, 20, 0.6); padding: 35px; border-radius: 20px; border: 1px solid var(--border); transition: 0.3s; display: flex; flex-direction: column; min-height: 250px; justify-content: space-between; }
+        .rule-card:hover { border-color: var(--blue); transform: translateY(-5px); background: rgba(30, 30, 30, 0.8); }
+        .rule-card i { font-size: 2rem; color: var(--blue); margin-bottom: 15px; }
+        .rule-card h4 { color: #fff; margin-bottom: 5px; font-size: 1.4rem; font-weight: 800; }
+        .rule-card p { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 20px; }
+
+        /* MYGTUKAI (Kaip 1 FOTO) */
+        .apply-btn { width: 100%; padding: 15px; border-radius: 10px; font-weight: 800; font-size: 0.9rem; border: none; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 0.5px; margin-top: auto; }
+        
+        /* Žalias */
+        .btn-open { background-color: #157a46; color: white; box-shadow: 0 5px 15px rgba(21, 122, 70, 0.4); }
+        .btn-open:hover { background-color: #198754; transform: translateY(-2px); }
+        /* Raudonas */
+        .btn-closed { background-color: rgba(34, 10, 10, 0.8); color: #ff4444; border: 1px solid rgba(255, 68, 68, 0.2); cursor: not-allowed; opacity: 0.8; }
+        /* Geltonas */
+        .btn-vip { background-color: #ffc107; color: #000; box-shadow: 0 5px 15px rgba(255, 193, 7, 0.4); }
+        .btn-vip:hover { background-color: #ffca2c; transform: translateY(-2px); }
+
+        .status-text { font-weight: bold; font-size: 0.9rem; }
+        .st-green { color: #00ff88; }
+        .st-red { color: #ff4444; }
+
+        /* VIP Grid */
+        .vip-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 30px; }
+        .vip-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 20px; padding: 40px 30px; text-align: center; transition: 0.3s; }
+        .vip-card:hover { transform: translateY(-10px); border-color: rgba(255,255,255,0.3); }
+        .vip-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 10px; text-transform: uppercase; }
+        .vip-price { font-size: 3rem; font-weight: 900; margin-bottom: 25px; color: #fff; }
+        .vip-list { list-style: none; padding: 0; text-align: left; margin-bottom: 25px; }
+        .vip-list li { margin-bottom: 10px; color: #ccc; display: flex; align-items: center; gap: 10px; }
+        .vip-list li i { color: var(--success); }
+        .vip-btn-buy { width: 100%; padding: 12px; border-radius: 10px; background: rgba(255,255,255,0.1); color: #fff; font-weight: bold; border: 1px solid rgba(255,255,255,0.2); cursor: pointer; transition: 0.3s; }
+        .vip-btn-buy:hover { background: #fff; color: #000; }
+
+        /* Home Mygtukai */
+        .btn-hero { display: inline-flex; align-items: center; gap: 15px; padding: 18px 45px; border-radius: 12px; text-decoration: none; font-weight: 800; font-size: 1rem; transition: 0.4s; cursor: pointer; border: none; }
+        .btn-primary { background: var(--blue); color: white; box-shadow: 0 10px 30px rgba(0, 112, 243, 0.3); }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 20px 50px rgba(0, 112, 243, 0.5); }
+
+        /* Modalai */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 3000; justify-content: center; align-items: center; opacity: 0; transition: all 0.4s ease; backdrop-filter: blur(10px); }
+        .modal-overlay.open { display: flex; opacity: 1; }
+        .modal-content { background: #0f0f0f; border: 1px solid var(--border); border-radius: 25px; padding: 50px; width: 100%; max-width: 550px; position: relative; transform: translateY(30px) scale(0.95); transition: 0.4s; box-shadow: 0 0 60px rgba(0, 112, 243, 0.15); }
+        .modal-overlay.open .modal-content { transform: translateY(0) scale(1); }
+        .close-modal { position: absolute; top: 25px; right: 25px; font-size: 1.5rem; color: #666; cursor: pointer; transition: 0.3s; }
+        .close-modal:hover { color: #fff; }
+
+        .input-group { margin-bottom: 20px; position: relative; }
+        .custom-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 15px 15px 15px 45px; border-radius: 12px; color: white; outline: none; font-size: 1rem; transition: 0.3s; }
+        .custom-input:focus { border-color: var(--blue); background: rgba(0, 112, 243, 0.05); }
+        .input-icon { position: absolute; left: 15px; top: 42px; color: #666; }
+        textarea + .input-icon { top: 42px; }
+        label { display: block; margin-bottom: 10px; font-weight: 700; color: #888; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; }
+        .submit-btn { width: 100%; padding: 15px; margin-top: 15px; background: linear-gradient(135deg, var(--blue), #0060d0); border: none; border-radius: 12px; color: white; font-weight: 800; cursor: pointer; font-size: 1rem; transition: 0.3s; }
+        .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0, 112, 243, 0.4); }
+
+        /* Stats */
+        .stats-row { display: flex; gap: 80px; margin-top: 60px; }
+        .stat-box h2 { font-size: 3.5rem; font-weight: 800; margin: 0; line-height: 1; }
+        .stat-box .label { color: var(--text-dim); text-transform: uppercase; font-weight: 700; letter-spacing: 2px; }
+
+        /* Ticker */
+        .ticker-wrap { position: fixed; bottom: 0; width: 100%; height: 40px; background: rgba(0,0,0,0.95); border-top: 1px solid var(--border); display: flex; align-items: center; z-index: 2000; }
+        .ticker { display: inline-block; white-space: nowrap; animation: ticker 40s linear infinite; }
+        .ticker__item { display: inline-block; padding: 0 3rem; color: #fff; font-weight: 600; font-size: 0.9rem; }
+        .ticker__item span { color: var(--blue); }
+        @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+
+        /* VIP SPALVOS */
+        .vip-bronze { border-top: 4px solid var(--bronze); }
+        .vip-silver { border-top: 4px solid var(--silver); }
+        .vip-gold { border-top: 4px solid var(--gold); }
+
+        #toast { visibility: hidden; min-width: 250px; background-color: #111; color: #fff; text-align: center; border-radius: 12px; padding: 16px; position: fixed; z-index: 2000; left: 50%; bottom: 80px; transform: translateX(-50%); border: 1px solid var(--success); display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: bold; }
+        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 80px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 80px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+
+    </style>
+</head>
+<body>
+
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="https://static.videezy.com/system/resources/previews/000/042/179/original/Traffic_lights_timelapse.mp4" type="video/mp4">
+    </video>
+
+    <div id="toast"><i class="fas fa-check-circle" style="color: var(--success)"></i> IP Nukopijuotas!</div>
+
+    <nav>
+        <div class="logo">
+            <div class="status-dot"></div>
+            TWOSIDE<span>.LT</span>
+        </div>
+        
+        <div class="nav-right">
+            <div class="nav-links">
+                <a onclick="showSection('home')" id="link-home" class="active">PAGRINDINIS</a>
+                <a onclick="showSection('about')" id="link-about">APRAŠYMAS</a>
+                <a onclick="showSection('rules')" id="link-rules">TAISYKLĖS</a>
+            </div>
+            
+            <div id="auth-container">
+                <button id="discord-btn" onclick="loginWithDiscord()">
+                    <i class="fab fa-discord"></i> PRISIJUNGTI
+                </button>
+                <div id="user-profile">
+                    <img id="user-avatar" src="" alt="">
+                    <span id="user-name"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-wrapper">
+        
+        <section id="dashboard" style="display: none;">
+            <div class="glass-card" style="border-top: 2px solid var(--blue);">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display:flex; align-items:center; gap:25px;">
+                        <img id="dash-avatar" src="" style="width: 80px; border-radius: 20px; border: 2px solid var(--blue); box-shadow: 0 0 20px rgba(0, 112, 243, 0.4);">
+                        <div>
+                            <h2 id="dash-welcome" style="font-size: 2.2rem; margin:0;">Sveikas!</h2>
+                            <p id="dash-id" style="color: var(--text-dim); font-family: monospace; font-size: 1rem; margin-top: 5px;"></p>
+                        </div>
+                    </div>
+                    <button onclick="logout()" style="background: rgba(220, 53, 69, 0.1); color: #dc3545; border: 1px solid #dc3545; padding: 12px 30px; border-radius: 8px; font-weight: 800; cursor: pointer; transition:0.3s;">ATSIJUNGTI</button>
+                </div>
+
+                <div class="dash-grid">
+                    <div id="card-policija" class="rule-card">
+                        <div>
+                            <i class="fas fa-shield-alt"></i>
+                            <h4>Policijos Atranka</h4>
+                            <p>Statusas: <span id="text-policija" class="status-text"></span></p>
+                        </div>
+                        <button id="btn-policija" class="apply-btn">KRAUNAMA...</button>
+                    </div>
+                    
+                    <div id="card-medikai" class="rule-card">
+                        <div>
+                            <i class="fas fa-ambulance"></i>
+                            <h4>Medikų Atranka</h4>
+                            <p>Statusas: <span id="text-medikai" class="status-text"></span></p>
+                        </div>
+                        <button id="btn-medikai" class="apply-btn">KRAUNAMA...</button>
+                    </div>
+
+                    <div id="card-mechanikai" class="rule-card">
+                        <div>
+                            <i class="fas fa-wrench"></i>
+                            <h4>Mechanikų Atranka</h4>
+                            <p>Statusas: <span id="text-mechanikai" class="status-text"></span></p>
+                        </div>
+                        <button id="btn-mechanikai" class="apply-btn">KRAUNAMA...</button>
+                    </div>
+
+                    <div class="rule-card" style="border-top: 4px solid var(--gold);">
+                        <div>
+                            <i class="fas fa-crown" style="color: var(--gold);"></i>
+                            <h4>VIP Narystė</h4>
+                            <p>Norėdami įsigyti VIP statusą, kreipkitės Discord Ticket.</p>
+                        </div>
+                        <button class="apply-btn btn-vip" onclick="openVip()">PERŽIŪRĖTI PLANUS</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="home" class="active">
+            <div class="glass-card" style="text-align: left; padding: 80px;">
+                <div style="display:inline-block; background: rgba(0, 112, 243, 0.15); padding: 8px 20px; border-radius: 30px; color: var(--blue); font-weight: 800; font-size: 0.9rem; margin-bottom: 25px; border: 1px solid var(--blue); letter-spacing: 1px;">
+                    <i class="fas fa-check-circle" style="margin-right: 5px;"></i> SEZONAS 2.0 STARTAVO
+                </div>
+                <h1>TIKRASIS<br><span class="blue-gradient">ROLEPLAY.</span></h1>
+                <p style="color: var(--text-dim); margin-bottom: 50px; max-width: 600px; font-size: 1.2rem; line-height: 1.6;">
+                    Prisijunk prie sparčiausiai augančios bendruomenės Lietuvoje. Unikalios sistemos, brandi administracija ir tavo istorija.
+                </p>
+                
+                <div style="display: flex; gap: 20px;">
+                    <button class="btn-hero btn-primary" onclick="copyIP()">
+                        <i class="fas fa-play"></i> PRISIJUNGTI DABAR
+                    </button>
+                    <a href="https://discord.gg/TAVO_LINK" target="_blank" class="btn-hero" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color:white;">
+                        <i class="fab fa-discord"></i> DISCORD
+                    </a>
+                </div>
+                
+                <div class="stats-row">
+                    <div class="stat-box"><div class="label">Žaidėjai</div><h2 id="pCount">0<span style="font-size:1.5rem; color:#888;">/128</span></h2></div>
+                    <div class="stat-box"><div class="label">Ping</div><h2>24<span style="font-size:1.5rem; color:#888;">ms</span></h2></div>
+                    <div class="stat-box"><div class="label">Uptime</div><h2 style="color: var(--success);">99%</h2></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about">
+            <div class="glass-card">
+                <h2 style="font-size: 3rem; margin-bottom: 40px;">KODĖL <span class="blue-gradient">TWOSIDE?</span></h2>
+                <div class="dash-grid">
+                    <div class="rule-card"><i class="fas fa-tachometer-alt"></i><h4>Optimizuota</h4><p>Serveris sukurtas veikti be trikdžių net ir su silpnesniais kompiuteriais. 100+ FPS garantuota.</p></div>
+                    <div class="rule-card"><i class="fas fa-users"></i><h4>Bendruomenė</h4><p>Draugiška ir brandi bendruomenė. Čia rasite draugų, o ne priešų.</p></div>
+                    <div class="rule-card"><i class="fas fa-briefcase"></i><h4>Ekonomika</h4><p>Realistinė ekonomika. Pinigai neauga ant medžių, bet uždarbis teikia malonumą.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="rules">
+            <div class="glass-card">
+                <h2 style="font-size: 3rem; margin-bottom: 40px;">SVARBIAUSIOS <span class="blue-gradient">TAISYKLĖS</span></h2>
+                <div class="dash-grid">
+                    <div class="rule-card"><h4><i class="fas fa-skull"></i> RDM</h4><p>Griežtai draudžiama žudyti ar žaloti kitus žaidėjus be svarios ir logiškos Roleplay priežasties.</p></div>
+                    <div class="rule-card"><h4><i class="fas fa-car-crash"></i> VDM</h4><p>Draudžiama naudoti transporto priemonę kaip ginklą traiškant žmones be RP priežasties.</p></div>
+                    <div class="rule-card"><h4><i class="fas fa-theater-masks"></i> Power Gaming</h4><p>Draudžiama atlikti veiksmus, kurie fiziškai neįmanomi realiame gyvenime.</p></div>
+                    
+                    <div class="rule-card"><h4><i class="fas fa-sync-alt"></i> NLR (New Life)</h4><p>Jei mirštate ir atsikeliate ligoninėje, jūs neatsimenate paskutinės RP situacijos.</p></div>
+                    <div class="rule-card"><h4><i class="fas fa-exclamation-triangle"></i> Fear RP</h4><p>Privalote branginti savo gyvybę. Jei jums grasina ginklu, privalote paklusti.</p></div>
+                    <div class="rule-card"><h4><i class="fas fa-headset"></i> Meta Gaming</h4><p>Draudžiama naudoti informaciją, gautą ne žaidimo būdu (Discord, Stream ir t.t.).</p></div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="modal-overlay" id="appModal">
+        <div class="modal-content">
+            <div class="close-modal" onclick="closeApp()"><i class="fas fa-times"></i></div>
+            <h2 id="modalTitle" style="margin-bottom: 20px; font-weight: 800;">Pildyti Anketą</h2>
+            <form id="applicationForm" onsubmit="submitForm(event)">
+                <input type="hidden" id="appType" value="">
+                <div class="input-group">
+                    <label>Vardas_Pavardė (Žaidime)</label>
+                    <input type="text" id="ign" class="custom-input" placeholder="Vardenis_Pavardenis" required>
+                    <i class="fas fa-user input-icon"></i>
+                </div>
+                <div class="input-group">
+                    <label>Tikras Amžius</label>
+                    <input type="number" id="age" class="custom-input" placeholder="Pvz: 17" required>
+                    <i class="fas fa-birthday-cake input-icon"></i>
+                </div>
+                <div class="input-group">
+                    <label>Motyvacija</label>
+                    <textarea id="reason" class="custom-input" placeholder="Kodėl norite prisijungti?" required></textarea>
+                    <i class="fas fa-comment-dots input-icon"></i>
+                </div>
+                <div class="input-group">
+                    <label>RP Patirtis</label>
+                    <textarea id="experience" class="custom-input" placeholder="Kur žaidei?" required></textarea>
+                    <i class="fas fa-history input-icon"></i>
+                </div>
+                <button type="submit" class="submit-btn" style="margin-top: 20px;">SIŲSTI ANKETĄ</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="vipModal">
+        <div class="modal-content" style="max-width: 1000px;">
+            <div class="close-modal" onclick="closeVip()"><i class="fas fa-times"></i></div>
+            <h2 style="text-align:center; margin-bottom:10px; font-size: 2.2rem; font-weight: 900;">VIP PLANAI</h2>
+            <p style="text-align:center; color:#888; margin-bottom:40px;">Pasirinkite planą ir mėgaukitės privilegijomis.</p>
+            
+            <div class="vip-grid">
+                <div class="vip-card vip-bronze">
+                    <div class="vip-title" style="color: var(--bronze)">Bronze</div>
+                    <div class="vip-price">5€ <span>/mėn</span></div>
+                    <ul class="vip-list"><li><i class="fas fa-check"></i> 1 Custom Mašina</li><li><i class="fas fa-check"></i> Prioritetas (Low)</li></ul>
+                    <button class="vip-btn-buy" onclick="window.open('https://discord.gg/TAVO_LINK')">PIRKTI</button>
+                </div>
+                <div class="vip-card vip-silver">
+                    <div class="vip-title" style="color: var(--silver)">Silver</div>
+                    <div class="vip-price">10€ <span>/mėn</span></div>
+                    <ul class="vip-list"><li><i class="fas fa-check"></i> 2 Custom Mašinos</li><li><i class="fas fa-check"></i> 50k Pinigų</li></ul>
+                    <button class="vip-btn-buy" onclick="window.open('https://discord.gg/TAVO_LINK')">PIRKTI</button>
+                </div>
+                <div class="vip-card vip-gold">
+                    <div class="vip-title" style="color: var(--gold)">Gold</div>
+                    <div class="vip-price">20€ <span>/mėn</span></div>
+                    <ul class="vip-list"><li><i class="fas fa-check"></i> 3 Custom Mašinos</li><li><i class="fas fa-check"></i> Namas + Gauja</li></ul>
+                    <button class="vip-btn-buy" onclick="window.open('https://discord.gg/TAVO_LINK')" style="background: var(--gold); color: #000; border: none;">PIRKTI</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ticker-wrap">
+        <div class="ticker">
+            <div class="ticker__item">📢 Dėmesio: <span>Policijos Atranka</span> atidaryta! Pildykite dabar.</div>
+            <div class="ticker__item">🎉 Savaitgalio renginys: <span>Gaujų karai</span> - Šeštadienį 20:00.</div>
+            <div class="ticker__item">💎 Naujas <span>VIP</span> atnaujinimas - daugiau mašinų ir ginklų.</div>
+            <div class="ticker__item">🔧 Serverio perkrovimas kasdien <span>06:00</span> ryte.</div>
+        </div>
+    </div>
+
+    <script>
+        // === SERVERIO NUSTATYMAI (Čia keisk statusus) ===
+        const SERVER_CONFIG = {
+            server_ip: 'connect cfx.re/join/YOUR_ID',
+            status: {
+                policija: true,   // Pakeisk į false, jei nori uždaryti
+                medikai: false,   // Pakeisk į true, jei nori atidaryti
+                mechanikai: true  // Pakeisk į false, jei nori uždaryti
+            },
+            webhook: 'https://discord.com/api/webhooks/1470572886614999092/oINMatnjGC7OVERaD0wieIZIErb7x3MBpnKzC9SjabTqMEWNB_rhiGOHNldTB9c4AIlp',
+            client_id: '1470568120921100423',
+            redirect: 'https://twoside.lt'
+        };
+
+        // === MYGTUKŲ LOGIKA ===
+        function initDashboard() {
+            const setupCard = (id, isOpen, openText) => {
+                const btn = document.getElementById(`btn-${id}`);
+                const txt = document.getElementById(`text-${id}`);
+                
+                if(isOpen) {
+                    txt.innerText = "ATIDARYTA";
+                    txt.className = "status-text st-green";
+                    btn.innerText = "PILDYTI ANKETĄ";
+                    btn.className = "apply-btn btn-open"; // Žalias pilnas mygtukas
+                    btn.onclick = () => openApp(openText);
+                } else {
+                    txt.innerText = "UŽDARYTA";
+                    txt.className = "status-text st-red";
+                    btn.innerText = "LAIKINAI UŽDARYTA";
+                    btn.className = "apply-btn btn-closed"; // Raudonas permatomas mygtukas
+                    btn.onclick = null;
+                }
+            };
+
+            setupCard('policija', SERVER_CONFIG.status.policija, 'Policija');
+            setupCard('medikai', SERVER_CONFIG.status.medikai, 'Medikai');
+            setupCard('mechanikai', SERVER_CONFIG.status.mechanikai, 'Mechanikai');
+        }
+        initDashboard();
+
+        // --- STANDARTINĖS FUNKCIJOS ---
+        function showSection(id) {
+            document.querySelectorAll('section:not(#dashboard)').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
+            document.getElementById(id)?.classList.add('active');
+            document.getElementById(`link-${id}`)?.classList.add('active');
+        }
+
+        const modal = document.getElementById('appModal');
+        const vipModal = document.getElementById('vipModal');
+        function openApp(type) {
+            document.getElementById('modalTitle').innerText = type + ' Anketa';
+            document.getElementById('appType').value = type;
+            modal.classList.add('open');
+        }
+        function closeApp() { modal.classList.remove('open'); }
+        function openVip() { vipModal.classList.add('open'); }
+        function closeVip() { vipModal.classList.remove('open'); }
+
+        function submitForm(e) {
+            e.preventDefault();
+            const btn = document.querySelector('.submit-btn');
+            const originalText = btn.innerText;
+            btn.innerText = "SIUNČIAMA...";
+            
+            fetch(SERVER_CONFIG.webhook, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username: "Website Bot",
+                    avatar_url: "https://i.imgur.com/AfFp7pu.png",
+                    embeds: [{
+                        title: `📄 Nauja Anketa: ${document.getElementById('appType').value}`,
+                        color: 3447003,
+                        fields: [
+                            { name: "Discord", value: document.getElementById('user-name').innerText || "?", inline: true },
+                            { name: "Vardas (IC)", value: document.getElementById('ign').value, inline: true },
+                            { name: "Amžius", value: document.getElementById('age').value, inline: true },
+                            { name: "Motyvacija", value: document.getElementById('reason').value },
+                            { name: "Patirtis", value: document.getElementById('experience').value }
+                        ],
+                        footer: { text: "TwoSide RP Sistema" },
+                        timestamp: new Date().toISOString()
+                    }]
+                })
+            }).then(() => {
+                alert('Anketa gauta! Susisieksime.');
+                closeApp();
+                document.getElementById('applicationForm').reset();
+            }).finally(() => btn.innerText = originalText);
+        }
+
+        function copyIP() {
+            window.location.href = `fivem://${SERVER_CONFIG.server_ip}`;
+            navigator.clipboard.writeText(SERVER_CONFIG.server_ip).then(() => {
+                const toast = document.getElementById("toast");
+                toast.className = "show";
+                setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+            });
+        }
+
+        function loginWithDiscord() {
+            window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${SERVER_CONFIG.client_id}&redirect_uri=${encodeURIComponent(SERVER_CONFIG.redirect)}&response_type=token&scope=identify`;
+        }
+        function logout() { localStorage.removeItem('discord_token'); window.location.href = SERVER_CONFIG.redirect; }
+
+        function fetchDiscordUser(token) {
+            fetch('https://discord.com/api/users/@me', { headers: { authorization: `Bearer ${token}` } })
+            .then(res => res.ok ? res.json() : Promise.reject())
+            .then(user => {
+                document.getElementById('discord-btn').style.display = 'none';
+                document.getElementById('user-profile').style.display = 'flex';
+                document.getElementById('user-name').innerText = user.username;
+                document.getElementById('user-avatar').src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
+                document.getElementById('dashboard').style.display = 'block';
+                document.getElementById('dash-welcome').innerText = `Sveikas, ${user.username}! 👋`;
+                document.getElementById('dash-id').innerText = `ID: ${user.id}`;
+                document.getElementById('dash-avatar').src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
+            }).catch(() => localStorage.removeItem('discord_token'));
+        }
+
+        window.onload = () => {
+            const token = new URLSearchParams(window.location.hash.slice(1)).get('access_token') || localStorage.getItem('discord_token');
+            if(token) { localStorage.setItem('discord_token', token); if(window.location.hash) window.history.replaceState({}, document.title, "/"); fetchDiscordUser(token); }
+            const baseCount = 60; const randomVar = Math.floor(Math.random() * 15);
+            document.getElementById('pCount').innerHTML = `${baseCount + randomVar}<span style="font-size:1.5rem; color:#888;">/128</span>`;
+        };
+    </script>
+</body>
+</html>
