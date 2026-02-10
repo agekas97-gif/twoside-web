@@ -2,7 +2,8 @@
 <html lang="lt" style="scroll-behavior: smooth;">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=1200">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
     <title>TwoSide RP | Modernus Serveris</title>
     
     <link rel="icon" href="https://media.discordapp.net/attachments/1353696356639969400/1366056131499135087/3294i2394819-removebg-preview.png?ex=698b3e69&is=6989ece9&hm=0d7d3c0a378925555567c83eb67170902178b6bb504a07134a8413826a3d959a&=&format=webp&quality=lossless">
@@ -33,14 +34,14 @@
             --bronze: #cd7f32;
         }
 
-        /* --- 1. CUSTOM SCROLLBAR --- */
+        /* SCROLLBAR */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #050505; }
         ::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #0056b3; }
 
-        /* --- PELYTĖS NUSTATYMAI --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; cursor: default; user-select: none; }
+        /* BASE STYLES */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; cursor: default; user-select: none; -webkit-tap-highlight-color: transparent; }
         a, button, .apply-btn, .vip-btn-buy, .close-modal, .rule-card, .vip-card, i { cursor: pointer; }
         input, textarea { cursor: text; user-select: text; }
 
@@ -48,12 +49,12 @@
 
         #bg-video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; filter: brightness(0.25); }
 
-        /* --- 2. PARTICLES --- */
+        /* PARTICLES */
         #particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; overflow: hidden; }
         .particle { position: absolute; background: rgba(255, 255, 255, 0.5); border-radius: 50%; animation: float 20s infinite linear; }
         @keyframes float { 0% { transform: translateY(0) translateX(0); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(-100vh) translateX(50px); opacity: 0; } }
 
-        /* --- 3. PRELOADER --- */
+        /* PRELOADER */
         #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease, visibility 0.5s; }
         #preloader.hidden { opacity: 0; visibility: hidden; }
         .loader-content { text-align: center; }
@@ -68,7 +69,7 @@
             backdrop-filter: blur(15px); z-index: 1000; 
             border-bottom: 1px solid var(--border); 
             background: rgba(0,0,0,0.6); 
-            height: 90px;
+            height: 90px; transition: 0.3s;
         }
 
         .logo { font-weight: 800; font-size: 1.8rem; letter-spacing: -1px; text-transform: uppercase; display: flex; align-items: center; gap: 15px; color: white; }
@@ -91,30 +92,21 @@
         #user-name { font-weight: 700; font-size: 0.95rem; color: white; }
 
         .main-wrapper { 
-            padding-top: 0; /* Pakeista, kad tiktų scrollinimui */
+            padding-top: 0; 
             display: flex; flex-direction: column; align-items: center; min-height: 100vh; gap: 0; padding-bottom: 100px; width: 100%; max-width: 1400px; margin: 0 auto; 
         }
         
-        /* PAKEISTA: Sekcijos dabar rodomos visada, viena po kitos */
         section { 
-            display: block; 
-            width: 100%; 
-            min-height: 100vh; /* Kiekviena sekcija užima bent visą ekraną */
-            padding-top: 130px; /* Kad navigacija neuždengtų viršaus */
-            opacity: 1; /* Panaikinom animacijas, nes scrollinant jos trukdo */
-            transform: none;
+            display: block; width: 100%; min-height: 100vh; padding-top: 130px; opacity: 1; transform: none;
         }
-        
-        /* Išimtis dashboardui - jis slepiamas kol neprisijungta */
         #dashboard { display: none; } 
 
-        .glass-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 30px; padding: 60px; position: relative; overflow: hidden; backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+        .glass-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 30px; padding: 60px; position: relative; overflow: hidden; backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); width: 100%; }
         h1 { font-size: 5rem; font-weight: 900; line-height: 0.95; margin-bottom: 30px; letter-spacing: -3px; cursor: default; }
         .blue-gradient { background: linear-gradient(135deg, #fff 30%, var(--blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
         .dash-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 40px; }
 
-        /* --- 4. TILT EFFECT --- */
         .rule-card, .vip-card { 
             transform-style: preserve-3d; transform: perspective(1000px); 
             background: rgba(20, 20, 20, 0.6); padding: 35px; border-radius: 20px; 
@@ -127,7 +119,6 @@
             transform: skewX(-25deg); transition: 0.5s; pointer-events: none;
         }
         .rule-card:hover::before, .vip-card:hover::before { left: 125%; transition: 0.7s; }
-        
         .rule-card:hover { border-color: var(--blue); background: rgba(30, 30, 30, 0.8); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .rule-card i { font-size: 2rem; color: var(--blue); margin-bottom: 15px; text-shadow: 0 0 15px rgba(0, 112, 243, 0.4); }
         .rule-card h4 { color: #fff; margin-bottom: 5px; font-size: 1.4rem; font-weight: 800; transform: translateZ(20px); }
@@ -192,6 +183,36 @@
         #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
         @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 80px; opacity: 1;} }
         @keyframes fadeout { from {bottom: 80px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+
+        /* --- MOBILE RESPONSIVE OPTIMIZATION --- */
+        @media (max-width: 1200px) {
+            .main-wrapper { max-width: 90%; }
+        }
+
+        @media (max-width: 768px) {
+            /* Navigacija */
+            nav { height: auto; padding: 15px; flex-direction: column; gap: 15px; background: rgba(0,0,0,0.95); }
+            .nav-right { flex-direction: column; gap: 15px; width: 100%; }
+            .nav-links { flex-direction: column; gap: 15px; width: 100%; text-align: center; }
+            .nav-links a { font-size: 1rem; padding: 5px; }
+            .nav-links a::after { display: none; } /* Panaikinam pabraukimą mobile */
+            
+            /* Turinys */
+            section { padding-top: 180px; min-height: auto; margin-bottom: 50px; }
+            .glass-card { padding: 30px; }
+            h1 { font-size: 3rem; margin-bottom: 20px; }
+            .dash-grid, .vip-grid { grid-template-columns: 1fr; gap: 20px; }
+            .stats-row { flex-direction: column; gap: 30px; align-items: center; }
+            .stat-box { text-align: center; }
+            
+            /* Mygtukai */
+            .btn-hero { width: 100%; justify-content: center; }
+            #auth-container { width: 100%; justify-content: center; }
+            #discord-btn { width: 100%; justify-content: center; }
+            
+            /* Tickeris gali trukdyti mobile, galim pamažinti */
+            .ticker__item { padding: 0 1rem; font-size: 0.8rem; }
+        }
     </style>
 </head>
 <body>
@@ -237,9 +258,9 @@
 
     <div class="main-wrapper">
         
-        <section id="dashboard" style="display: none;">
+        <section id="dashboard" style="padding-top: 130px; display: none;">
             <div class="glass-card" style="border-top: 2px solid var(--blue);">
-                <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
                     <div style="display:flex; align-items:center; gap:25px;">
                         <img id="dash-avatar" src="" style="width: 80px; border-radius: 20px; border: 2px solid var(--blue); box-shadow: 0 0 20px rgba(0, 112, 243, 0.4);">
                         <div>
@@ -280,7 +301,7 @@
                 <p style="color: var(--text-dim); margin-bottom: 50px; max-width: 600px; font-size: 1.2rem; line-height: 1.6;">
                     Prisijunk prie sparčiausiai augančios bendruomenės Lietuvoje. Unikalios sistemos, brandi administracija ir tavo istorija.
                 </p>
-                <div style="display: flex; gap: 20px;">
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
                     <button class="btn-hero btn-primary" onclick="copyIP()"><i class="fas fa-play"></i> PRISIJUNGTI DABAR</button>
                     <a href="https://discord.gg/4yjqwYnker" target="_blank" class="btn-hero" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color:white;"><i class="fab fa-discord"></i> DISCORD</a>
                 </div>
@@ -496,3 +517,4 @@
     </script>
 </body>
 </html>
+
