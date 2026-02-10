@@ -153,6 +153,7 @@
         .vip-silver { border-top: 4px solid var(--silver); }
         .vip-gold { border-top: 4px solid var(--gold); }
 
+        /* PULSATION EFFECT FOR HERO BUTTON */
         .btn-hero { display: inline-flex; align-items: center; gap: 15px; padding: 18px 45px; border-radius: 12px; text-decoration: none; font-weight: 800; font-size: 1rem; transition: 0.4s; border: none; }
         .btn-primary { 
             background: var(--blue); color: white; box-shadow: 0 0 20px rgba(0, 112, 243, 0.6);
@@ -504,6 +505,27 @@
             setupCard('mechanikai', SERVER_CONFIG.status.mechanikai, 'Mechanikai');
         }
 
+        // --- SCROLL SPY LOGIC ---
+        window.addEventListener('scroll', () => {
+            let current = '';
+            const sections = document.querySelectorAll('section');
+            
+            sections.forEach(section => {
+                if(getComputedStyle(section).display === 'none') return;
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            document.querySelectorAll('.nav-links a').forEach(li => {
+                li.classList.remove('active');
+                if (li.id === `link-${current}`) {
+                    li.classList.add('active');
+                }
+            });
+        });
+
         function showSection(id) {
             document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
             document.getElementById(`link-${id}`)?.classList.add('active');
@@ -557,6 +579,7 @@
             const pCount = document.getElementById('pCount');
             const pPing = document.getElementById('pPing');
             const randCount = 60 + Math.floor(Math.random() * 15);
+            
             const spanCount = '<span style="font-size:1.5rem; color:#888;">/128</span>';
             const spanPing = '<span style="font-size:1.5rem; color:#888;">ms</span>';
             
