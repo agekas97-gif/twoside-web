@@ -513,7 +513,7 @@
             sections.forEach(section => {
                 if(getComputedStyle(section).display === 'none') return;
                 const sectionTop = section.offsetTop;
-                if (pageYOffset >= (sectionTop - 200)) {
+                if (pageYOffset >= (sectionTop - 200)) { // 200px offsetas kad anksčiau suveiktų
                     current = section.getAttribute('id');
                 }
             });
@@ -527,8 +527,6 @@
         });
 
         function showSection(id) {
-            document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
-            document.getElementById(`link-${id}`)?.classList.add('active');
             const element = document.getElementById(id);
             if(element) element.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
@@ -540,10 +538,57 @@
         function openVip() { vipModal.classList.add('open'); }
         function closeVip() { vipModal.classList.remove('open'); }
 
+        // --- ANTI SPAM FORM SUBMIT ---
         function submitForm(e) {
             e.preventDefault();
-            const btn = document.querySelector('.submit-btn'); const originalText = btn.innerText; btn.innerText = "SIUNČIAMA...";
-            fetch(SERVER_CONFIG.webhook, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: "Website Bot", avatar_url: "https://i.imgur.com/AfFp7pu.png", embeds: [{ title: `📄 Nauja Anketa: ${document.getElementById('appType').value}`, color: 3447003, fields: [{ name: "Discord", value: document.getElementById('user-name').innerText || "?", inline: true }, { name: "Vardas (IC)", value: document.getElementById('ign').value, inline: true }, { name: "Amžius", value: document.getElementById('age').value, inline: true }, { name: "Motyvacija", value: document.getElementById('reason').value }, { name: "Patirtis", value: document.getElementById('experience').value }], footer: { text: "TwoSide RP Sistema" }, timestamp: new Date().toISOString() }] }) }).then(() => { alert('Anketa gauta!'); closeApp(); document.getElementById('applicationForm').reset(); }).finally(() => btn.innerText = originalText);
+            
+            // 1. Anti-Spam Check
+            const lastSubmit = localStorage.getItem('lastAppSubmit');
+            const cooldownTime = 30 * 60 * 1000; // 30 min
+            const now = Date.now();
+
+            if (lastSubmit && (now - lastSubmit < cooldownTime)) {
+                const remaining = Math.ceil((cooldownTime - (now - lastSubmit)) / 60000);
+                alert(`Prašome palaukti. Kitą anketą galėsite siųsti už ${remaining} min.`);
+                return;
+            }
+
+            const btn = document.querySelector('.submit-btn'); 
+            const originalText = btn.innerText; 
+            btn.innerText = "SIUNČIAMA...";
+            btn.disabled = true; // Disable button immediately
+
+            fetch(SERVER_CONFIG.webhook, { 
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json' }, 
+                body: JSON.stringify({ 
+                    username: "Website Bot", 
+                    avatar_url: "https://i.imgur.com/AfFp7pu.png", 
+                    embeds: [{ 
+                        title: `📄 Nauja Anketa: ${document.getElementById('appType').value}`, 
+                        color: 3447003, 
+                        fields: [
+                            { name: "Discord", value: document.getElementById('user-name').innerText || "?", inline: true }, 
+                            { name: "Vardas (IC)", value: document.getElementById('ign').value, inline: true }, 
+                            { name: "Amžius", value: document.getElementById('age').value, inline: true }, 
+                            { name: "Motyvacija", value: document.getElementById('reason').value }, 
+                            { name: "Patirtis", value: document.getElementById('experience').value }
+                        ], 
+                        footer: { text: "TwoSide RP Sistema" }, 
+                        timestamp: new Date().toISOString() 
+                    }] 
+                }) 
+            }).then(() => { 
+                alert('Anketa gauta! Susisieksime.'); 
+                localStorage.setItem('lastAppSubmit', Date.now()); // Save time
+                closeApp(); 
+                document.getElementById('applicationForm').reset(); 
+            }).catch(err => {
+                alert('Klaida siunčiant anketą.');
+            }).finally(() => { 
+                btn.innerText = originalText;
+                btn.disabled = false;
+            });
         }
 
         function copyIP() {
