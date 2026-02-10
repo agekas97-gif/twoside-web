@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="lt">
+<html lang="lt" style="scroll-behavior: smooth;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=1200">
@@ -12,9 +12,9 @@
     <meta property="og:image" content="https://media.discordapp.net/attachments/1353696356639969400/1366056131499135087/3294i2394819-removebg-preview.png?ex=698b3e69&is=6989ece9&hm=0d7d3c0a378925555567c83eb67170902178b6bb504a07134a8413826a3d959a&=&format=webp&quality=lossless">
     <meta property="og:url" content="https://twoside.lt">
     <meta property="og:type" content="website">
-    
-    <meta name="theme-color" content="#0070f3"> 
+    <meta name="theme-color" content="#0070f3">
     <meta name="twitter:card" content="summary_large_image">
+
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -33,7 +33,7 @@
             --bronze: #cd7f32;
         }
 
-        /* --- 1. CUSTOM SCROLLBAR (Slinkties juosta) --- */
+        /* --- 1. CUSTOM SCROLLBAR --- */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #050505; }
         ::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 4px; }
@@ -48,12 +48,12 @@
 
         #bg-video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; filter: brightness(0.25); }
 
-        /* --- 2. PARTICLES (Dalelės) --- */
+        /* --- 2. PARTICLES --- */
         #particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; overflow: hidden; }
         .particle { position: absolute; background: rgba(255, 255, 255, 0.5); border-radius: 50%; animation: float 20s infinite linear; }
         @keyframes float { 0% { transform: translateY(0) translateX(0); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(-100vh) translateX(50px); opacity: 0; } }
 
-        /* --- 3. PRELOADER (Krovimas) --- */
+        /* --- 3. PRELOADER --- */
         #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease, visibility 0.5s; }
         #preloader.hidden { opacity: 0; visibility: hidden; }
         .loader-content { text-align: center; }
@@ -90,10 +90,23 @@
         #user-avatar { width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--blue); }
         #user-name { font-weight: 700; font-size: 0.95rem; color: white; }
 
-        .main-wrapper { padding-top: 160px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; gap: 60px; padding-bottom: 100px; width: 100%; max-width: 1400px; margin: 0 auto; }
-        section { display: none; width: 100%; animation: fadeIn 0.8s ease forwards; }
-        section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .main-wrapper { 
+            padding-top: 0; /* Pakeista, kad tiktų scrollinimui */
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh; gap: 0; padding-bottom: 100px; width: 100%; max-width: 1400px; margin: 0 auto; 
+        }
+        
+        /* PAKEISTA: Sekcijos dabar rodomos visada, viena po kitos */
+        section { 
+            display: block; 
+            width: 100%; 
+            min-height: 100vh; /* Kiekviena sekcija užima bent visą ekraną */
+            padding-top: 130px; /* Kad navigacija neuždengtų viršaus */
+            opacity: 1; /* Panaikinom animacijas, nes scrollinant jos trukdo */
+            transform: none;
+        }
+        
+        /* Išimtis dashboardui - jis slepiamas kol neprisijungta */
+        #dashboard { display: none; } 
 
         .glass-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 30px; padding: 60px; position: relative; overflow: hidden; backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
         h1 { font-size: 5rem; font-weight: 900; line-height: 0.95; margin-bottom: 30px; letter-spacing: -3px; cursor: default; }
@@ -101,14 +114,13 @@
 
         .dash-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 40px; }
 
-        /* --- 4. TILT EFFECT (Kortelių stiliai) --- */
+        /* --- 4. TILT EFFECT --- */
         .rule-card, .vip-card { 
             transform-style: preserve-3d; transform: perspective(1000px); 
             background: rgba(20, 20, 20, 0.6); padding: 35px; border-radius: 20px; 
             border: 1px solid var(--border); transition: transform 0.1s; display: flex; flex-direction: column; 
             min-height: 250px; justify-content: space-between; position: relative; overflow: hidden;
         }
-        /* Blizgesys kortelėms */
         .rule-card::before, .vip-card::before {
             content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
             background: linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent);
@@ -259,7 +271,7 @@
             </div>
         </section>
 
-        <section id="home" class="active">
+        <section id="home">
             <div class="glass-card" style="text-align: left; padding: 80px;">
                 <div style="display:inline-block; background: rgba(0, 112, 243, 0.15); padding: 8px 20px; border-radius: 30px; color: var(--blue); font-weight: 800; font-size: 0.9rem; margin-bottom: 25px; border: 1px solid var(--blue); letter-spacing: 1px;">
                     <i class="fas fa-check-circle" style="margin-right: 5px;"></i> SEZONAS 2.0 STARTAVO
@@ -410,12 +422,18 @@
             setupCard('mechanikai', SERVER_CONFIG.status.mechanikai, 'Mechanikai');
         }
 
-        // --- STANDARTINĖS FUNKCIJOS ---
+        // --- PAKEISTA: AUTO SCROLL FUNKCIJA ---
         function showSection(id) {
-            document.querySelectorAll('section:not(#dashboard)').forEach(s => s.classList.remove('active'));
+            // Nuimame active nuo visų mygtukų
             document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
-            document.getElementById(id)?.classList.add('active');
+            // Uždėdame active ant paspausto
             document.getElementById(`link-${id}`)?.classList.add('active');
+            
+            // Slenkame į sekciją
+            const element = document.getElementById(id);
+            if(element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         }
 
         const modal = document.getElementById('appModal');
