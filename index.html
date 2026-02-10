@@ -334,7 +334,8 @@
                 <div class="stats-row">
                     <div class="stat-box"><div class="label">Žaidėjai</div><h2 id="pCount">0<span style="font-size:1.5rem; color:#888;">/128</span></h2></div>
                     <div class="stat-box"><div class="label">Ping</div><h2 id="pPing">0<span style="font-size:1.5rem; color:#888;">ms</span></h2></div>
-                    <div class="stat-box"><div class="label">Discord nariai</div><h2 id="pDiscord" style="color: #5865F2;">0</h2></div>
+                    
+                    <div class="stat-box"><div class="label">Discord</div><h2 id="pDiscord" style="color: #5865F2;">0</h2></div>
                 </div>
             </div>
         </section>
@@ -402,7 +403,14 @@
     </div>
 
     <script>
+        // === SERVERIO NUSTATYMAI ===
         const SERVER_CONFIG = {
+            // TAVO ID (pakeisk į savo, pvz: 'q85o9r')
+            fivem_code: 'SOON', 
+            
+            // TAVO DISCORD ID (Iš Widget Settings)
+            discord_server_id: '1380526027331207271', 
+
             server_ip: 'connect cfx.re/join/SOON',
             status: { policija: false, medikai: false, mechanikai: false },
             webhook: 'https://discord.com/api/webhooks/1470572886614999092/oINMatnjGC7OVERaD0wieIZIErb7x3MBpnKzC9SjabTqMEWNB_rhiGOHNldTB9c4AIlp',
@@ -436,6 +444,36 @@
 
             container.appendChild(toast);
             setTimeout(() => { toast.classList.add('hide'); setTimeout(() => toast.remove(), 500); }, 4000);
+        }
+
+        // --- FETCH REAL DATA ---
+        function fetchStats() {
+            // 1. FiveM Players
+            if(SERVER_CONFIG.fivem_code !== 'SOON') {
+                fetch(`https://servers-frontend.fivem.net/api/servers/single/${SERVER_CONFIG.fivem_code}`)
+                .then(res => res.json())
+                .then(data => {
+                    if(data && data.Data) {
+                        const players = data.Data.clients;
+                        const maxPlayers = data.Data.sv_maxclients;
+                        // Čia naudojame paprastą atvaizdavimą be animacijos, kad nesusipjautų su random
+                        document.getElementById('pCount').innerHTML = `${players}<span style="font-size:1.5rem; color:#888;">/${maxPlayers}</span>`;
+                    }
+                })
+                .catch(err => console.log('FiveM Offline'));
+            }
+
+            // 2. Discord Members (Widget API)
+            fetch(`https://discord.com/api/guilds/${SERVER_CONFIG.discord_server_id}/widget.json`)
+            .then(res => res.json())
+            .then(data => {
+                if(data.presence_count) {
+                    // Animacija Discord skaičiui
+                    const el = document.getElementById('pDiscord');
+                    animateValue(el, 0, data.presence_count, 2000);
+                }
+            })
+            .catch(err => console.log('Discord Widget Error'));
         }
 
         function animateValue(obj, start, end, duration, suffix = '') {
@@ -508,20 +546,14 @@
         window.addEventListener('scroll', () => {
             let current = '';
             const sections = document.querySelectorAll('section');
-            
             sections.forEach(section => {
                 if(getComputedStyle(section).display === 'none') return;
                 const sectionTop = section.offsetTop;
-                if (pageYOffset >= (sectionTop - 200)) { 
-                    current = section.getAttribute('id');
-                }
+                if (pageYOffset >= (sectionTop - 200)) { current = section.getAttribute('id'); }
             });
-
             document.querySelectorAll('.nav-links a').forEach(li => {
                 li.classList.remove('active');
-                if (li.id === `link-${current}`) {
-                    li.classList.add('active');
-                }
+                if (li.id === `link-${current}`) { li.classList.add('active'); }
             });
         });
 
@@ -540,7 +572,6 @@
         // --- ANTI SPAM FORM SUBMIT ---
         function submitForm(e) {
             e.preventDefault();
-            
             const lastSubmit = localStorage.getItem('lastAppSubmit');
             const cooldownTime = 30 * 60 * 1000; 
             const now = Date.now();
@@ -619,22 +650,25 @@
             const token = new URLSearchParams(window.location.hash.slice(1)).get('access_token') || localStorage.getItem('discord_token');
             if(token) { localStorage.setItem('discord_token', token); if(window.location.hash) window.history.replaceState({}, document.title, "/"); fetchDiscordUser(token); }
             
+            // Startuojam su nuliniais, kol fetchas neįvyko
             const pCount = document.getElementById('pCount');
             const pPing = document.getElementById('pPing');
             const pDiscord = document.getElementById('pDiscord');
             
-            const randCount = 60 + Math.floor(Math.random() * 15);
-            const randDiscord = 1420 + Math.floor(Math.random() * 50); // Netikras skaičius apie 1400
-            
             pCount.innerHTML = '0<span style="font-size:1.5rem; color:#888;">/128</span>';
             pPing.innerHTML = '0<span style="font-size:1.5rem; color:#888;">ms</span>';
-            pDiscord.innerHTML = '0';
             
-            setTimeout(() => {
-                animateValue(pCount, 0, randCount, 2000, '<span style="font-size:1.5rem; color:#888;">/128</span>');
-                animateValue(pPing, 0, 24, 2000, '<span style="font-size:1.5rem; color:#888;">ms</span>');
-                animateValue(pDiscord, 0, randDiscord, 2000); // Sukasi iki 1400+
-            }, 1600);
+            // Jei nėra ID, rodom fake duomenis
+            if(SERVER_CONFIG.fivem_code === 'SOON') {
+                const randCount = 60 + Math.floor(Math.random() * 15);
+                setTimeout(() => {
+                    animateValue(pCount, 0, randCount, 2000, '<span style="font-size:1.5rem; color:#888;">/128</span>');
+                    animateValue(pPing, 0, 24, 2000, '<span style="font-size:1.5rem; color:#888;">ms</span>');
+                }, 1600);
+            }
+
+            // Paimam tikrus duomenis
+            fetchStats();
         };
     </script>
 </body>
