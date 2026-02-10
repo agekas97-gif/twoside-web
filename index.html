@@ -195,7 +195,7 @@
         <div class="nav-right">
             <div class="nav-links">
                 <a onclick="showSection('home')" id="link-home" class="active">PAGRINDINIS</a>
-                <a onclick="showSection('about')" id="link-about">APRAŠYMAS</a>
+                <a onclick="showSection('about')" id="link-about">SERVERIO APRAŠYMAS</a>
                 <a onclick="showSection('rules')" id="link-rules">TAISYKLĖS</a>
             </div>
             
@@ -230,7 +230,7 @@
                     <div id="card-policija" class="rule-card">
                         <div>
                             <i class="fas fa-shield-alt"></i>
-                            <h4>Policijos Departamentas</h4>
+                            <h4>Policijos darbo anketa</h4>
                             <p>Statusas: <span id="text-policija" class="status-text"></span></p>
                         </div>
                         <button id="btn-policija" class="apply-btn">KRAUNAMA...</button>
@@ -239,7 +239,7 @@
                     <div id="card-medikai" class="rule-card">
                         <div>
                             <i class="fas fa-ambulance"></i>
-                            <h4>Medikų Departamentas</h4>
+                            <h4>Medikų darbo anketa</h4>
                             <p>Statusas: <span id="text-medikai" class="status-text"></span></p>
                         </div>
                         <button id="btn-medikai" class="apply-btn">KRAUNAMA...</button>
@@ -248,7 +248,7 @@
                     <div id="card-mechanikai" class="rule-card">
                         <div>
                             <i class="fas fa-wrench"></i>
-                            <h4>Mechanikų Departamentas</h4>
+                            <h4>Mechanikų darbo anketa</h4>
                             <p>Statusas: <span id="text-mechanikai" class="status-text"></span></p>
                         </div>
                         <button id="btn-mechanikai" class="apply-btn">KRAUNAMA...</button>
@@ -273,7 +273,7 @@
                 </div>
                 <h1>TIKRASIS<br><span class="blue-gradient">ROLEPLAY.</span></h1>
                 <p style="color: var(--text-dim); margin-bottom: 50px; max-width: 600px; font-size: 1.2rem; line-height: 1.6;">
-                    Prisijunk prie sparčiausiai augančios bendruomenės Lietuvoje. Unikalios sistemos, brandi administracija ir tavo istorija.
+                    Prisijunk prie sparčiausiai augančios bendruomenės Lietuvoje. Unikalios sistemos, brandi administracija ir tavo nauja istorija.
                 </p>
                 
                 <div style="display: flex; gap: 20px;">
@@ -382,20 +382,20 @@
 
     <div class="ticker-wrap">
         <div class="ticker">
-            <div class="ticker__item">📢 Dėmesio: <span>Policijos Atranka</span> atidaryta! Pildykite dabar.</div>
-            <div class="ticker__item">🎉 Savaitgalio renginys: <span>Gaujų karai</span> - Šeštadienį 20:00.</div>
-            <div class="ticker__item">💎 Naujas <span>VIP</span> atnaujinimas - daugiau mašinų ir ginklų.</div>
-            <div class="ticker__item">🔧 Serverio perkrovimas kasdien <span>06:00</span> ryte.</div>
+            <div class="ticker__item">📢 Dėmesio: <span>Policijos, Medikų ir Mechanikų darbo Anketos</span> atidarytos! Pildykite dabar.</div>
+            <div class="ticker__item">🎉 Serverio starto renginys: <span>Drago lenktynės</span> - 03-18.</div>
+            <div class="ticker__item">💎 Naujas <span>VIP</span> atnaujinimas - privatūs VIP eventai.</div>
+            <div class="ticker__item">🔧 Serverio perkrovimai kasdien <span>02:00, 06:00, 12:00, 18:00, 23:00</span> ryte.</div>
         </div>
     </div>
 
     <script>
         // === SERVERIO NUSTATYMAI (Greitas valdymas) ===
         const SERVER_CONFIG = {
-            server_ip: 'connect cfx.re/join/YOUR_ID', // Įrašyk savo IP
+            server_ip: 'connect cfx.re/join/SOON', // Įrašyk savo IP
             status: {
                 policija: true,   // true = ATIDARYTA, false = UŽDARYTA
-                medikai: false,   // Pakeisk, jei reikia
+                medikai: true,   // Pakeisk, jei reikia
                 mechanikai: true  // Pakeisk, jei reikia
             },
             webhook: 'https://discord.com/api/webhooks/1470572886614999092/oINMatnjGC7OVERaD0wieIZIErb7x3MBpnKzC9SjabTqMEWNB_rhiGOHNldTB9c4AIlp',
