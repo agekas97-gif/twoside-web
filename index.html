@@ -101,9 +101,20 @@
         h1 { font-size: 5rem; font-weight: 900; line-height: 0.95; margin-bottom: 30px; letter-spacing: -3px; cursor: default; }
         .blue-gradient { background: linear-gradient(135deg, #fff 30%, var(--blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
+        /* --- TYPEWRITER EFEKTAS --- */
+        .typewriter {
+            display: inline-block;
+            overflow: hidden;
+            border-right: .15em solid var(--blue);
+            white-space: nowrap;
+            margin: 0 auto;
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+        }
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: var(--blue); } }
+
         .dash-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 40px; }
 
-        /* KORTELĖS */
         .rule-card, .vip-card { 
             transform-style: preserve-3d; transform: perspective(1000px); 
             background: rgba(20, 20, 20, 0.6); padding: 35px; border-radius: 20px; 
@@ -146,39 +157,30 @@
         .vip-silver { border-top: 4px solid var(--silver); }
         .vip-gold { border-top: 4px solid var(--gold); }
 
+        /* PULSATION EFFECT FOR HERO BUTTON */
         .btn-hero { display: inline-flex; align-items: center; gap: 15px; padding: 18px 45px; border-radius: 12px; text-decoration: none; font-weight: 800; font-size: 1rem; transition: 0.4s; border: none; }
-        .btn-primary { background: var(--blue); color: white; box-shadow: 0 10px 30px rgba(0, 112, 243, 0.3); }
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 20px 50px rgba(0, 112, 243, 0.6); }
+        .btn-primary { 
+            background: var(--blue); color: white; 
+            box-shadow: 0 0 20px rgba(0, 112, 243, 0.6);
+            animation: pulseBtn 2s infinite; 
+        }
+        .btn-primary:hover { transform: translateY(-3px); animation: none; box-shadow: 0 20px 50px rgba(0, 112, 243, 0.8); }
+        @keyframes pulseBtn {
+            0% { box-shadow: 0 0 0 0 rgba(0, 112, 243, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(0, 112, 243, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 112, 243, 0); }
+        }
 
-        /* --- SUTVARKYTAS MODAL (TELEFONAMS) --- */
         .modal-overlay { 
-            display: none; 
-            position: fixed; 
-            top: 0; left: 0; 
-            width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.9); 
-            z-index: 3000; 
-            /* Svarbu: leidžiam scrollinti ir centruojam viršuje */
-            align-items: flex-start; 
-            padding: 20px;
-            overflow-y: auto; 
-            opacity: 0; transition: all 0.4s ease; 
-            backdrop-filter: blur(10px);
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 3000; 
+            justify-content: center; align-items: flex-start; padding: 20px; overflow-y: auto; opacity: 0; transition: all 0.4s ease; backdrop-filter: blur(10px);
         }
         .modal-overlay.open { display: flex; opacity: 1; }
-        
         .modal-content { 
-            background: #0f0f0f; border: 1px solid var(--border); 
-            border-radius: 25px; padding: 50px; 
-            width: 100%; max-width: 550px; 
-            position: relative; 
-            /* Centruojam horizontaliai ir duodam vietos viršuj/apačioj */
-            margin: 50px auto; 
-            transform: scale(0.95); transition: 0.4s; 
-            box-shadow: 0 0 60px rgba(0, 112, 243, 0.15); 
+            background: #0f0f0f; border: 1px solid var(--border); border-radius: 25px; padding: 50px; width: 100%; max-width: 550px; 
+            position: relative; margin: 50px auto; transform: scale(0.95); transition: 0.4s; box-shadow: 0 0 60px rgba(0, 112, 243, 0.15); 
         }
         .modal-overlay.open .modal-content { transform: scale(1); }
-        
         .close-modal { position: absolute; top: 25px; right: 25px; font-size: 1.5rem; color: #666; transition: 0.3s; }
         .close-modal:hover { color: #fff; }
 
@@ -236,6 +238,9 @@
             .glass-card { padding: 25px; }
             h1 { font-size: 2.8rem; margin-bottom: 20px; }
             
+            /* Mobili versija: Typewriter neveikia gerai, todėl išjungiam */
+            .typewriter { border: none; animation: none; white-space: normal; }
+
             .btn-hero, #discord-btn, #auth-container { width: 100%; justify-content: center; }
             .dash-grid, .vip-grid { grid-template-columns: 1fr; }
             .stats-row { flex-direction: column; gap: 30px; }
@@ -328,7 +333,7 @@
                 <div style="display:inline-block; background: rgba(0, 112, 243, 0.15); padding: 8px 20px; border-radius: 30px; color: var(--blue); font-weight: 800; font-size: 0.9rem; margin-bottom: 25px; border: 1px solid var(--blue); letter-spacing: 1px;">
                     <i class="fas fa-check-circle" style="margin-right: 5px;"></i> SEZONAS 2.0 STARTAVO
                 </div>
-                <h1>TIKRASIS<br><span class="blue-gradient">ROLEPLAY.</span></h1>
+                <h1>TIKRASIS<br><span class="blue-gradient typewriter">ROLEPLAY.</span></h1>
                 <p style="color: var(--text-dim); margin-bottom: 50px; max-width: 600px; font-size: 1.2rem; line-height: 1.6;">
                     Prisijunk prie sparčiausiai augančios bendruomenės Lietuvoje. Unikalios sistemos, brandi administracija ir tavo istorija.
                 </p>
@@ -338,7 +343,7 @@
                 </div>
                 <div class="stats-row">
                     <div class="stat-box"><div class="label">Žaidėjai</div><h2 id="pCount">0<span style="font-size:1.5rem; color:#888;">/128</span></h2></div>
-                    <div class="stat-box"><div class="label">Ping</div><h2>24<span style="font-size:1.5rem; color:#888;">ms</span></h2></div>
+                    <div class="stat-box"><div class="label">Ping</div><h2 id="pPing">0<span style="font-size:1.5rem; color:#888;">ms</span></h2></div>
                     <div class="stat-box"><div class="label">Uptime</div><h2 style="color: var(--success);">99%</h2></div>
                 </div>
             </div>
@@ -415,6 +420,22 @@
             client_id: '1470568120921100423',
             redirect: 'https://twoside.lt'
         };
+
+        // === ANIMACIJA SKAIČIAMS ===
+        function animateValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = Math.floor(progress * (end - start) + start) + obj.innerHTML.replace(/[0-9]/g, '');
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                } else {
+                    obj.innerHTML = end + obj.innerHTML.replace(/[0-9]/g, '');
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
 
         // === DALELĖS (PARTICLES) ===
         function createParticles() {
@@ -538,8 +559,22 @@
             const token = new URLSearchParams(window.location.hash.slice(1)).get('access_token') || localStorage.getItem('discord_token');
             if(token) { localStorage.setItem('discord_token', token); if(window.location.hash) window.history.replaceState({}, document.title, "/"); fetchDiscordUser(token); }
             
-            const baseCount = 60; const randomVar = Math.floor(Math.random() * 15);
-            document.getElementById('pCount').innerHTML = `${baseCount + randomVar}<span style="font-size:1.5rem; color:#888;">/128</span>`;
+            // Animacija skaičiams
+            const pCount = document.getElementById('pCount');
+            const pPing = document.getElementById('pPing');
+            const randCount = 60 + Math.floor(Math.random() * 15);
+            
+            // Išsaugom spanus
+            const spanCount = '<span style="font-size:1.5rem; color:#888;">/128</span>';
+            const spanPing = '<span style="font-size:1.5rem; color:#888;">ms</span>';
+            
+            pCount.innerHTML = '0' + spanCount;
+            pPing.innerHTML = '0' + spanPing;
+            
+            setTimeout(() => {
+                animateValue(pCount, 0, randCount, 2000);
+                animateValue(pPing, 0, 24, 2000);
+            }, 1600);
         };
     </script>
 </body>
