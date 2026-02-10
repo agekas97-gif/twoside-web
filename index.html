@@ -420,7 +420,24 @@
             fetch(SERVER_CONFIG.webhook, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: "Website Bot", avatar_url: "https://i.imgur.com/AfFp7pu.png", embeds: [{ title: `📄 Nauja Anketa: ${document.getElementById('appType').value}`, color: 3447003, fields: [{ name: "Discord", value: document.getElementById('user-name').innerText || "?", inline: true }, { name: "Vardas (IC)", value: document.getElementById('ign').value, inline: true }, { name: "Amžius", value: document.getElementById('age').value, inline: true }, { name: "Motyvacija", value: document.getElementById('reason').value }, { name: "Patirtis", value: document.getElementById('experience').value }], footer: { text: "TwoSide RP Sistema" }, timestamp: new Date().toISOString() }] }) }).then(() => { alert('Anketa gauta!'); closeApp(); document.getElementById('applicationForm').reset(); }).finally(() => btn.innerText = originalText);
         }
 
-        function copyIP() { window.location.href = `fivem://${SERVER_CONFIG.server_ip}`; navigator.clipboard.writeText(SERVER_CONFIG.server_ip).then(() => { const toast = document.getElementById("toast"); toast.className = "show"; setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000); }); }
+        // --- PAKEISTA COPY FUNKCIJA (Fix) ---
+        function copyIP() {
+            // Paimam IP is konfigo
+            const ip = SERVER_CONFIG.server_ip;
+
+            // 1. Nukopijuojam
+            navigator.clipboard.writeText(ip).then(() => {
+                const toast = document.getElementById("toast");
+                toast.className = "show";
+                setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+            });
+
+            // 2. Bandom atidaryti FiveM (su 0.5s delsimu)
+            setTimeout(() => {
+                window.location.href = `fivem://${ip}`;
+            }, 500);
+        }
+
         function loginWithDiscord() { window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${SERVER_CONFIG.client_id}&redirect_uri=${encodeURIComponent(SERVER_CONFIG.redirect)}&response_type=token&scope=identify`; }
         function logout() { localStorage.removeItem('discord_token'); window.location.href = SERVER_CONFIG.redirect; }
 
