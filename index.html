@@ -2,7 +2,8 @@
 <html lang="lt">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=1200"> <title>TwoSide RP | Modernus Serveris</title>
+    <meta name="viewport" content="width=1200">
+    <title>TwoSide RP | Modernus Serveris</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -14,59 +15,71 @@
             --text-main: #ffffff;
             --text-dim: #999999;
             --border: rgba(255, 255, 255, 0.1);
-            --success: #00ff88;
-            --danger: #ff4444;
-            --gold: #ffd700;
+            --success: #157a46;
+            --danger: #dc3545;
+            --gold: #ffc107;
             --silver: #c0c0c0;
             --bronze: #cd7f32;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        /* --- PELYTĖS FIX (SVARBU) --- */
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif;
+            cursor: default; /* Visur rodyklė */
+            user-select: none; /* Neleidžia žymėti teksto */
+        }
         
+        /* Ant nuorodų ir mygtukų - rankutė */
+        a, button, .apply-btn, .vip-btn-buy, .close-modal, .rule-card, .vip-card, i {
+            cursor: pointer;
+        }
+
+        /* Tik įvedimo laukuose leidžiam žymėti tekstą ir rodyti brūkšnį */
+        input, textarea {
+            cursor: text;
+            user-select: text;
+        }
+
         body { background-color: var(--bg); color: var(--text-main); min-height: 100vh; overflow-x: hidden; }
 
         #bg-video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; filter: brightness(0.25); }
 
-        /* --- NAVIGACIJA (KAIP 1 FOTO) --- */
+        /* NAVIGACIJA */
         nav { 
-            position: fixed; top: 0; width: 100%; padding: 20px 50px; /* Platesni tarpai šonuose */
+            position: fixed; top: 0; width: 100%; padding: 0 50px; 
             display: flex; justify-content: space-between; align-items: center; 
             backdrop-filter: blur(15px); z-index: 1000; 
             border-bottom: 1px solid var(--border); 
-            background: rgba(0,0,0,0.6); /* Tamsesnis fonas */
+            background: rgba(0,0,0,0.6); 
             height: 90px;
         }
 
-        /* Kairė pusė: Logo */
         .logo { 
             font-weight: 800; font-size: 1.8rem; letter-spacing: -1px; text-transform: uppercase; 
             display: flex; align-items: center; gap: 15px; color: white;
         }
         .logo span { color: var(--blue); text-shadow: 0 0 20px rgba(0, 112, 243, 0.6); }
         
-        /* Žalias taškas prie logo */
         .status-dot { 
-            width: 12px; height: 12px; background-color: var(--success); border-radius: 50%; 
-            box-shadow: 0 0 15px var(--success); animation: pulse 2s infinite; 
+            width: 12px; height: 12px; background-color: #00ff88; border-radius: 50%; 
+            box-shadow: 0 0 15px #00ff88; animation: pulse 2s infinite; 
         }
         @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.3); opacity: 0.6; } 100% { transform: scale(1); opacity: 1; } }
 
-        /* Dešinė pusė: Nuorodos + Profilis kartu */
-        .nav-right { display: flex; align-items: center; gap: 50px; } /* Tarpas tarp nuorodų ir profilio */
+        .nav-right { display: flex; align-items: center; gap: 50px; }
 
         .nav-links { display: flex; gap: 35px; }
         .nav-links a { 
             color: #ccc; text-decoration: none; font-weight: 700; font-size: 0.9rem; 
             text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; 
         }
-        .nav-links a:hover, .nav-links a.active { color: #fff; border-bottom: 2px solid var(--blue); padding-bottom: 5px; }
+        .nav-links a:hover, .nav-links a.active { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
 
-        /* Profilio mygtukas (Pill shape) */
         #auth-container { display: flex; align-items: center; }
         
         #discord-btn { 
             background: #5865F2; color: white; border: none; padding: 10px 25px; border-radius: 50px; 
-            font-weight: 700; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 10px; font-size: 0.9rem;
+            font-weight: 700; transition: 0.3s; display: flex; align-items: center; gap: 10px; font-size: 0.9rem;
         }
         #discord-btn:hover { background: #4752c4; transform: translateY(-2px); }
 
@@ -78,46 +91,42 @@
         #user-avatar { width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--blue); }
         #user-name { font-weight: 700; font-size: 0.95rem; color: white; }
 
-
-        /* --- LAYOUT --- */
         .main-wrapper { padding-top: 160px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; gap: 60px; padding-bottom: 100px; width: 100%; max-width: 1400px; margin: 0 auto; }
         section { display: none; width: 100%; animation: fadeIn 0.5s ease forwards; }
         section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* KORTELĖS */
         .glass-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 30px; padding: 60px; position: relative; overflow: hidden; backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
         
-        h1 { font-size: 5rem; font-weight: 900; line-height: 0.95; margin-bottom: 30px; letter-spacing: -3px; }
+        h1 { font-size: 5rem; font-weight: 900; line-height: 0.95; margin-bottom: 30px; letter-spacing: -3px; cursor: default; }
         .blue-gradient { background: linear-gradient(135deg, #fff 30%, var(--blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* GRID */
         .dash-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 40px; }
 
-        /* JOB CARDS */
-        .rule-card { background: rgba(20, 20, 20, 0.6); padding: 35px; border-radius: 20px; border: 1px solid var(--border); transition: 0.3s; display: flex; flex-direction: column; min-height: 250px; justify-content: space-between; }
+        .rule-card { 
+            background: rgba(20, 20, 20, 0.6); padding: 35px; border-radius: 20px; 
+            border: 1px solid var(--border); transition: 0.3s; display: flex; flex-direction: column; 
+            min-height: 250px; justify-content: space-between; 
+        }
         .rule-card:hover { border-color: var(--blue); transform: translateY(-5px); background: rgba(30, 30, 30, 0.8); }
         .rule-card i { font-size: 2rem; color: var(--blue); margin-bottom: 15px; }
         .rule-card h4 { color: #fff; margin-bottom: 5px; font-size: 1.4rem; font-weight: 800; }
         .rule-card p { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 20px; }
 
-        /* MYGTUKAI (Kaip 1 FOTO) */
-        .apply-btn { width: 100%; padding: 15px; border-radius: 10px; font-weight: 800; font-size: 0.9rem; border: none; cursor: pointer; transition: 0.3s; text-transform: uppercase; letter-spacing: 0.5px; margin-top: auto; }
+        .apply-btn { width: 100%; padding: 15px; border-radius: 10px; font-weight: 800; font-size: 0.9rem; border: none; transition: 0.3s; text-transform: uppercase; letter-spacing: 0.5px; margin-top: auto; }
         
-        /* Žalias */
-        .btn-open { background-color: #157a46; color: white; box-shadow: 0 5px 15px rgba(21, 122, 70, 0.4); }
-        .btn-open:hover { background-color: #198754; transform: translateY(-2px); }
-        /* Raudonas */
+        .btn-open { background-color: var(--success); color: white; box-shadow: 0 5px 15px rgba(21, 122, 70, 0.4); }
+        .btn-open:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        
         .btn-closed { background-color: rgba(34, 10, 10, 0.8); color: #ff4444; border: 1px solid rgba(255, 68, 68, 0.2); cursor: not-allowed; opacity: 0.8; }
-        /* Geltonas */
-        .btn-vip { background-color: #ffc107; color: #000; box-shadow: 0 5px 15px rgba(255, 193, 7, 0.4); }
-        .btn-vip:hover { background-color: #ffca2c; transform: translateY(-2px); }
+        
+        .btn-vip { background-color: var(--gold); color: #000; box-shadow: 0 5px 15px rgba(255, 193, 7, 0.4); }
+        .btn-vip:hover { transform: translateY(-2px); filter: brightness(1.1); }
 
         .status-text { font-weight: bold; font-size: 0.9rem; }
         .st-green { color: #00ff88; }
         .st-red { color: #ff4444; }
 
-        /* VIP Grid */
         .vip-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 30px; }
         .vip-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 20px; padding: 40px 30px; text-align: center; transition: 0.3s; }
         .vip-card:hover { transform: translateY(-10px); border-color: rgba(255,255,255,0.3); }
@@ -125,21 +134,23 @@
         .vip-price { font-size: 3rem; font-weight: 900; margin-bottom: 25px; color: #fff; }
         .vip-list { list-style: none; padding: 0; text-align: left; margin-bottom: 25px; }
         .vip-list li { margin-bottom: 10px; color: #ccc; display: flex; align-items: center; gap: 10px; }
-        .vip-list li i { color: var(--success); }
-        .vip-btn-buy { width: 100%; padding: 12px; border-radius: 10px; background: rgba(255,255,255,0.1); color: #fff; font-weight: bold; border: 1px solid rgba(255,255,255,0.2); cursor: pointer; transition: 0.3s; }
+        .vip-list li i { color: #00ff88; }
+        .vip-btn-buy { width: 100%; padding: 12px; border-radius: 10px; background: rgba(255,255,255,0.1); color: #fff; font-weight: bold; border: 1px solid rgba(255,255,255,0.2); transition: 0.3s; }
         .vip-btn-buy:hover { background: #fff; color: #000; }
 
-        /* Home Mygtukai */
-        .btn-hero { display: inline-flex; align-items: center; gap: 15px; padding: 18px 45px; border-radius: 12px; text-decoration: none; font-weight: 800; font-size: 1rem; transition: 0.4s; cursor: pointer; border: none; }
+        .vip-bronze { border-top: 4px solid var(--bronze); }
+        .vip-silver { border-top: 4px solid var(--silver); }
+        .vip-gold { border-top: 4px solid var(--gold); }
+
+        .btn-hero { display: inline-flex; align-items: center; gap: 15px; padding: 18px 45px; border-radius: 12px; text-decoration: none; font-weight: 800; font-size: 1rem; transition: 0.4s; border: none; }
         .btn-primary { background: var(--blue); color: white; box-shadow: 0 10px 30px rgba(0, 112, 243, 0.3); }
         .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 20px 50px rgba(0, 112, 243, 0.5); }
 
-        /* Modalai */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 3000; justify-content: center; align-items: center; opacity: 0; transition: all 0.4s ease; backdrop-filter: blur(10px); }
         .modal-overlay.open { display: flex; opacity: 1; }
         .modal-content { background: #0f0f0f; border: 1px solid var(--border); border-radius: 25px; padding: 50px; width: 100%; max-width: 550px; position: relative; transform: translateY(30px) scale(0.95); transition: 0.4s; box-shadow: 0 0 60px rgba(0, 112, 243, 0.15); }
         .modal-overlay.open .modal-content { transform: translateY(0) scale(1); }
-        .close-modal { position: absolute; top: 25px; right: 25px; font-size: 1.5rem; color: #666; cursor: pointer; transition: 0.3s; }
+        .close-modal { position: absolute; top: 25px; right: 25px; font-size: 1.5rem; color: #666; transition: 0.3s; }
         .close-modal:hover { color: #fff; }
 
         .input-group { margin-bottom: 20px; position: relative; }
@@ -148,31 +159,23 @@
         .input-icon { position: absolute; left: 15px; top: 42px; color: #666; }
         textarea + .input-icon { top: 42px; }
         label { display: block; margin-bottom: 10px; font-weight: 700; color: #888; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; }
-        .submit-btn { width: 100%; padding: 15px; margin-top: 15px; background: linear-gradient(135deg, var(--blue), #0060d0); border: none; border-radius: 12px; color: white; font-weight: 800; cursor: pointer; font-size: 1rem; transition: 0.3s; }
+        .submit-btn { width: 100%; padding: 15px; margin-top: 15px; background: linear-gradient(135deg, var(--blue), #0060d0); border: none; border-radius: 12px; color: white; font-weight: 800; font-size: 1rem; transition: 0.3s; }
         .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0, 112, 243, 0.4); }
 
-        /* Stats */
         .stats-row { display: flex; gap: 80px; margin-top: 60px; }
         .stat-box h2 { font-size: 3.5rem; font-weight: 800; margin: 0; line-height: 1; }
         .stat-box .label { color: var(--text-dim); text-transform: uppercase; font-weight: 700; letter-spacing: 2px; }
 
-        /* Ticker */
         .ticker-wrap { position: fixed; bottom: 0; width: 100%; height: 40px; background: rgba(0,0,0,0.95); border-top: 1px solid var(--border); display: flex; align-items: center; z-index: 2000; }
         .ticker { display: inline-block; white-space: nowrap; animation: ticker 40s linear infinite; }
         .ticker__item { display: inline-block; padding: 0 3rem; color: #fff; font-weight: 600; font-size: 0.9rem; }
         .ticker__item span { color: var(--blue); }
         @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
 
-        /* VIP SPALVOS */
-        .vip-bronze { border-top: 4px solid var(--bronze); }
-        .vip-silver { border-top: 4px solid var(--silver); }
-        .vip-gold { border-top: 4px solid var(--gold); }
-
         #toast { visibility: hidden; min-width: 250px; background-color: #111; color: #fff; text-align: center; border-radius: 12px; padding: 16px; position: fixed; z-index: 2000; left: 50%; bottom: 80px; transform: translateX(-50%); border: 1px solid var(--success); display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: bold; }
         #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
         @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 80px; opacity: 1;} }
         @keyframes fadeout { from {bottom: 80px; opacity: 1;} to {bottom: 0; opacity: 0;} }
-
     </style>
 </head>
 <body>
@@ -181,7 +184,7 @@
         <source src="https://static.videezy.com/system/resources/previews/000/042/179/original/Traffic_lights_timelapse.mp4" type="video/mp4">
     </video>
 
-    <div id="toast"><i class="fas fa-check-circle" style="color: var(--success)"></i> IP Nukopijuotas!</div>
+    <div id="toast"><i class="fas fa-check-circle" style="color: #00ff88"></i> IP Nukopijuotas!</div>
 
     <nav>
         <div class="logo">
@@ -220,14 +223,14 @@
                             <p id="dash-id" style="color: var(--text-dim); font-family: monospace; font-size: 1rem; margin-top: 5px;"></p>
                         </div>
                     </div>
-                    <button onclick="logout()" style="background: rgba(220, 53, 69, 0.1); color: #dc3545; border: 1px solid #dc3545; padding: 12px 30px; border-radius: 8px; font-weight: 800; cursor: pointer; transition:0.3s;">ATSIJUNGTI</button>
+                    <button onclick="logout()" style="background: rgba(220, 53, 69, 0.1); color: #dc3545; border: 1px solid #dc3545; padding: 12px 30px; border-radius: 8px; font-weight: 800; transition:0.3s;">ATSIJUNGTI</button>
                 </div>
 
                 <div class="dash-grid">
                     <div id="card-policija" class="rule-card">
                         <div>
                             <i class="fas fa-shield-alt"></i>
-                            <h4>Policijos Atranka</h4>
+                            <h4>Policijos Departamentas</h4>
                             <p>Statusas: <span id="text-policija" class="status-text"></span></p>
                         </div>
                         <button id="btn-policija" class="apply-btn">KRAUNAMA...</button>
@@ -236,7 +239,7 @@
                     <div id="card-medikai" class="rule-card">
                         <div>
                             <i class="fas fa-ambulance"></i>
-                            <h4>Medikų Atranka</h4>
+                            <h4>Medikų Departamentas</h4>
                             <p>Statusas: <span id="text-medikai" class="status-text"></span></p>
                         </div>
                         <button id="btn-medikai" class="apply-btn">KRAUNAMA...</button>
@@ -245,7 +248,7 @@
                     <div id="card-mechanikai" class="rule-card">
                         <div>
                             <i class="fas fa-wrench"></i>
-                            <h4>Mechanikų Atranka</h4>
+                            <h4>Mechanikų Departamentas</h4>
                             <p>Statusas: <span id="text-mechanikai" class="status-text"></span></p>
                         </div>
                         <button id="btn-mechanikai" class="apply-btn">KRAUNAMA...</button>
@@ -387,20 +390,20 @@
     </div>
 
     <script>
-        // === SERVERIO NUSTATYMAI (Čia keisk statusus) ===
+        // === SERVERIO NUSTATYMAI (Greitas valdymas) ===
         const SERVER_CONFIG = {
-            server_ip: 'connect cfx.re/join/YOUR_ID',
+            server_ip: 'connect cfx.re/join/YOUR_ID', // Įrašyk savo IP
             status: {
-                policija: true,   // Pakeisk į false, jei nori uždaryti
-                medikai: false,   // Pakeisk į true, jei nori atidaryti
-                mechanikai: true  // Pakeisk į false, jei nori uždaryti
+                policija: true,   // true = ATIDARYTA, false = UŽDARYTA
+                medikai: false,   // Pakeisk, jei reikia
+                mechanikai: true  // Pakeisk, jei reikia
             },
             webhook: 'https://discord.com/api/webhooks/1470572886614999092/oINMatnjGC7OVERaD0wieIZIErb7x3MBpnKzC9SjabTqMEWNB_rhiGOHNldTB9c4AIlp',
             client_id: '1470568120921100423',
             redirect: 'https://twoside.lt'
         };
 
-        // === MYGTUKŲ LOGIKA ===
+        // === DASHBOARD LOGIKA (Mygtukų valdymas) ===
         function initDashboard() {
             const setupCard = (id, isOpen, openText) => {
                 const btn = document.getElementById(`btn-${id}`);
@@ -410,13 +413,13 @@
                     txt.innerText = "ATIDARYTA";
                     txt.className = "status-text st-green";
                     btn.innerText = "PILDYTI ANKETĄ";
-                    btn.className = "apply-btn btn-open"; // Žalias pilnas mygtukas
+                    btn.className = "apply-btn btn-open"; // Žalias mygtukas
                     btn.onclick = () => openApp(openText);
                 } else {
                     txt.innerText = "UŽDARYTA";
                     txt.className = "status-text st-red";
                     btn.innerText = "LAIKINAI UŽDARYTA";
-                    btn.className = "apply-btn btn-closed"; // Raudonas permatomas mygtukas
+                    btn.className = "apply-btn btn-closed"; // Raudonas permatomas
                     btn.onclick = null;
                 }
             };
@@ -427,7 +430,7 @@
         }
         initDashboard();
 
-        // --- STANDARTINĖS FUNKCIJOS ---
+        // --- KITOS FUNKCIJOS ---
         function showSection(id) {
             document.querySelectorAll('section:not(#dashboard)').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
@@ -505,13 +508,20 @@
                 document.getElementById('dash-welcome').innerText = `Sveikas, ${user.username}! 👋`;
                 document.getElementById('dash-id').innerText = `ID: ${user.id}`;
                 document.getElementById('dash-avatar').src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
-            }).catch(() => localStorage.removeItem('discord_token'));
+            })
+            .catch(() => localStorage.removeItem('discord_token'));
         }
 
         window.onload = () => {
             const token = new URLSearchParams(window.location.hash.slice(1)).get('access_token') || localStorage.getItem('discord_token');
-            if(token) { localStorage.setItem('discord_token', token); if(window.location.hash) window.history.replaceState({}, document.title, "/"); fetchDiscordUser(token); }
-            const baseCount = 60; const randomVar = Math.floor(Math.random() * 15);
+            if(token) {
+                localStorage.setItem('discord_token', token);
+                if(window.location.hash) window.history.replaceState({}, document.title, "/");
+                fetchDiscordUser(token);
+            }
+            
+            const baseCount = 60;
+            const randomVar = Math.floor(Math.random() * 15);
             document.getElementById('pCount').innerHTML = `${baseCount + randomVar}<span style="font-size:1.5rem; color:#888;">/128</span>`;
         };
     </script>
