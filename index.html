@@ -278,8 +278,8 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, push, set, onValue, get, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // --- ĮRAŠYK SAVO DUOMENIS ČIA ---
-        const ADMIN_IDS = ["771407889087725578", "Kitas_Admin_ID_Jei_Reikia"]; // TAVO DISCORD ID ČIA
+        // --- KONFIGŪRACIJA ---
+        const replitURL = "https://node-server--agekas97.replit.app"; 
 
         const firebaseConfig = {
             apiKey: "AIzaSyCQXr6AJSfWDvQAAsIbSSHVhznbKkZ_-sQ",
@@ -290,12 +290,10 @@
             messagingSenderId: "639976729105",
             appId: "1:639976729105:web:443d951377221ccfc01fb0"
         };
-        // --------------------------------
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // Globalūs kintamieji valdymui
         window.db = db;
         window.ref = ref;
         window.update = update;
@@ -305,23 +303,21 @@
             fivem_code: '3zv39z', 
             discord_server_id: '1380526027331207271', 
             server_ip: 'connect cfx.re/join/3zv39z',
-            status: { policija: true, medikai: false, mechanikai: false }, // Bus perrašyta iš DB
+            status: { policija: false, medikai: false, mechanikai: false },
             webhook: 'https://discord.com/api/webhooks/1470572886614999092/oINMatnjGC7OVERaD0wieIZIErb7x3MBpnKzC9SjabTqMEWNB_rhiGOHNldTB9c4AIlp',
             client_id: '1470568120921100423',
             redirect: 'https://twoside.lt'
         };
 
-        // --- REAL-TIME STATUS LISTENER ---
         const statusRef = ref(db, 'serverStatus');
         onValue(statusRef, (snapshot) => {
             const data = snapshot.val();
             if (data) {
                 window.SERVER_CONFIG.status = data;
-                initDashboard(); // Atnaujinam UI visiems
+                initDashboard();
             }
         });
 
-        // --- ADMIN FUNKCIJOS ---
         window.toggleAppStatus = async function(job) {
             const currentRef = ref(db, `serverStatus/${job}`);
             const snapshot = await get(currentRef);
@@ -332,7 +328,6 @@
             alert(`${job} statusas pakeistas!`);
         };
 
-        // --- STANDARTINĖS FUNKCIJOS ---
         window.submitForm = function(e) {
             e.preventDefault();
             const lastSubmit = localStorage.getItem('lastAppSubmit');
@@ -413,16 +408,32 @@
             if(element) element.scrollIntoView({ behavior: 'smooth', block: 'start' });
         };
 
+        // --- ATNAUJINTA DISCORD USER FUNKCIJA SU REPLIT PATIKRA ---
         function fetchDiscordUser(token) {
-            fetch('https://discord.com/api/users/@me', { headers: { authorization: `Bearer ${token}` } }).then(res => res.ok ? res.json() : Promise.reject()).then(user => {
-                document.getElementById('discord-btn').style.display = 'none'; document.getElementById('user-profile').style.display = 'flex';
-                document.getElementById('user-name').innerText = user.username; document.getElementById('user-avatar').src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
-                document.getElementById('dashboard').style.display = 'block'; document.getElementById('dash-welcome').innerText = `Sveikas, ${user.username}! 👋`;
-                document.getElementById('dash-id').innerText = `ID: ${user.id}`; document.getElementById('dash-avatar').src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
+            fetch('https://discord.com/api/users/@me', { headers: { authorization: `Bearer ${token}` } })
+            .then(res => res.ok ? res.json() : Promise.reject())
+            .then(async user => {
+                document.getElementById('discord-btn').style.display = 'none'; 
+                document.getElementById('user-profile').style.display = 'flex';
+                document.getElementById('user-name').innerText = user.username; 
+                document.getElementById('user-avatar').src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
                 
-                // ADMIN CHECK
-                if(ADMIN_IDS.includes(user.id)) {
-                    document.querySelectorAll('.admin-controls').forEach(el => el.classList.add('visible'));
+                document.getElementById('dashboard').style.display = 'block'; 
+                document.getElementById('dash-welcome').innerText = `Sveikas, ${user.username}! 👋`;
+                document.getElementById('dash-id').innerText = `ID: ${user.id}`; 
+                document.getElementById('dash-avatar').src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
+                
+                // Kreipiamės į Replit patikrinti Admin teises
+                try {
+                    const response = await fetch(`${replitURL}/check-admin?id=${user.id}`);
+                    const data = await response.json();
+
+                    if (data.isAdmin === true) {
+                        document.querySelectorAll('.admin-controls').forEach(el => el.classList.add('visible'));
+                        console.log("Adminas atpažintas per Replit!");
+                    }
+                } catch (e) {
+                    console.error("Klaida susisiekiant su Replit serveriu:", e);
                 }
 
             }).catch(() => localStorage.removeItem('discord_token'));
@@ -505,7 +516,6 @@
             }).catch(() => console.log('Discord Widget Error'));
         }
 
-        // Init
         setTimeout(() => document.getElementById('preloader').classList.add('hidden'), 1500);
         createParticles(); initTilt(); initDashboard();
         setTimeout(() => { setInterval(showFakeNotification, 12000); showFakeNotification(); }, 10000);
@@ -539,4 +549,3 @@
     </script>
 </body>
 </html>
-
