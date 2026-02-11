@@ -13,117 +13,103 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- KINTAMIEJI --- */
         :root { 
             --primary: #0070f3; 
             --primary-glow: rgba(0, 112, 243, 0.6);
-            --bg: #030303; 
-            --glass: rgba(18, 18, 18, 0.8); 
-            --glass-border: rgba(255, 255, 255, 0.08); 
+            --bg: #050505; 
+            --glass: rgba(255, 255, 255, 0.03); 
+            --glass-border: rgba(255, 255, 255, 0.1); 
             --text-main: #ffffff; 
             --text-dim: #a0a0a0;
             --success: #00e676; 
             --danger: #ff1744; 
             --gold: #ffd700; 
-            --silver: #c0c0c0;
-            --bronze: #cd7f32;
         }
         
-        /* --- SCROLLBAR --- */
         ::-webkit-scrollbar { width: 8px; } 
         ::-webkit-scrollbar-track { background: #000; } 
-        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; border: 2px solid #000; }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 10px; }
         
-        /* --- PAGRINDINIAI --- */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg); color: var(--text-main); min-height: 100vh; overflow-x: hidden; position: relative; }
         
-        /* --- VIDEO FONAS --- */
-        #bg-video { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; 
-            filter: brightness(0.25) blur(3px) contrast(1.1); transform: scale(1.05); 
-        }
+        /* FONAS */
+        #bg-video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; filter: brightness(0.25) blur(3px); }
         #particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-        
-        .particle { position: absolute; background: rgba(255, 255, 255, 0.2); border-radius: 50%; animation: floatUp 20s infinite linear; }
+        .particle { position: absolute; background: rgba(255, 255, 255, 0.2); border-radius: 50%; animation: floatUp 15s infinite linear; }
         @keyframes floatUp { 0% { transform: translateY(100vh) scale(0); opacity: 0; } 100% { transform: translateY(-10vh) scale(1); opacity: 0; } }
         
-        /* --- MODERNUS STIKLO DIZAINAS (VISOMS KORTELĖMS) --- */
+        /* ATNAUJINTAS STIKLO DIZAINAS */
         .glass-card, .rule-card, .vip-card, .admin-app-card, .action-card {
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
+            background: rgba(15, 15, 15, 0.6); /* Tamsesnis fonas geresniam kontrastui */
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(255, 255, 255, 0.15); /* Šviesesnis viršus */
             border-radius: 24px;
             padding: 40px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
             position: relative;
             overflow: hidden;
         }
 
-        /* Hover efektai kortelėms */
         .rule-card:hover, .vip-card:hover, .action-card:hover {
             transform: translateY(-8px);
             border-color: var(--primary);
-            box-shadow: 0 20px 50px rgba(0, 112, 243, 0.2);
+            box-shadow: 0 25px 60px rgba(0, 112, 243, 0.15);
+            background: rgba(20, 20, 20, 0.8);
         }
         
-        /* Blizgesys */
-        .rule-card::before, .vip-card::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
-            transition: 0.6s;
-        }
-        .rule-card:hover::before, .vip-card:hover::before { left: 100%; }
+        .admin-mode-card { border-top: 3px solid #ff1744 !important; box-shadow: 0 0 80px rgba(255, 23, 68, 0.2) !important; }
 
-        .admin-mode-card { border-top: 3px solid red !important; box-shadow: 0 0 60px rgba(255, 0, 0, 0.2) !important; }
-
-        /* --- NAVIGACIJA --- */
+        /* NAVIGACIJA */
         nav { 
-            position: fixed; top: 0; width: 100%; padding: 15px 50px; 
+            position: fixed; top: 0; width: 100%; padding: 20px 50px; 
             display: flex; justify-content: space-between; align-items: center; 
-            z-index: 1000; background: rgba(5, 5, 5, 0.9); 
+            z-index: 1000; background: rgba(0, 0, 0, 0.8); 
             backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); 
             transition: 0.3s; 
         }
-        .logo { font-weight: 900; font-size: 1.8rem; display: flex; align-items: center; gap: 12px; color: white; letter-spacing: -1px; }
+        .logo { font-weight: 800; font-size: 1.8rem; display: flex; align-items: center; gap: 12px; color: white; letter-spacing: -1px; }
         .logo span { color: var(--primary); }
         .status-dot { width: 10px; height: 10px; background-color: var(--success); border-radius: 50%; box-shadow: 0 0 15px var(--success); animation: pulse 2s infinite; }
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(0, 230, 118, 0.7); } 100% { box-shadow: 0 0 0 10px rgba(0, 230, 118, 0); } }
         
         .nav-right { display: flex; align-items: center; gap: 40px; }
         .nav-links { display: flex; gap: 40px; position: relative; }
-        .nav-links a { color: #ccc; cursor: pointer; font-weight: 600; font-size: 0.95rem; text-decoration: none; padding: 10px 0; transition: 0.3s; }
-        .nav-links a:hover, .nav-links a.active { color: white; text-shadow: 0 0 15px rgba(255,255,255,0.4); }
+        .nav-links a { 
+            color: #bbb; cursor: pointer; font-weight: 600; font-size: 0.95rem; 
+            text-decoration: none; padding: 10px 0; transition: 0.3s; 
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .nav-links a:hover, .nav-links a.active { color: white; text-shadow: 0 0 20px rgba(255,255,255,0.4); }
         
-        /* SCROLL SPY LINIJA (SUTVARKYTA) */
+        /* SCROLL SPY LINIJA (FIXED) */
         .nav-links a::after { 
-            content: ''; position: absolute; width: 0; height: 3px; bottom: 0; left: 50%; 
-            background: var(--primary); transition: 0.3s ease-in-out; transform: translateX(-50%);
+            content: ''; position: absolute; width: 0; height: 3px; bottom: -5px; left: 50%; 
+            background: var(--primary); transition: 0.3s ease; transform: translateX(-50%);
             box-shadow: 0 0 15px var(--primary); border-radius: 10px;
         }
         .nav-links a.active::after { width: 100%; }
 
-        /* --- MYGTUKAI --- */
+        /* MYGTUKAI */
         .btn-hero { 
-            padding: 15px 40px; border-radius: 12px; font-weight: 800; border: none; cursor: pointer; transition: all 0.3s ease; 
+            padding: 16px 40px; border-radius: 14px; font-weight: 700; border: none; cursor: pointer; transition: all 0.3s ease; 
             background: linear-gradient(135deg, var(--primary), #0050b3); color: white; display: inline-flex; align-items: center; gap: 10px;
             text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; box-shadow: 0 5px 20px rgba(0, 112, 243, 0.3);
         }
-        .btn-hero:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(0, 112, 243, 0.5); filter: brightness(1.2); }
+        .btn-hero:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(0, 112, 243, 0.5); filter: brightness(1.15); }
         
         #discord-btn { background: #5865F2; box-shadow: 0 5px 20px rgba(88, 101, 242, 0.3); }
         #discord-btn:hover { background: #4752c4; box-shadow: 0 15px 35px rgba(88, 101, 242, 0.5); }
 
-        /* --- PAGRINDINIS LAYOUT --- */
+        /* PAGRINDINIS */
         .main-wrapper { max-width: 1300px; margin: 0 auto; padding-top: 140px; padding-bottom: 100px; width: 90%; }
         section { min-height: auto; margin-bottom: 120px; scroll-margin-top: 140px; }
         
         h1 { font-size: 4.5rem; font-weight: 900; line-height: 1; margin-bottom: 25px; letter-spacing: -2px; }
         .blue-gradient { background: linear-gradient(135deg, #fff 40%, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .typewriter { border-right: 4px solid var(--primary); animation: blink 0.8s infinite; padding-right: 5px; }
-        @keyframes blink { 50% { border-color: transparent; } }
         
         .dash-grid, .vip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-top: 40px; }
         
@@ -131,7 +117,7 @@
         .rule-card h4 { font-size: 1.6rem; font-weight: 800; margin-bottom: 10px; color: white; }
         .rule-card p { color: var(--text-dim); font-size: 1rem; line-height: 1.6; }
 
-        /* --- ADMIN UI --- */
+        /* ADMIN UI */
         .toggle-btn {
             width: 100%; padding: 14px; margin-top: 20px;
             background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
@@ -149,51 +135,34 @@
         }
         .admin-nav-btn:hover, .admin-nav-btn.active { background: rgba(0, 112, 243, 0.15); color: var(--primary); border-color: var(--primary); transform: translateX(5px); }
         
-        .admin-app-card { 
-            background: rgba(30,30,30,0.6); padding: 25px; border-radius: 18px; margin-bottom: 20px; 
-            border: 1px solid var(--glass-border); border-left: 4px solid var(--primary); 
-            animation: slideUp 0.4s ease-out; 
-        }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .action-card { text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
-        .action-card:hover { border-color: var(--danger); background: rgba(220, 53, 69, 0.1); box-shadow: 0 10px 30px rgba(220, 53, 69, 0.2); }
-        
-        /* --- LOADER --- */
-        #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #050505; z-index: 9999; display: flex; justify-content: center; align-items: center; transition: 0.5s; flex-direction: column; }
-        #preloader.hidden { opacity: 0; pointer-events: none; visibility: hidden; }
-        .admin-load-text { color: var(--danger) !important; text-shadow: 0 0 30px red; font-size: 3.5rem !important; animation: blink 1s infinite; }
-        
         .admin-controls { display: none; } 
         .admin-controls.visible { display: block; }
         
-        /* --- FORMOS --- */
+        /* FORMOS */
         .input-group { margin-bottom: 25px; }
         label { display: block; margin-bottom: 10px; font-weight: 700; color: #ddd; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px; }
         input, textarea { width: 100%; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); padding: 18px; border-radius: 14px; color: white; outline: none; transition: 0.3s; font-size: 1rem; }
         input:focus, textarea:focus { border-color: var(--primary); background: rgba(0, 112, 243, 0.05); box-shadow: 0 0 20px rgba(0, 112, 243, 0.1); }
         
-        /* --- MODAL --- */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        /* MODAL */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(15px); }
         .modal-overlay.open { display: flex; animation: fadeIn 0.3s; }
-        .modal-content { background: #0f0f0f; border: 1px solid var(--primary); border-radius: 30px; padding: 50px; width: 95%; max-width: 650px; position: relative; box-shadow: 0 0 80px rgba(0, 112, 243, 0.3); }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .modal-content { background: #0a0a0a; border: 1px solid var(--primary); border-radius: 30px; padding: 50px; width: 95%; max-width: 650px; position: relative; box-shadow: 0 0 80px rgba(0, 112, 243, 0.2); }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
-        /* --- STATISTIKA --- */
-        .stats-row { display: flex; gap: 60px; margin-top: 50px; flex-wrap: wrap; }
-        .stat-box { text-align: center; flex: 1; }
-        .stat-box h2 { font-size: 3.5rem; font-weight: 800; margin: 0; color: white; line-height: 1; }
-        .stat-box .label { color: var(--text-dim); font-weight: 600; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; margin-top: 10px; }
+        /* LOADER */
+        #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #050505; z-index: 9999; display: flex; justify-content: center; align-items: center; transition: 0.5s; flex-direction: column; }
+        #preloader.hidden { opacity: 0; pointer-events: none; visibility: hidden; }
+        .admin-load-text { color: var(--danger) !important; text-shadow: 0 0 30px red; font-size: 3.5rem !important; animation: blink 1s infinite; }
 
         @media (max-width: 768px) {
             nav { padding: 20px; flex-direction: column; height: auto; background: rgba(0,0,0,0.95); }
             .nav-right, .nav-links { flex-direction: column; gap: 20px; width: 100%; text-align: center; }
-            .nav-links a { display: block; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+            .nav-links a { display: block; padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
             .nav-links a::after { display: none; }
             h1 { font-size: 3rem; }
             .admin-layout { flex-direction: column; }
-            .admin-sidebar { width: 100%; border-right: none; margin-bottom: 30px; border-bottom: 1px solid var(--glass-border); padding-bottom: 20px; }
-            .stats-row { flex-direction: column; gap: 30px; }
+            .admin-sidebar { width: 100%; border-right: none; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid var(--glass-border); }
         }
     </style>
 </head>
@@ -206,10 +175,6 @@
 
     <div id="particles"></div>
     <video autoplay muted loop playsinline id="bg-video"><source src="https://static.videezy.com/system/resources/previews/000/042/179/original/Traffic_lights_timelapse.mp4" type="video/mp4"></video>
-
-    <div id="toast" style="visibility:hidden; min-width: 250px; background-color: #111; color: #fff; text-align: center; border-radius: 12px; padding: 16px; position: fixed; z-index: 2000; left: 50%; bottom: 80px; transform: translateX(-50%); border: 1px solid var(--success); font-weight: bold; box-shadow: 0 10px 40px rgba(0,230,118,0.2);">
-        <i class="fas fa-check-circle" style="color: #00ff88; margin-right: 10px;"></i> IP Nukopijuotas!
-    </div>
 
     <nav>
         <div class="logo"><div class="status-dot"></div><div>TWOSIDE<span>.LT</span></div></div>
@@ -266,17 +231,13 @@
                         <div id="tab-actions" style="display:none;">
                             <h3 style="margin-bottom:20px; color:white;">Greitieji Veiksmai</h3>
                             <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:20px;">
-                                <div class="action-card glass-card" onclick="alert('Serveris perkraunamas... (Simuliacija)')">
+                                <div class="action-card glass-card" onclick="alert('Serveris perkraunamas...')">
                                     <i class="fas fa-power-off" style="color:var(--danger); font-size:2.5rem; margin-bottom:15px;"></i>
                                     <h4>Perkrauti Serverį</h4>
                                 </div>
-                                <div class="action-card glass-card" onclick="alert('Cache sėkmingai išvalytas!')">
+                                <div class="action-card glass-card" onclick="alert('Cache išvalytas!')">
                                     <i class="fas fa-trash-alt" style="color:var(--gold); font-size:2.5rem; margin-bottom:15px;"></i>
                                     <h4>Išvalyti Cache</h4>
-                                </div>
-                                <div class="action-card glass-card" onclick="alert('Pranešimas išsiųstas į Discord!')">
-                                    <i class="fas fa-bullhorn" style="color:#f1c40f; font-size:2.5rem; margin-bottom:15px;"></i>
-                                    <h4>Skelbti Pranešimą</h4>
                                 </div>
                             </div>
                         </div>
@@ -336,7 +297,7 @@
         </section>
 
         <section id="home">
-            <div class="glass-card" style="padding: 100px 60px; text-align: left;">
+            <div class="glass-card" style="padding: 100px 60px; text-align: left; background: rgba(10, 10, 10, 0.4);">
                 <div style="display:inline-flex; align-items:center; gap:10px; background: rgba(0, 112, 243, 0.15); padding: 10px 25px; border-radius: 50px; color: var(--primary); font-weight: 800; font-size: 0.9rem; margin-bottom: 30px; border: 1px solid var(--primary);">
                     <i class="fas fa-check-circle"></i> SEZONAS 2.0 STARTAVO
                 </div>
@@ -349,10 +310,10 @@
                     <a href="https://discord.gg/SyGUUGWqj6" target="_blank" class="btn-hero" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); box-shadow:none;"><i class="fab fa-discord"></i> DISCORD</a>
                 </div>
                 
-                <div class="stats-row">
-                    <div class="stat-box"><h2>128<span style="font-size:1.5rem; color:#666;">/128</span></h2><div class="label">Žaidėjai</div></div>
-                    <div class="stat-box"><h2 style="color:var(--primary);">8</h2><div class="label">Pareigūnai</div></div>
-                    <div class="stat-box"><h2 style="color:#5865F2;">1420</h2><div class="label">Discord Nariai</div></div>
+                <div class="stats-row" style="display:flex; gap:60px; margin-top:50px;">
+                    <div class="stat-box" style="text-align:center;"><h2>128<span style="font-size:1.5rem; color:#666;">/128</span></h2><div class="label" style="color:var(--text-dim); font-weight:600;">Žaidėjai</div></div>
+                    <div class="stat-box" style="text-align:center;"><h2 style="color:var(--primary);">8</h2><div class="label" style="color:var(--text-dim); font-weight:600;">Pareigūnai</div></div>
+                    <div class="stat-box" style="text-align:center;"><h2 style="color:#5865F2;">1420</h2><div class="label" style="color:var(--text-dim); font-weight:600;">Discord Nariai</div></div>
                 </div>
             </div>
         </section>
@@ -435,7 +396,7 @@
     </div>
 
     <script>
-        // SVARBU: Patikrink ar ši nuoroda vis dar veikia
+        // --- TAVO NAUJA NUORODA ---
         const API_URL = "https://fingers-eagles-freely-ministers.trycloudflare.com";
         
         const CLIENT_ID = "1470568120921100423"; 
@@ -443,21 +404,19 @@
 
         let currentUser = null;
 
-        // --- SCROLL SPY (SUTVARKYTAS) ---
+        // --- SCROLL SPY LOGIKA ---
         window.addEventListener('scroll', () => {
             let current = "";
             const sections = document.querySelectorAll("section");
             
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
-                // Aktyvuoja, kai esi 1/3 sekcijos viduje
-                if (pageYOffset >= sectionTop - window.innerHeight / 3) {
+                if (pageYOffset >= sectionTop - 250) { // Jei esi 250px nuo sekcijos
                     current = section.getAttribute("id");
                 }
             });
 
-            // Jei pačiame viršuje -> Home
-            if (pageYOffset < 100) current = "home";
+            if (pageYOffset < 100) current = "home"; // Jei viršuje - Home
 
             document.querySelectorAll(".nav-links a").forEach(li => {
                 li.classList.remove("active");
@@ -467,7 +426,7 @@
             });
         });
 
-        // --- DALELES (PARTICLES) ---
+        // --- DALELES (FONAS) ---
         function createParticles() {
             const container = document.getElementById('particles');
             for(let i=0; i<25; i++){
@@ -508,7 +467,7 @@
             event.currentTarget.classList.add('active');
         }
 
-        // --- INIT & LOGIC ---
+        // --- PAGRINDINĖ LOGIKA (INIT) ---
         async function init() {
             const fragment = new URLSearchParams(window.location.hash.slice(1));
             let token = fragment.get('access_token') || localStorage.getItem('token');
@@ -516,13 +475,14 @@
             if (token) {
                 localStorage.setItem('token', token);
                 try {
+                    // 1. GAUTI DISCORD VARTOTOJĄ
                     const userRes = await fetch('https://discord.com/api/users/@me', { headers: { authorization: `Bearer ${token}` } });
                     
                     if (!userRes.ok) throw new Error("Token expired");
                     const user = await userRes.json();
                     currentUser = user;
 
-                    // UI Updates
+                    // UI ATNAUJINIMAS
                     document.getElementById('discord-btn').style.display = 'none';
                     document.getElementById('user-profile').style.display = 'flex';
                     document.getElementById('user-name').innerText = user.username;
@@ -533,13 +493,13 @@
                     document.getElementById('dash-id').innerText = user.id;
                     document.getElementById('dash-avatar').src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
 
-                    // GAUTI STATUSĄ
+                    // 2. GAUTI STATUSĄ IŠ VPS (SVARBU)
                     try {
                         const statusRes = await fetch(`${API_URL}/check-status?id=${user.id}`);
                         const status = await statusRes.json();
 
-                        // Adminas?
-                        if (status.isAdmin) {
+                        // -- ADMIN LOGIKA --
+                        if (status.isAdmin === true) {
                             const loader = document.getElementById('loaderText');
                             loader.innerHTML = "TWOSIDE <span style='color:red'>ADMIN</span>";
                             loader.classList.add('admin-load-text');
@@ -549,10 +509,10 @@
                             loadApps(user.id);
                         }
 
-                        // Whitelist statusas?
+                        // -- WHITELIST LOGIKA --
+                        const wlCard = document.getElementById('wl-card');
                         const wlText = document.getElementById('wl-status-text');
                         const wlBtn = document.getElementById('btn-wl-apply');
-                        const wlCard = document.getElementById('wl-card');
 
                         if (status.isWhitelisted) {
                             wlCard.style.borderTop = "3px solid #00e676";
@@ -564,18 +524,20 @@
                             wlBtn.style.display = 'none';
                         } else {
                             wlText.innerText = "Norėdamas žaisti, privalai užpildyti anketą.";
-                            wlBtn.style.display = "inline-flex";
+                            wlBtn.style.display = "inline-flex"; // Rodo mygtuką
                         }
+
                     } catch(err) {
-                        console.log("Serveris nepasiekiamas:", err);
+                        console.log("Nepavyko susisiekti su serveriu:", err);
                         document.getElementById('wl-status-text').innerText = "Serveris nepasiekiamas (bandykite vėliau).";
                     }
+
                 } catch (e) { 
                     console.error("Auth Error:", e); 
                     localStorage.removeItem('token');
                 }
             }
-            setTimeout(() => document.getElementById('preloader').classList.add('hidden'), 1000);
+            setTimeout(() => document.getElementById('preloader').classList.add('hidden'), 1500);
         }
 
         async function submitForm(e) {
@@ -630,7 +592,7 @@
                         <div class="admin-app-header">
                             <h3 style="margin:0; display:flex; align-items:center; gap:10px;">
                                 <i class="fab fa-discord" style="color:#5865F2"></i> ${app.discordName} 
-                                <span style="font-size:0.8rem; color:#666;">(${app.discordId})</span>
+                                <span style="font-size:0.8rem; color:#666; font-weight:normal;">(${app.discordId})</span>
                             </h3>
                             <small style="color:#666;">${new Date(parseInt(app.id)).toLocaleTimeString()}</small>
                         </div>
@@ -651,7 +613,7 @@
         }
 
         async function handle(id, action) {
-            if(!confirm("Ar tikrai?")) return;
+            if(!confirm("Ar tikrai norite atlikti šį veiksmą?")) return;
             const res = await fetch(`${API_URL}/handle-app`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
