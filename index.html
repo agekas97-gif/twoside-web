@@ -10,507 +10,562 @@
     <meta name="theme-color" content="#0070f3">
 
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        :root { --blue: #0070f3; --bg: #050505; --card-bg: rgba(12, 12, 12, 0.90); --text-main: #ffffff; --text-dim: #999999; --border: rgba(255, 255, 255, 0.1); --success: #157a46; --danger: #dc3545; --gold: #ffc107; --silver: #c0c0c0; --bronze: #cd7f32; --police: #3498db; }
-        ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: #050505; } ::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 4px; }
+        :root { 
+            --blue: #0070f3; 
+            --bg: #050505; 
+            --glass: rgba(20, 20, 20, 0.75); 
+            --border: rgba(255, 255, 255, 0.1); 
+            --text-main: #ffffff; 
+            --text-dim: #a0a0a0;
+            --success: #00e676; 
+            --danger: #ff1744; 
+            --gold: #ffd700; 
+        }
+        
+        ::-webkit-scrollbar { width: 8px; } 
+        ::-webkit-scrollbar-track { background: #000; } 
+        ::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 10px; }
+        
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg); color: var(--text-main); min-height: 100vh; overflow-x: hidden; position: relative; }
-        #bg-video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; filter: brightness(0.25); }
+        
+        #bg-video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; filter: brightness(0.3) blur(3px); transform: scale(1.05); }
         #particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-        .particle { position: absolute; background: rgba(255, 255, 255, 0.5); border-radius: 50%; animation: float 20s infinite linear; }
-        @keyframes float { 0% { transform: translateY(0) translateX(0); opacity: 0; } 100% { transform: translateY(-100vh) translateX(50px); opacity: 0; } }
+        .particle { position: absolute; background: rgba(255, 255, 255, 0.3); border-radius: 50%; animation: floatUp 15s infinite linear; }
+        @keyframes floatUp { 0% { transform: translateY(100vh) scale(0); opacity: 0; } 100% { transform: translateY(-10vh) scale(1); opacity: 0; } }
         
-        #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s; flex-direction: column; }
-        #preloader.hidden { opacity: 0; visibility: hidden; }
-        .loader-text { font-size: 2rem; font-weight: 900; letter-spacing: 5px; animation: blink 1.5s infinite; transition: 0.3s; }
-        .loader-text span { color: var(--blue); }
-        .admin-load-text { color: #ff0000 !important; text-shadow: 0 0 20px red; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-        
-        nav { position: fixed; top: 0; width: 100%; padding: 0 50px; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(15px); z-index: 1000; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.6); height: 90px; transition: 0.3s; }
-        .logo { font-weight: 800; font-size: 1.8rem; display: flex; align-items: center; gap: 15px; color: white; }
-        .logo span { color: var(--blue); }
-        .status-dot { width: 12px; height: 12px; background-color: #00ff88; border-radius: 50%; box-shadow: 0 0 15px #00ff88; animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.3); opacity: 0.6; } }
-        .nav-right { display: flex; align-items: center; gap: 50px; }
-        .nav-links { display: flex; gap: 35px; }
-        .nav-links a { color: #ccc; cursor: pointer; font-weight: 700; font-size: 0.9rem; position: relative; transition: 0.3s; }
-        .nav-links a:hover, .nav-links a.active { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
-        .nav-links a::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; left: 0; background: var(--blue); transition: 0.3s; }
-        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
-        #auth-container { display: flex; align-items: center; }
-        #discord-btn { background: #5865F2; color: white; border: none; padding: 10px 25px; border-radius: 50px; font-weight: 700; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 10px; font-size: 0.9rem; }
-        #discord-btn:hover { background: #4752c4; transform: translateY(-2px); }
-        #user-profile { display: none; align-items: center; gap: 15px; background: rgba(255,255,255,0.05); padding: 6px 20px 6px 6px; border-radius: 50px; border: 1px solid var(--border); }
-        #user-avatar { width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--blue); }
-        .main-wrapper { display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding-bottom: 100px; width: 100%; max-width: 1400px; margin: 0 auto; padding-top: 0; }
-        section { display: block; width: 100%; min-height: 100vh; padding-top: 130px; }
-        #dashboard { display: none; }
-        
-        .glass-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 30px; padding: 40px; position: relative; backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); width: 100%; transition: 0.5s; margin-bottom: 30px; }
-        .admin-mode-card { border-top: 2px solid red !important; box-shadow: 0 0 40px rgba(255, 0, 0, 0.2) !important; }
-        .admin-badge { background: red; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; margin-left: 10px; vertical-align: middle; box-shadow: 0 0 10px red; }
-        
-        h1 { font-size: 5rem; font-weight: 900; line-height: 0.95; margin-bottom: 30px; letter-spacing: -3px; }
-        .blue-gradient { background: linear-gradient(135deg, #fff 30%, var(--blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
-        .dash-grid, .vip-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 20px; }
-        .rule-card, .vip-card { background: rgba(20, 20, 20, 0.6); padding: 35px; border-radius: 20px; border: 1px solid var(--border); transition: 0.3s; display: flex; flex-direction: column; min-height: 250px; justify-content: space-between; overflow: hidden; position: relative; }
-        .rule-card:hover { border-color: var(--blue); background: rgba(30, 30, 30, 0.8); transform: translateY(-5px); }
-        .rule-card i { font-size: 2rem; color: var(--blue); margin-bottom: 15px; }
-        .rule-card h4 { font-size: 1.4rem; font-weight: 800; margin-bottom: 5px; }
-        .rule-card p { color: var(--text-dim); font-size: 0.9rem; }
-        .apply-btn, .vip-btn-buy { width: 100%; padding: 15px; border-radius: 10px; font-weight: 800; border: none; cursor: pointer; transition: 0.3s; margin-top: auto; }
-        .btn-open { background: var(--success); color: white; }
-        .btn-closed { background: rgba(34, 10, 10, 0.8); color: #ff4444; border: 1px solid rgba(255, 68, 68, 0.2); cursor: not-allowed; }
-        .btn-vip { background: var(--gold); color: #000; }
-        .btn-hero { display: inline-flex; align-items: center; gap: 15px; padding: 18px 45px; border-radius: 12px; font-weight: 800; text-decoration: none; border: none; cursor: pointer; transition: 0.3s; }
-        .btn-primary { background: var(--blue); color: white; animation: pulseBtn 2s infinite; }
-        @keyframes pulseBtn { 0% { box-shadow: 0 0 0 0 rgba(0, 112, 243, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(0, 112, 243, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 112, 243, 0); } }
-        .stats-row { display: flex; gap: 80px; margin-top: 60px; }
-        .stat-box h2 { font-size: 3.5rem; font-weight: 800; margin: 0; line-height: 1; }
-        .stat-box .label { color: var(--text-dim); text-transform: uppercase; font-weight: 700; letter-spacing: 2px; }
-        #live-toast-container { position: fixed; bottom: 60px; right: 20px; z-index: 2500; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
-        .live-toast { background: rgba(12, 12, 12, 0.95); border: 1px solid var(--border); border-left: 4px solid var(--blue); padding: 15px 20px; border-radius: 10px; color: white; min-width: 250px; animation: slideIn 0.5s forwards; display: flex; align-items: center; gap: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
-        .live-toast.hide { animation: slideOut 0.5s forwards; }
-        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
-        
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 3000; justify-content: center; align-items: flex-start; padding: 20px; overflow-y: auto; opacity: 0; transition: 0.4s; backdrop-filter: blur(10px); }
-        .modal-overlay.open { display: flex; opacity: 1; }
-        .modal-content { background: #0f0f0f; border: 1px solid var(--border); border-radius: 25px; padding: 50px; width: 100%; max-width: 650px; position: relative; margin: 50px auto; transform: scale(0.95); transition: 0.4s; }
-        .modal-overlay.open .modal-content { transform: scale(1); }
-        .close-modal { position: absolute; top: 25px; right: 25px; font-size: 1.5rem; color: #666; cursor: pointer; }
-        .input-group { margin-bottom: 20px; position: relative; }
-        .custom-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 15px; border-radius: 12px; color: white; outline: none; transition: 0.3s; }
-        .custom-input:focus { border-color: var(--blue); background: rgba(255,255,255,0.1); }
-        textarea.custom-input { min-height: 100px; resize: vertical; }
-        .input-label { display: block; margin-bottom: 8px; font-weight: 700; color: #ccc; }
-        .submit-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, var(--blue), #0060d0); border: none; border-radius: 12px; color: white; font-weight: 800; cursor: pointer; margin-top: 15px; }
-        
-        /* ADMIN PANEL NEW STYLES */
-        .admin-layout { display: flex; gap: 30px; height: 100%; min-height: 400px; }
-        .admin-sidebar { width: 250px; border-right: 1px solid var(--border); padding-right: 20px; display: flex; flex-direction: column; gap: 10px; }
-        .admin-content { flex: 1; padding-left: 10px; overflow-y: auto; max-height: 500px; }
-        .admin-nav-btn { background: rgba(255,255,255,0.05); border: 1px solid transparent; padding: 15px; text-align: left; border-radius: 10px; color: #ccc; cursor: pointer; transition: 0.3s; font-weight: 600; display: flex; align-items: center; gap: 10px; }
-        .admin-nav-btn:hover, .admin-nav-btn.active { background: rgba(220, 53, 69, 0.1); color: #ff4444; border-color: #ff4444; }
-        .admin-app-card { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; margin-bottom: 20px; border-left: 4px solid var(--blue); animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .admin-app-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .admin-app-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .admin-answer-box { background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; }
-        .admin-answer-label { font-size: 0.75rem; text-transform: uppercase; color: var(--text-dim); font-weight: 800; display: block; margin-bottom: 5px; }
-        .admin-actions { display: flex; gap: 10px; margin-top: 15px; }
-        
-        .action-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 20px; border-radius: 15px; text-align: center; cursor: pointer; transition: 0.3s; }
-        .action-card:hover { transform: translateY(-5px); border-color: var(--blue); background: rgba(0, 112, 243, 0.1); }
-        .action-card i { font-size: 2rem; color: var(--blue); margin-bottom: 10px; }
-        
-        .ticker-wrap { position: fixed; bottom: 0; width: 100%; height: 40px; background: rgba(0,0,0,0.95); border-top: 1px solid var(--border); display: flex; align-items: center; z-index: 2000; }
-        .ticker { display: inline-block; white-space: nowrap; animation: ticker 40s linear infinite; }
-        .ticker__item { display: inline-block; padding: 0 3rem; color: #fff; font-weight: 600; font-size: 0.9rem; }
-        .ticker__item span { color: var(--blue); }
-        @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
-        #toast { visibility: hidden; min-width: 250px; background-color: #111; color: #fff; text-align: center; border-radius: 12px; padding: 16px; position: fixed; z-index: 2000; left: 50%; bottom: 80px; transform: translateX(-50%); border: 1px solid var(--success); font-weight: bold; }
-        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
-        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 80px; opacity: 1;} }
-        @keyframes fadeout { from {bottom: 80px; opacity: 1;} to {bottom: 0; opacity: 0;} }
-        .admin-controls { display: none; margin-top: 10px; gap: 10px; }
-        .admin-controls.visible { display: flex; }
-        .toggle-btn { flex: 1; padding: 10px; font-size: 0.8rem; font-weight: 800; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.4); color: #ccc; cursor: pointer; transition: 0.3s; text-transform: uppercase; }
-        .toggle-btn:hover { background: rgba(0, 112, 243, 0.2); border-color: var(--blue); color: white; }
+        /* --- MODERNUS STIKLO DIZAINAS (GLASSMORPHISM) --- */
+        .glass-card, .rule-card, .vip-card, .admin-app-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
 
-        @media (max-width: 1200px) { .main-wrapper { max-width: 90%; } }
+        /* Hover efektai kortelėms */
+        .rule-card:hover, .vip-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--blue);
+            box-shadow: 0 20px 50px rgba(0, 112, 243, 0.2);
+        }
+        
+        .admin-mode-card { border-top: 3px solid red !important; box-shadow: 0 0 60px rgba(255, 0, 0, 0.2) !important; }
+
+        /* NAVIGACIJA */
+        nav { position: fixed; top: 0; width: 100%; padding: 20px 50px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); border-bottom: 1px solid var(--border); transition: 0.3s; }
+        .logo { font-weight: 800; font-size: 1.6rem; display: flex; align-items: center; gap: 12px; color: white; letter-spacing: -1px; }
+        .logo span { color: var(--blue); }
+        .status-dot { width: 10px; height: 10px; background-color: var(--success); border-radius: 50%; box-shadow: 0 0 15px var(--success); animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.3); opacity: 0.6; } }
+        
+        .nav-right { display: flex; align-items: center; gap: 40px; }
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { color: #ccc; cursor: pointer; font-weight: 600; font-size: 0.95rem; position: relative; transition: 0.3s; text-decoration: none; padding: 5px 0; }
+        .nav-links a:hover, .nav-links a.active { color: white; text-shadow: 0 0 20px rgba(255,255,255,0.4); }
+        .nav-links a::after { content: ''; position: absolute; width: 0; height: 3px; bottom: -2px; left: 0; background: var(--blue); transition: 0.3s; box-shadow: 0 0 15px var(--blue); border-radius: 2px; }
+        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+
+        /* MYGTUKAI */
+        .btn-hero { 
+            padding: 14px 35px; border-radius: 12px; font-weight: 800; border: none; cursor: pointer; transition: all 0.3s ease; 
+            background: linear-gradient(135deg, var(--blue), #0050b3); color: white; display: inline-flex; align-items: center; gap: 10px;
+            text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem; box-shadow: 0 5px 20px rgba(0, 112, 243, 0.3);
+        }
+        .btn-hero:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(0, 112, 243, 0.5); filter: brightness(1.1); }
+        
+        #discord-btn { background: #5865F2; box-shadow: 0 5px 20px rgba(88, 101, 242, 0.3); }
+        #discord-btn:hover { background: #4752c4; box-shadow: 0 15px 35px rgba(88, 101, 242, 0.5); }
+
+        /* PAGRINDINIS */
+        .main-wrapper { max-width: 1200px; margin: 0 auto; padding-top: 120px; padding-bottom: 100px; width: 90%; }
+        section { min-height: auto; margin-bottom: 100px; scroll-margin-top: 120px; }
+        
+        h1 { font-size: 4.5rem; font-weight: 900; line-height: 1; margin-bottom: 25px; letter-spacing: -2px; }
+        .blue-gradient { background: linear-gradient(135deg, #fff 40%, var(--blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .dash-grid, .vip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-top: 30px; }
+        
+        .rule-card i, .vip-card i { font-size: 2.5rem; color: var(--blue); margin-bottom: 20px; filter: drop-shadow(0 0 10px rgba(0, 112, 243, 0.5)); }
+        .rule-card h4 { font-size: 1.5rem; font-weight: 800; margin-bottom: 10px; }
+        .rule-card p { color: var(--text-dim); font-size: 0.95rem; line-height: 1.6; }
+
+        /* MODERN ADMIN UI */
+        .toggle-btn {
+            width: 100%; padding: 14px; margin-top: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ccc; font-weight: 700; font-size: 0.8rem;
+            border-radius: 12px; cursor: pointer; transition: 0.3s;
+            text-transform: uppercase; letter-spacing: 1px;
+            display: flex; justify-content: center; align-items: center; gap: 8px;
+        }
+        .toggle-btn:hover { background: var(--blue); color: white; border-color: var(--blue); box-shadow: 0 0 25px rgba(0, 112, 243, 0.4); }
+        
+        .admin-nav-btn {
+            background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 18px;
+            text-align: left; border-radius: 14px; color: #ccc; font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; gap: 15px; transition: 0.3s; margin-bottom: 10px;
+        }
+        .admin-nav-btn:hover, .admin-nav-btn.active { background: rgba(0, 112, 243, 0.15); color: var(--blue); border-color: var(--blue); transform: translateX(5px); }
+        
+        .admin-app-card { background: rgba(30,30,30,0.4); padding: 25px; border-radius: 18px; margin-bottom: 20px; border: 1px solid var(--border); border-left: 4px solid var(--blue); animation: slideUp 0.4s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .action-card { text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .action-card:hover { border-color: var(--danger); background: rgba(220, 53, 69, 0.1); box-shadow: 0 10px 30px rgba(220, 53, 69, 0.2); }
+        
+        /* LOADER */
+        #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #050505; z-index: 9999; display: flex; justify-content: center; align-items: center; transition: 0.5s; flex-direction: column; }
+        #preloader.hidden { opacity: 0; pointer-events: none; visibility: hidden; }
+        .admin-load-text { color: var(--danger) !important; text-shadow: 0 0 30px red; font-size: 3.5rem !important; }
+        .admin-controls { display: none; } 
+        .admin-controls.visible { display: block; }
+        
+        /* FORMOS */
+        .input-group { margin-bottom: 25px; }
+        label { display: block; margin-bottom: 10px; font-weight: 700; color: #ddd; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        input, textarea { width: 100%; background: rgba(0,0,0,0.4); border: 1px solid var(--border); padding: 18px; border-radius: 14px; color: white; outline: none; transition: 0.3s; font-size: 1rem; }
+        input:focus, textarea:focus { border-color: var(--blue); background: rgba(0, 112, 243, 0.05); box-shadow: 0 0 20px rgba(0, 112, 243, 0.1); }
+        
+        /* MODAL */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        .modal-overlay.open { display: flex; animation: fadeIn 0.3s; }
+        .modal-content { background: #0f0f0f; border: 1px solid var(--blue); border-radius: 30px; padding: 50px; width: 95%; max-width: 650px; position: relative; box-shadow: 0 0 80px rgba(0, 112, 243, 0.3); }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
         @media (max-width: 768px) {
-            nav { position: relative; height: auto; padding: 20px; flex-direction: column; gap: 20px; background: var(--bg); border-bottom: 1px solid var(--border); }
-            .nav-right, .nav-links { flex-direction: column; gap: 15px; width: 100%; text-align: center; }
-            .nav-links a { font-size: 1.1rem; padding: 10px; width: 100%; display: block; border-bottom: 1px solid rgba(255,255,255,0.05); }
+            nav { padding: 20px; flex-direction: column; height: auto; background: rgba(0,0,0,0.95); }
+            .nav-right, .nav-links { flex-direction: column; gap: 20px; width: 100%; text-align: center; }
+            .nav-links a { display: block; padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05); }
             .nav-links a::after { display: none; }
-            section { padding-top: 40px !important; min-height: auto; margin-bottom: 60px; }
-            #dashboard { padding-top: 40px !important; }
-            .glass-card { padding: 25px; }
+            h1 { font-size: 3rem; }
             .admin-layout { flex-direction: column; }
-            .admin-sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
-            .dash-grid, .vip-grid, .admin-app-grid { grid-template-columns: 1fr; }
-            .stats-row { flex-direction: column; gap: 30px; }
-            .stat-box { text-align: center; }
-            #live-toast-container { bottom: 50px; right: 10px; left: 10px; align-items: center; }
-            .btn-hero, #auth-container, #discord-btn { width: 100%; justify-content: center; }
+            .admin-sidebar { width: 100%; border-right: none; margin-bottom: 30px; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
         }
     </style>
 </head>
 <body>
 
     <div id="preloader">
-        <div class="loader-content">
-            <div class="loader-text" id="loaderText">TWOSIDE<span>.LT</span></div>
-        </div>
+        <h1 style="font-size: 3rem; font-weight: 900;" id="loaderText">TWOSIDE<span style="color:var(--blue)">.LT</span></h1>
+        <div style="margin-top:20px; color:#666;">Kraunama...</div>
     </div>
 
     <div id="particles"></div>
-    <div id="live-toast-container"></div>
+    <video autoplay muted loop playsinline id="bg-video"><source src="https://static.videezy.com/system/resources/previews/000/042/179/original/Traffic_lights_timelapse.mp4" type="video/mp4"></video>
 
-    <video autoplay muted loop playsinline id="bg-video">
-        <source src="https://static.videezy.com/system/resources/previews/000/042/179/original/Traffic_lights_timelapse.mp4" type="video/mp4">
-    </video>
-
-    <div id="toast"><i class="fas fa-check-circle" style="color: #00ff88"></i> IP Nukopijuotas!</div>
+    <div id="toast" style="visibility:hidden; min-width: 250px; background-color: #111; color: #fff; text-align: center; border-radius: 12px; padding: 16px; position: fixed; z-index: 2000; left: 50%; bottom: 80px; transform: translateX(-50%); border: 1px solid var(--success); font-weight: bold;">
+        <i class="fas fa-check-circle" style="color: #00ff88"></i> IP Nukopijuotas!
+    </div>
 
     <nav>
-        <div class="logo">
-            <div class="status-dot"></div>
-            <div>TWOSIDE<span>.LT</span></div>
-        </div>
+        <div class="logo"><div class="status-dot"></div><div>TWOSIDE<span>.LT</span></div></div>
         <div class="nav-right">
             <div class="nav-links">
-                <a onclick="showSection('home')" id="link-home" class="active">PAGRINDINIS</a>
-                <a onclick="showSection('about')" id="link-about">SERVERIO APRAŠYMAS</a>
-                <a onclick="showSection('rules')" id="link-rules">SERVERIO TAISYKLĖS</a>
+                <a onclick="scrollToSection('home')" id="link-home" class="active">PAGRINDINIS</a>
+                <a onclick="scrollToSection('about')" id="link-about">APRAŠYMAS</a>
+                <a onclick="scrollToSection('rules')" id="link-rules">TAISYKLĖS</a>
             </div>
             <div id="auth-container">
-                <button id="discord-btn" onclick="loginWithDiscord()"><i class="fab fa-discord"></i> PRISIJUNGTI</button>
-                <div id="user-profile"><img id="user-avatar" src="" alt=""><span id="user-name"></span></div>
+                <button id="discord-btn" class="btn-hero" onclick="loginWithDiscord()"><i class="fab fa-discord"></i> PRISIJUNGTI</button>
+                <div id="user-profile" style="display:none; align-items:center; gap:15px; background:rgba(255,255,255,0.08); padding:8px 20px 8px 8px; border-radius:50px; border:1px solid rgba(255,255,255,0.1);">
+                    <img id="user-avatar" src="" style="width:35px; border-radius:50%; border:2px solid var(--blue);">
+                    <span id="user-name" style="font-weight:bold; font-size:0.9rem;"></span>
+                </div>
             </div>
         </div>
     </nav>
 
     <div class="main-wrapper">
-        <section id="dashboard">
-            <div class="glass-card" id="dash-card" style="border-top: 2px solid var(--blue);">
-                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+        
+        <section id="dashboard" style="display:none;">
+            
+            <div class="glass-card" id="dash-card">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;">
                     <div style="display:flex; align-items:center; gap:25px;">
-                        <img id="dash-avatar" src="" style="width: 80px; border-radius: 20px; border: 2px solid var(--blue); box-shadow: 0 0 20px rgba(0, 112, 243, 0.4);">
+                        <img id="dash-avatar" src="" style="width: 90px; border-radius: 25px; border: 3px solid var(--blue); box-shadow: 0 0 30px rgba(0, 112, 243, 0.4);">
                         <div>
-                            <h2 id="dash-welcome" style="font-size: 2.2rem; margin:0;">Sveikas!</h2>
-                            <p id="dash-id" style="color: var(--text-dim); font-family: monospace; font-size: 1rem; margin-top: 5px;"></p>
+                            <h2 id="dash-welcome" style="margin:0; font-size:2.2rem; font-weight:800;">Sveikas!</h2>
+                            <p style="color:var(--text-dim); margin-top:5px; font-family:monospace; background:rgba(255,255,255,0.05); padding:5px 10px; border-radius:8px; display:inline-block;">ID: <span id="dash-id"></span></p>
                         </div>
                     </div>
-                    <button onclick="logout()" style="background: rgba(220, 53, 69, 0.1); color: #dc3545; border: 1px solid #dc3545; padding: 12px 30px; border-radius: 8px; font-weight: 800; transition:0.3s;">ATSIJUNGTI</button>
+                    <button onclick="logout()" class="btn-hero" style="background:linear-gradient(135deg, #ff1744, #b71c1c); box-shadow: 0 5px 20px rgba(255, 23, 68, 0.3);">ATSIJUNGTI</button>
                 </div>
             </div>
 
-            <div id="admin-area" class="glass-card" style="display: none; border-top: 2px solid #dc3545;">
-                <h2 style="color: #dc3545; margin-bottom: 25px; display:flex; align-items:center; gap:10px;">
-                    <i class="fas fa-shield-alt"></i> ADMIN VALDYMO PULTAS
-                </h2>
+            <div id="admin-area" class="glass-card" style="display:none; border-top: 3px solid var(--danger);">
+                <h2 style="color:var(--danger); margin-bottom:30px;"><i class="fas fa-user-shield"></i> ADMIN VALDYMO PULTAS</h2>
                 <div class="admin-layout">
-                    <div class="admin-sidebar">
-                        <div class="admin-nav-btn active" onclick="switchAdminTab('apps')">
-                            <i class="fas fa-clipboard-list"></i> Whitelist Anketos
-                        </div>
-                        <div class="admin-nav-btn" onclick="switchAdminTab('actions')">
-                            <i class="fas fa-bolt"></i> Serverio Veiksmai
-                        </div>
-                        <div class="admin-nav-btn" onclick="switchAdminTab('stats')">
-                            <i class="fas fa-chart-line"></i> Statistika
-                        </div>
+                    <div class="admin-sidebar" style="min-width:240px;">
+                        <div class="admin-nav-btn active" onclick="switchTab('apps')"><i class="fas fa-clipboard-list"></i> Whitelist Anketos</div>
+                        <div class="admin-nav-btn" onclick="switchTab('actions')"><i class="fas fa-bolt"></i> Veiksmai</div>
+                        <div class="admin-nav-btn" onclick="switchTab('stats')"><i class="fas fa-chart-bar"></i> Statistika</div>
                     </div>
-                    
-                    <div class="admin-content">
+                    <div class="admin-content" style="flex:1;">
                         <div id="tab-apps">
                             <h3 style="margin-bottom:15px; color:white;">Gautos Anketos</h3>
                             <div id="applications-list">
-                                <p style="color:#666;">Kraunama...</p>
+                                <p style="color:#666; text-align:center; margin-top:20px;">Kraunama...</p>
                             </div>
                         </div>
-
                         <div id="tab-actions" style="display:none;">
                             <h3 style="margin-bottom:15px; color:white;">Greitieji Veiksmai</h3>
                             <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:15px;">
-                                <div class="action-card" onclick="alert('Serveris perkraunamas... (Simuliacija)')">
-                                    <i class="fas fa-redo"></i>
+                                <div class="action-card glass-card" onclick="alert('Serveris perkraunamas... (Simuliacija)')">
+                                    <i class="fas fa-power-off" style="color:var(--danger)"></i>
                                     <h4>Perkrauti Serverį</h4>
                                 </div>
-                                <div class="action-card" onclick="alert('Cache sėkmingai išvalytas!')">
-                                    <i class="fas fa-trash-alt" style="color:#e74c3c;"></i>
+                                <div class="action-card glass-card" onclick="alert('Cache sėkmingai išvalytas!')">
+                                    <i class="fas fa-trash-alt" style="color:var(--gold)"></i>
                                     <h4>Išvalyti Cache</h4>
                                 </div>
-                                <div class="action-card" onclick="alert('Pranešimas išsiųstas į Discord!')">
+                                <div class="action-card glass-card" onclick="alert('Pranešimas išsiųstas į Discord!')">
                                     <i class="fas fa-bullhorn" style="color:#f1c40f;"></i>
                                     <h4>Skelbti Pranešimą</h4>
                                 </div>
-                                <div class="action-card" onclick="alert('Visi žaidėjai atjungti.')">
-                                    <i class="fas fa-users-slash" style="color:#e74c3c;"></i>
+                                <div class="action-card glass-card" onclick="alert('Visi žaidėjai atjungti.')">
+                                    <i class="fas fa-users-slash" style="color:var(--danger)"></i>
                                     <h4>Išmesti Visus</h4>
                                 </div>
                             </div>
                         </div>
-
                         <div id="tab-stats" style="display:none;">
                             <h3 style="margin-bottom:15px; color:white;">Serverio Statistika</h3>
-                            <div style="background:rgba(255,255,255,0.05); padding:20px; border-radius:10px;">
-                                <p style="font-size:2rem; font-weight:900; color:var(--blue);">1,420</p>
-                                <p style="color:#888;">Registruotų Vartotojų</p>
+                            <div class="glass-card" style="text-align:center;">
+                                <h1 style="color:var(--blue); margin-bottom:0;">1,420</h1>
+                                <p>Registruotų Vartotojų</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div id="wl-card" class="glass-card" style="border-top: 2px solid #00ff88; padding: 30px;">
-                <h3 style="margin-bottom: 10px; display:flex; align-items:center; gap:10px;"><i class="fas fa-id-card" style="color: var(--blue);"></i> WHITELIST STATUSAS</h3>
-                <p id="wl-status-text" style="color: var(--text-dim); margin-bottom: 20px; font-size: 1.1rem;">Norėdamas žaisti serveryje, privalai užpildyti anketą.</p>
+            <div id="wl-card" class="glass-card" style="border-top: 3px solid var(--blue); padding:35px;">
+                <h3 style="margin-bottom:15px; display:flex; align-items:center; gap:10px;"><i class="fas fa-id-card" style="color:var(--blue)"></i> WHITELIST STATUSAS</h3>
+                <p id="wl-status-text" style="color:var(--text-dim); margin-bottom:25px; font-size:1.1rem;">Tikrinama tavo būsena...</p>
                 <div id="wl-action-container">
-                    <button id="btn-wl-apply" class="btn-hero" onclick="openWhitelistApp()" style="max-width: 300px;">PILDYTI ANKETĄ</button>
+                    <button id="btn-wl-apply" class="btn-hero" onclick="openModal()" style="display:none;">PILDYTI ANKETĄ <i class="fas fa-pen"></i></button>
                 </div>
             </div>
 
             <div class="dash-grid">
-                <div id="card-policija" class="rule-card">
-                    <div><i class="fas fa-shield-alt"></i><h4>Policijos Atranka</h4><p>Statusas: <span id="text-policija" class="status-text"></span></p></div>
-                    <button id="btn-policija" class="apply-btn">KRAUNAMA...</button>
-                    <div id="admin-policija" class="admin-controls"><button class="toggle-btn" onclick="toggleAppStatus('policija')">KEISTI STATUSĄ</button></div>
+                <div class="rule-card" id="card-policija">
+                    <div style="text-align:center;">
+                        <i class="fas fa-shield-alt"></i>
+                        <h4>Policija</h4>
+                        <p id="status-policija" style="color:var(--success); font-weight:bold; font-size:1.1rem; margin-top:10px;">ATIDARYTA</p>
+                    </div>
+                    <div class="admin-controls" id="adm-policija">
+                        <button class="toggle-btn" onclick="toggleJob('policija')">KEISTI STATUSĄ</button>
+                    </div>
                 </div>
-                <div id="card-medikai" class="rule-card">
-                    <div><i class="fas fa-ambulance"></i><h4>Medikų Atranka</h4><p>Statusas: <span id="text-medikai" class="status-text"></span></p></div>
-                    <button id="btn-medikai" class="apply-btn">KRAUNAMA...</button>
-                    <div id="admin-medikai" class="admin-controls"><button class="toggle-btn" onclick="toggleAppStatus('medikai')">KEISTI STATUSĄ</button></div>
+                
+                <div class="rule-card" id="card-medikai">
+                    <div style="text-align:center;">
+                        <i class="fas fa-user-md"></i>
+                        <h4>Medikai</h4>
+                        <p id="status-medikai" style="color:var(--danger); font-weight:bold; font-size:1.1rem; margin-top:10px;">UŽDARYTA</p>
+                    </div>
+                    <div class="admin-controls" id="adm-medikai">
+                        <button class="toggle-btn" onclick="toggleJob('medikai')">KEISTI STATUSĄ</button>
+                    </div>
                 </div>
-                <div id="card-mechanikai" class="rule-card">
-                    <div><i class="fas fa-wrench"></i><h4>Mechanikų Atranka</h4><p>Statusas: <span id="text-mechanikai" class="status-text"></span></p></div>
-                    <button id="btn-mechanikai" class="apply-btn">KRAUNAMA...</button>
-                    <div id="admin-mechanikai" class="admin-controls"><button class="toggle-btn" onclick="toggleAppStatus('mechanikai')">KEISTI STATUSĄ</button></div>
-                </div>
-                <div class="rule-card" style="border-top: 4px solid var(--gold);">
-                    <div><i class="fas fa-crown" style="color: var(--gold);"></i><h4>VIP Narystė</h4><p>Norėdami įsigyti VIP statusą, kreipkitės Discord Ticket.</p></div>
-                    <button class="apply-btn btn-vip" onclick="openVip()">PERŽIŪRĖTI PLANUS</button>
+
+                <div class="rule-card" style="border-top: 3px solid var(--gold);">
+                    <div style="text-align:center;">
+                        <i class="fas fa-crown" style="color:var(--gold);"></i>
+                        <h4>VIP Narystė</h4>
+                        <p>Peržiūrėti planus ir privilegijas</p>
+                    </div>
+                    <button class="toggle-btn" style="background:var(--gold); color:black; border:none; box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);" onclick="openVip()">ATIDARYTI</button>
                 </div>
             </div>
         </section>
 
         <section id="home">
-            <div class="glass-card" style="text-align: left; padding: 80px;">
-                <div style="display:inline-block; background: rgba(0, 112, 243, 0.15); padding: 8px 20px; border-radius: 30px; color: var(--blue); font-weight: 800; font-size: 0.9rem; margin-bottom: 25px; border: 1px solid var(--blue); letter-spacing: 1px;">
-                    <i class="fas fa-check-circle" style="margin-right: 5px;"></i> SEZONAS 2.0 STARTAVO
+            <div class="glass-card" style="padding: 100px 60px; text-align: left; background: rgba(10, 10, 10, 0.4);">
+                <div style="display:inline-flex; align-items:center; gap:10px; background: rgba(0, 112, 243, 0.15); padding: 10px 25px; border-radius: 50px; color: var(--blue); font-weight: 800; font-size: 0.9rem; margin-bottom: 30px; border: 1px solid var(--blue);">
+                    <i class="fas fa-check-circle"></i> SEZONAS 2.0 STARTAVO
                 </div>
-                <h1>TIKRASIS<br><span class="blue-gradient typewriter">ROLEPLAY.</span></h1>
-                <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top:30px;">
-                    <button class="btn-hero btn-primary" onclick="copyIP()"><i class="fas fa-play"></i> PRISIJUNGTI DABAR</button>
-                    <a href="https://discord.gg/SyGUUGWqj6" target="_blank" class="btn-hero" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color:white;"><i class="fab fa-discord"></i> DISCORD</a>
+                <h1 style="font-weight:900;">TWOSIDE <span class="blue-gradient">ROLEPLAY</span></h1>
+                <p style="font-size:1.3rem; color:var(--text-dim); max-width:650px; margin-bottom:40px; line-height:1.7;">
+                    Prisijunk prie sparčiausiai augančios bendruomenės Lietuvoje. Unikalios sistemos, brandi administracija ir tavo nauja istorija prasideda čia.
+                </p>
+                <div style="display:flex; gap:20px; flex-wrap:wrap;">
+                    <button class="btn-hero" onclick="copyIP()"><i class="fas fa-play"></i> PRISIJUNGTI DABAR</button>
+                    <a href="https://discord.gg/SyGUUGWqj6" target="_blank" class="btn-hero" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); box-shadow:none;"><i class="fab fa-discord"></i> DISCORD</a>
                 </div>
             </div>
         </section>
 
         <section id="about">
             <div class="glass-card">
-                <h2 style="font-size: 3rem; margin-bottom: 40px;">KODĖL <span class="blue-gradient">TWOSIDE?</span></h2>
+                <h2 style="font-size: 3rem; margin-bottom: 50px; text-align:center;">KODĖL <span class="blue-gradient">TWOSIDE?</span></h2>
                 <div class="dash-grid">
-                    <div class="rule-card"><i class="fas fa-tachometer-alt"></i><h4>Optimizuota</h4><p>Serveris kurtas galvojant apie stabilumą, ne apie bereikalingus efektus.</p></div>
-                    <div class="rule-card"><i class="fas fa-users"></i><h4>Bendruomenė</h4><p>Draugiška ir brandi bendruomenė. Čia rasite draugų, o ne priešų.</p></div>
-                    <div class="rule-card"><i class="fas fa-briefcase"></i><h4>Ekonomika</h4><p>Realistiška ekonomika. Pinigai neuždirbami per minutę, bet kiekvienas uždarbis turi vertę.</p></div>
+                    <div class="rule-card"><i class="fas fa-tachometer-alt"></i><h4>Optimizuota</h4><p>Serveris kurtas galvojant apie stabilumą ir greitį.</p></div>
+                    <div class="rule-card"><i class="fas fa-users"></i><h4>Bendruomenė</h4><p>Draugiška ir brandi bendruomenė, padedanti naujokams.</p></div>
+                    <div class="rule-card"><i class="fas fa-briefcase"></i><h4>Ekonomika</h4><p>Realistiška ekonomika, darbai ir verslai.</p></div>
                 </div>
             </div>
         </section>
 
         <section id="rules">
             <div class="glass-card">
-                <h2 style="font-size: 3rem; margin-bottom: 40px;">SVARBIAUSIOS <span class="blue-gradient">TAISYKLĖS</span></h2>
+                <h2 style="font-size: 3rem; margin-bottom: 50px; text-align:center;">SVARBIAUSIOS <span class="blue-gradient">TAISYKLĖS</span></h2>
                 <div class="dash-grid">
-                    <div class="rule-card"><h4><i class="fas fa-skull"></i> RDM</h4><p>Griežtai draudžiama žudyti ar žaloti kitus žaidėjus be svarios RP priežasties.</p></div>
-                    <div class="rule-card"><h4><i class="fas fa-car-crash"></i> VDM</h4><p>Draudžiama naudoti transporto priemonę kaip ginklą traiškant žmones.</p></div>
-                    <div class="rule-card"><h4><i class="fas fa-theater-masks"></i> Power Gaming</h4><p>Draudžiama atlikti veiksmus, kurie fiziškai neįmanomi realiame gyvenime.</p></div>
-                    <div class="rule-card"><h4><i class="fas fa-sync-alt"></i> NLR (New Life Rule)</h4><p>Jei mirštate, jūs neatsimenate paskutinės RP situacijos.</p></div>
-                    <div class="rule-card"><h4><i class="fas fa-exclamation-triangle"></i> Fear RP</h4><p>Privalote branginti savo gyvybę. Jei jums grasina ginklu, turite paklusti.</p></div>
-                    <div class="rule-card"><h4><i class="fas fa-headset"></i> Meta Gaming</h4><p>Draudžiama naudoti informaciją, gautą ne žaidime būdu (Discord ir t.t.).</p></div>
+                    <div class="rule-card"><h4><i class="fas fa-skull"></i> RDM</h4><p>Žudymas be svarios RP priežasties griežtai draudžiamas.</p></div>
+                    <div class="rule-card"><h4><i class="fas fa-car-crash"></i> VDM</h4><p>Trankymas su mašina kaip ginklu draudžiamas.</p></div>
+                    <div class="rule-card"><h4><i class="fas fa-theater-masks"></i> Power Gaming</h4><p>Neįmanomi veiksmai ir jėgos naudojimas draudžiami.</p></div>
+                    <div class="rule-card"><h4><i class="fas fa-sync-alt"></i> NLR</h4><p>Miręs personažas neprisimena paskutinės situacijos.</p></div>
+                    <div class="rule-card"><h4><i class="fas fa-exclamation-triangle"></i> Fear RP</h4><p>Privaloma branginti gyvybę, kai gresia pavojus.</p></div>
+                    <div class="rule-card"><h4><i class="fas fa-headset"></i> Meta Gaming</h4><p>Draudžiama naudoti OOC informaciją IC tikslais.</p></div>
                 </div>
             </div>
         </section>
+
     </div>
 
-    <div class="modal-overlay" id="whitelistModal">
+    <div class="modal-overlay" id="appModal">
         <div class="modal-content">
-            <div class="close-modal" onclick="closeWhitelistApp()"><i class="fas fa-times"></i></div>
-            <h2 style="text-align: center; margin-bottom: 20px; font-weight: 800;">WHITELIST ANKETA</h2>
-            <form id="wlForm" onsubmit="submitWhitelistForm(event)">
-                <div class="input-group">
-                    <label class="input-label">1. Kiek tau metų?</label>
-                    <input type="number" id="wl_age" class="custom-input" placeholder="Pvz: 16" required>
-                </div>
-                <div class="input-group">
-                    <label class="input-label">2. Kokiuose projektuose žaidei anksčiau?</label>
-                    <textarea id="wl_history" class="custom-input" placeholder="Išvardink projektus..." required></textarea>
-                </div>
-                <div class="input-group">
-                    <label class="input-label">3. Kas yra NLR? (Paaiškink)</label>
-                    <textarea id="wl_nlr" class="custom-input" placeholder="New Life Rule yra..." required></textarea>
-                </div>
-                <div class="input-group">
-                    <label class="input-label">4. Kas yra FEARRP? (Paaiškink)</label>
-                    <textarea id="wl_fearrp" class="custom-input" placeholder="Fear Roleplay yra..." required></textarea>
-                </div>
-                <div class="input-group">
-                    <label class="input-label">5. Kodėl nusprendei žaisti šiame serveryje?</label>
-                    <textarea id="wl_why" class="custom-input" placeholder="Mane sudomino..." required></textarea>
-                </div>
-                <button type="submit" class="submit-btn">SIŲSTI ANKETĄ</button>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+                <h2 style="margin:0; font-size:2rem;">WHITELIST ANKETA</h2>
+                <i class="fas fa-times" style="cursor:pointer; font-size:1.8rem; color:var(--text-dim);" onclick="closeModal()"></i>
+            </div>
+            <form onsubmit="submitForm(event)">
+                <div class="input-group"><label>1. Kiek tau metų?</label><input type="number" id="q1" required placeholder="Pvz: 16"></div>
+                <div class="input-group"><label>2. RP Patirtis (Projektai)?</label><textarea id="q2" required placeholder="Kur žaidei anksčiau?"></textarea></div>
+                <div class="input-group"><label>3. Kas yra NLR?</label><textarea id="q3" required placeholder="New Life Rule yra..."></textarea></div>
+                <div class="input-group"><label>4. Kas yra FEARRP?</label><textarea id="q4" required placeholder="Fear Roleplay yra..."></textarea></div>
+                <div class="input-group"><label>5. Kodėl nori žaisti pas mus?</label><textarea id="q5" required placeholder="Mane sudomino..."></textarea></div>
+                <button type="submit" class="btn-hero" style="width:100%; justify-content:center;">SIŲSTI ANKETĄ</button>
             </form>
         </div>
     </div>
 
     <div class="modal-overlay" id="vipModal">
-        <div class="modal-content" style="max-width: 1000px;">
-            <div class="close-modal" onclick="closeVip()"><i class="fas fa-times"></i></div>
-            <h2 style="text-align:center; margin-bottom:10px; font-size: 2.2rem; font-weight: 900;">VIP PLANAI</h2>
+        <div class="modal-content" style="max-width:900px;">
+            <div style="text-align:right;"><i class="fas fa-times" style="cursor:pointer; font-size:1.8rem; color:var(--text-dim);" onclick="closeVip()"></i></div>
+            <h2 style="text-align:center; margin-bottom:40px; font-size:3rem; text-shadow:0 0 20px rgba(255,215,0,0.3);">VIP PLANAI</h2>
             <div class="vip-grid">
-                <div class="vip-card vip-bronze"><div class="vip-title" style="color: var(--bronze)">Bronze</div><div class="vip-price">5€ <span>/mėn</span></div><ul class="vip-list"><li><i class="fas fa-check"></i> Prioritetinė eilė</li></ul><button class="vip-btn-buy" onclick="window.open('https://discord.gg/SyGUUGWqj6')">PIRKTI</button></div>
-                <div class="vip-card vip-silver"><div class="vip-title" style="color: var(--silver)">Silver</div><div class="vip-price">10€ <span>/mėn</span></div><ul class="vip-list"><li><i class="fas fa-check"></i> Prioritetinė eilė + 1 Auto</li></ul><button class="vip-btn-buy" onclick="window.open('https://discord.gg/SyGUUGWqj6')">PIRKTI</button></div>
-                <div class="vip-card vip-gold"><div class="vip-title" style="color: var(--gold)">Gold</div><div class="vip-price">20€ <span>/mėn</span></div><ul class="vip-list"><li><i class="fas fa-check"></i> Aukščiausia eilė + Namas</li></ul><button class="vip-btn-buy" onclick="window.open('https://discord.gg/SyGUUGWqj6')" style="background: var(--gold); color: #000; border: none;">PIRKTI</button></div>
+                <div class="vip-card" style="border-top: 4px solid #cd7f32;">
+                    <div style="text-align:center;">
+                        <i class="fas fa-medal" style="color:#cd7f32; font-size:3rem;"></i>
+                        <h3 style="color:#cd7f32; margin:10px 0;">BRONZE</h3>
+                        <h2 style="font-size:3rem;">5€</h2>
+                    </div>
+                    <ul style="list-style:none; padding:20px 0; text-align:center; color:var(--text-dim);">
+                        <li style="margin-bottom:10px;"><i class="fas fa-check" style="color:var(--success); font-size:1rem;"></i> Prioritetinė eilė</li>
+                        <li><i class="fas fa-check" style="color:var(--success); font-size:1rem;"></i> 1 Custom Mašina</li>
+                    </ul>
+                    <button class="btn-hero" style="width:100%; justify-content:center;">PIRKTI</button>
+                </div>
+                <div class="vip-card" style="border-top: 4px solid #c0c0c0;">
+                    <div style="text-align:center;">
+                        <i class="fas fa-medal" style="color:#c0c0c0; font-size:3rem;"></i>
+                        <h3 style="color:#c0c0c0; margin:10px 0;">SILVER</h3>
+                        <h2 style="font-size:3rem;">10€</h2>
+                    </div>
+                    <ul style="list-style:none; padding:20px 0; text-align:center; color:var(--text-dim);">
+                        <li style="margin-bottom:10px;"><i class="fas fa-check" style="color:var(--success); font-size:1rem;"></i> Aukščiausia eilė</li>
+                        <li><i class="fas fa-check" style="color:var(--success); font-size:1rem;"></i> 2 Custom Mašinos</li>
+                    </ul>
+                    <button class="btn-hero" style="width:100%; justify-content:center;">PIRKTI</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="ticker-wrap">
-        <div class="ticker">
-            <div class="ticker__item">📢 Dėmesio: <span>Serverio startas</span> KOVO 18 DIENĄ!</div>
-            <div class="ticker__item">🎉 Serverio atidarymo renginys: <span>Drago lenktynės</span></div>
-            <div class="ticker__item">💎 Naujos <span>VIP</span> sistemos atnaujinimas</div>
-        </div>
-    </div>
+    <script>
+        // --- SVARBU: TAVO TUNELIO NUORODA ---
+        const API_URL = "https://twoside-final-v3.loca.lt";
+        
+        const CLIENT_ID = "1470568120921100423"; 
+        const REDIRECT_URI = "https://twoside.lt";
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, push, set, onValue, get, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        let currentUser = null;
 
-        // --- KONFIGŪRACIJA (TAVO VPS) ---
-        const replitURL = "https://twoside-final-v3.loca.lt"; 
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCQXr6AJSfWDvQAAsIbSSHVhznbKkZ_-sQ",
-            authDomain: "twosiderp-4e580.firebaseapp.com",
-            databaseURL: "https://twosiderp-4e580-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "twosiderp-4e580",
-            storageBucket: "twosiderp-4e580.firebasestorage.app",
-            messagingSenderId: "639976729105",
-            appId: "1:639976729105:web:443d951377221ccfc01fb0"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-        window.db = db; window.ref = ref; window.update = update; window.get = get;
-
-        window.SERVER_CONFIG = {
-            fivem_code: '3zv39z', 
-            discord_server_id: '1380526027331207271', 
-            server_ip: 'connect cfx.re/join/3zv39z',
-            status: { policija: false, medikai: false, mechanikai: false },
-            client_id: '1470568120921100423',
-            redirect: 'https://twoside.lt'
-        };
-
-        let CURRENT_USER = null;
-
-        // --- DASHBOARD FUNKCIJOS ---
-        const statusRef = ref(db, 'serverStatus');
-        onValue(statusRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                window.SERVER_CONFIG.status = data;
-                initDashboard();
+        // SCROLL SPY LOGIKA
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for(let i=0; i<25; i++){
+                let p = document.createElement('div');
+                p.className = 'particle';
+                p.style.left = Math.random()*100 + 'vw';
+                p.style.top = Math.random()*100 + 'vh';
+                let size = Math.random()*4;
+                p.style.width = size + 'px';
+                p.style.height = size + 'px';
+                p.style.animationDuration = Math.random()*15 + 10 + 's';
+                p.style.opacity = Math.random() * 0.5;
+                container.appendChild(p);
             }
+        }
+        createParticles();
+
+        window.addEventListener('scroll', () => {
+            let current = "";
+            document.querySelectorAll("section").forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 300) current = section.getAttribute("id");
+            });
+            document.querySelectorAll(".nav-links a").forEach(li => {
+                li.classList.remove("active");
+                if (li.id === `link-${current}`) li.classList.add("active");
+            });
         });
 
-        window.toggleAppStatus = async function(job) {
-            const currentRef = ref(db, `serverStatus/${job}`);
-            const snapshot = await get(currentRef);
-            const updates = {}; updates[`serverStatus/${job}`] = !snapshot.val();
-            update(ref(db), updates);
-            alert(`${job} statusas pakeistas!`);
-        };
+        function scrollToSection(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
+        function loginWithDiscord() { window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify`; }
+        function logout() { localStorage.removeItem('token'); window.location.reload(); }
+        function openModal() { document.getElementById('appModal').classList.add('open'); }
+        function closeModal() { document.getElementById('appModal').classList.remove('open'); }
+        function openVip() { document.getElementById('vipModal').classList.add('open'); }
+        function closeVip() { document.getElementById('vipModal').classList.remove('open'); }
+        function copyIP() { 
+            navigator.clipboard.writeText('connect cfx.re/join/3zv39z'); 
+            const toast = document.getElementById("toast");
+            toast.style.visibility = "visible";
+            toast.style.animation = "fadein 0.5s, fadeout 0.5s 2.5s";
+            setTimeout(() => { toast.style.visibility = "hidden"; }, 3000);
+        }
 
-        window.openWhitelistApp = () => { document.getElementById('whitelistModal').classList.add('open'); };
-        window.closeWhitelistApp = () => { document.getElementById('whitelistModal').classList.remove('open'); };
-        window.openVip = () => { document.getElementById('vipModal').classList.add('open'); };
-        window.closeVip = () => { document.getElementById('vipModal').classList.remove('open'); };
-        
-        window.copyIP = () => {
-            const ip = window.SERVER_CONFIG.server_ip;
-            navigator.clipboard.writeText(ip).then(() => { const toast = document.getElementById("toast"); toast.className = "show"; setTimeout(() => toast.className = "", 3000); });
-            setTimeout(() => { window.location.href = `fivem://${ip}`; }, 500);
-        };
-
-        window.loginWithDiscord = () => { window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${window.SERVER_CONFIG.client_id}&redirect_uri=${encodeURIComponent(window.SERVER_CONFIG.redirect)}&response_type=token&scope=identify`; };
-        window.logout = () => { localStorage.removeItem('discord_token'); window.location.href = window.SERVER_CONFIG.redirect; };
-        window.showSection = (id) => { const element = document.getElementById(id); if(element) element.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
-
-        // --- NAUJA: ADMIN TAB SISTEMA ---
-        window.switchAdminTab = function(tabId) {
-            // Paslepiam visus tabus
-            document.querySelectorAll('.admin-content > div').forEach(div => div.style.display = 'none');
-            // Nuimam active nuo visų mygtukų
-            document.querySelectorAll('.admin-nav-btn').forEach(btn => btn.classList.remove('active'));
-            
-            // Parodom pasirinktą
-            document.getElementById(`tab-${tabId}`).style.display = 'block';
-            // Pridedam active paspaustam mygtukui
+        function switchTab(tab) {
+            document.querySelectorAll('.admin-content > div').forEach(d => d.style.display='none');
+            document.getElementById(`tab-${tab}`).style.display='block';
+            document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active'));
             event.currentTarget.classList.add('active');
-        };
+        }
 
-        // --- WHITELIST FORMA (SIUNČIA Į VPS) ---
-        window.submitWhitelistForm = async function(e) {
-            e.preventDefault();
-            if(!CURRENT_USER) return alert("Klaida: Neprisijungta.");
+        // PRISIJUNGIMO IR BŪSENOS LOGIKA
+        async function init() {
+            const fragment = new URLSearchParams(window.location.hash.slice(1));
+            let token = fragment.get('access_token') || localStorage.getItem('token');
 
-            const payload = {
-                discordId: CURRENT_USER.id,
-                discordName: CURRENT_USER.username,
-                answers: {
-                    age: document.getElementById('wl_age').value,
-                    history: document.getElementById('wl_history').value,
-                    nlr: document.getElementById('wl_nlr').value,
-                    fearrp: document.getElementById('wl_fearrp').value,
-                    why: document.getElementById('wl_why').value
+            if (token) {
+                localStorage.setItem('token', token);
+                try {
+                    const userRes = await fetch('https://discord.com/api/users/@me', { headers: { authorization: `Bearer ${token}` } });
+                    const user = await userRes.json();
+                    
+                    if(user.id) {
+                        currentUser = user;
+
+                        // UI Updates
+                        document.getElementById('discord-btn').style.display = 'none';
+                        document.getElementById('user-profile').style.display = 'flex';
+                        document.getElementById('user-name').innerText = user.username;
+                        document.getElementById('user-avatar').src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
+                        
+                        document.getElementById('dashboard').style.display = 'block';
+                        document.getElementById('dash-welcome').innerText = `Sveikas, ${user.username}!`;
+                        document.getElementById('dash-id').innerText = user.id;
+                        document.getElementById('dash-avatar').src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
+
+                        // Status check from VPS
+                        try {
+                            const statusRes = await fetch(`${API_URL}/check-status?id=${user.id}`);
+                            const status = await statusRes.json();
+
+                            if (status.isAdmin) {
+                                document.getElementById('loaderText').innerHTML = "TWOSIDE <span style='color:red'>ADMIN</span>";
+                                document.getElementById('loaderText').classList.add('admin-load-text');
+                                document.getElementById('admin-area').style.display = 'block';
+                                document.querySelectorAll('.admin-controls').forEach(el => el.classList.add('visible'));
+                                document.getElementById('dash-card').classList.add('admin-mode-card');
+                                loadApps(user.id);
+                            }
+
+                            const wlCard = document.getElementById('wl-card');
+                            const wlText = document.getElementById('wl-status-text');
+                            const wlBtn = document.getElementById('btn-wl-apply');
+
+                            if (status.isWhitelisted) {
+                                wlCard.style.borderTop = "3px solid #00e676";
+                                wlText.innerHTML = "✅ <b style='color:#00e676'>JŪS TURITE WHITELIST</b>";
+                            } else if (status.cooldown) {
+                                wlCard.style.borderTop = "3px solid #ff1744";
+                                wlText.innerHTML = `⛔ <b>ATMESTA.</b> Bandykite už <span style='color:#ff1744'>${status.timeLeft} val.</span>`;
+                            } else {
+                                wlText.innerText = "Norėdamas žaisti, privalai užpildyti anketą.";
+                                wlBtn.style.display = "inline-flex";
+                            }
+                        } catch(err) {
+                            console.log("Serveris nepasiekiamas, rodomas standartinis vaizdas.");
+                        }
+                    }
+                } catch (e) { 
+                    console.error("Auth Error:", e); 
+                    localStorage.removeItem('token');
                 }
-            };
+            }
+            // Paslėpti loaderį bet kokiu atveju
+            setTimeout(() => document.getElementById('preloader').classList.add('hidden'), 1000);
+        }
 
+        async function submitForm(e) {
+            e.preventDefault();
             const btn = e.target.querySelector('button');
             const originalText = btn.innerText;
             btn.innerText = "SIUNČIAMA...";
             btn.disabled = true;
+            
+            const payload = {
+                discordId: currentUser.id,
+                discordName: currentUser.username,
+                answers: {
+                    age: document.getElementById('q1').value,
+                    history: document.getElementById('q2').value,
+                    nlr: document.getElementById('q3').value,
+                    fearrp: document.getElementById('q4').value,
+                    why: document.getElementById('q5').value
+                }
+            };
 
             try {
-                const res = await fetch(`${replitURL}/submit-app`, {
+                const res = await fetch(`${API_URL}/submit-app`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify(payload)
                 });
                 const data = await res.json();
                 
-                if(data.success) {
-                    alert("Anketa sėkmingai išsiųsta! Administratoriai ją peržiūrės.");
-                    closeWhitelistApp();
-                    document.getElementById('wlForm').reset();
-                    document.getElementById('wl-status-text').innerText = "✅ Jūsų anketa išsiųsta ir laukia patvirtinimo.";
-                    document.getElementById('btn-wl-apply').style.display = 'none';
+                if (data.success) {
+                    alert("Anketa išsiųsta sėkmingai! Laukite patvirtinimo.");
+                    window.location.reload();
                 } else {
-                    alert("Klaida siunčiant anketą.");
+                    alert("Klaida siunčiant.");
                 }
-            } catch(err) {
-                console.error(err);
-                alert("Nepavyko susisiekti su serveriu.");
-            }
+            } catch (e) { alert("Nepavyko susisiekti su serveriu."); }
+            
             btn.innerText = originalText;
             btn.disabled = false;
-        };
+        }
 
-        // --- ADMINO FUNKCIJOS ---
-        async function loadAdminPanel(adminId) {
+        async function loadApps(adminId) {
             try {
-                const res = await fetch(`${replitURL}/get-apps?adminId=${adminId}`);
+                const res = await fetch(`${API_URL}/get-apps?adminId=${adminId}`);
                 const apps = await res.json();
                 const list = document.getElementById('applications-list');
                 
-                if(apps.length === 0) {
-                    list.innerHTML = '<p style="text-align:center; color:#888;">Nėra naujų anketų.</p>';
-                    return;
-                }
+                if(apps.length === 0) { list.innerHTML = "<p style='color:#888; text-align:center; padding:20px;'>Nėra naujų anketų.</p>"; return; }
 
                 list.innerHTML = apps.map(app => `
                     <div class="admin-app-card" id="app-${app.id}">
                         <div class="admin-app-header">
-                            <h3 style="margin:0;">${app.discordName} <span style="font-size:0.8rem; color:#666;">(ID: ${app.discordId})</span></h3>
-                            <span style="font-size:0.8rem; color:#888;">${new Date(parseInt(app.id)).toLocaleTimeString()}</span>
+                            <h3 style="margin:0; display:flex; align-items:center; gap:10px;">
+                                <i class="fab fa-discord" style="color:#5865F2"></i> ${app.discordName} 
+                                <span style="font-size:0.8rem; color:#666; font-weight:normal;">(${app.discordId})</span>
+                            </h3>
+                            <small style="color:#666;">${new Date(parseInt(app.id)).toLocaleTimeString()}</small>
                         </div>
                         <div class="admin-app-grid">
                             <div class="admin-answer-box"><span class="admin-answer-label">Amžius</span>${app.answers.age}</div>
@@ -520,130 +575,31 @@
                             <div class="admin-answer-box" style="grid-column: span 2;"><span class="admin-answer-label">Kodėl mes?</span>${app.answers.why}</div>
                         </div>
                         <div class="admin-actions">
-                            <button class="toggle-btn" style="background:var(--success); border:none;" onclick="handleApp('${app.id}', 'approve')">PRIIMTI (Uždėti Rolę)</button>
-                            <button class="toggle-btn" style="background:var(--danger); border:none;" onclick="handleApp('${app.id}', 'reject')">ATMESTI</button>
+                            <button class="toggle-btn" style="background:var(--success); border:none; color:black; margin-top:0;" onclick="handle('${app.id}', 'approve')"><i class="fas fa-check"></i> PRIIMTI</button>
+                            <button class="toggle-btn" style="background:var(--danger); border:none; margin-top:0;" onclick="handle('${app.id}', 'reject')"><i class="fas fa-times"></i> ATMESTI</button>
                         </div>
                     </div>
                 `).join('');
-                
-            } catch(e) { console.error("Admin Load Error:", e); }
+            } catch(e) { console.error(e); }
         }
 
-        window.handleApp = async function(appId, action) {
-            if(!confirm(action === 'approve' ? "Priimti ir uždėti rolę?" : "Atmesti anketą?")) return;
-            
-            try {
-                const res = await fetch(`${replitURL}/handle-app`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ adminId: CURRENT_USER.id, appId, action })
-                });
-                const data = await res.json();
-                alert(data.msg);
-                if(data.success) {
-                    document.getElementById(`app-${appId}`).remove();
-                }
-            } catch(e) { alert("Serverio klaida."); }
-        }
-
-        // --- AUTH & LOAD ---
-        function fetchDiscordUser(token) {
-            fetch('https://discord.com/api/users/@me', { headers: { authorization: `Bearer ${token}` } })
-            .then(res => res.ok ? res.json() : Promise.reject())
-            .then(async user => {
-                CURRENT_USER = user;
-                document.getElementById('discord-btn').style.display = 'none'; 
-                document.getElementById('user-profile').style.display = 'flex';
-                document.getElementById('user-name').innerText = user.username; 
-                document.getElementById('user-avatar').src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
-                
-                document.getElementById('dashboard').style.display = 'block'; 
-                document.getElementById('dash-welcome').innerText = `Sveikas, ${user.username}! 👋`;
-                document.getElementById('dash-id').innerText = `ID: ${user.id}`; 
-                document.getElementById('dash-avatar').src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
-                
-                try {
-                    const response = await fetch(`${replitURL}/check-status?id=${user.id}`);
-                    const data = await response.json();
-
-                    // 1. ADMIN CHECK
-                    if (data.isAdmin === true) {
-                        const loaderText = document.getElementById('loaderText');
-                        loaderText.innerHTML = "TWOSIDE <span style='color:red;'>ADMIN</span>";
-                        loaderText.classList.add('admin-load-text');
-                        
-                        document.querySelectorAll('.admin-controls').forEach(el => el.classList.add('visible'));
-                        const dashCard = document.getElementById('dash-card');
-                        dashCard.classList.add('admin-mode-card');
-                        
-                        // Rodyti Admin Panelę
-                        document.getElementById('admin-area').style.display = 'block';
-                        
-                        loadAdminPanel(user.id);
-                        
-                        setTimeout(() => { document.getElementById('preloader').classList.add('hidden'); }, 1500);
-                    } else {
-                        document.getElementById('preloader').classList.add('hidden');
-                    }
-
-                    // 2. WHITELIST STATUS CHECK
-                    const wlText = document.getElementById('wl-status-text');
-                    const wlBtn = document.getElementById('btn-wl-apply');
-                    const wlCard = document.getElementById('wl-card');
-
-                    if (data.isWhitelisted) {
-                        wlCard.style.borderTop = "2px solid #00ff88";
-                        wlText.innerHTML = "✅ <b style='color:#00ff88'>JŪS JAU ESATE WHITELISTED</b>";
-                        wlBtn.style.display = 'none';
-                    } else if (data.cooldown) {
-                        wlCard.style.borderTop = "2px solid #dc3545";
-                        wlText.innerHTML = `⛔ <b>JŪSŲ ANKETA ATMESTA.</b><br>Bandykite vėl už: <span style='color:#dc3545'>${data.timeLeft} val.</span>`;
-                        wlBtn.style.display = 'none';
-                    } else {
-                        // Nieko neturi - leidžiam pildyti
-                        wlCard.style.borderTop = "2px solid var(--blue)";
-                    }
-
-                } catch (e) {
-                    console.error("Klaida susisiekiant su VPS:", e);
-                    document.getElementById('preloader').classList.add('hidden');
-                }
-
-            }).catch(() => {
-                localStorage.removeItem('discord_token');
-                document.getElementById('preloader').classList.add('hidden');
+        async function handle(id, action) {
+            if(!confirm("Ar tikrai norite atlikti šį veiksmą?")) return;
+            const res = await fetch(`${API_URL}/handle-app`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ adminId: currentUser.id, appId: id, action })
             });
+            const data = await res.json();
+            alert(data.msg);
+            if(data.success) {
+                const el = document.getElementById(`app-${id}`);
+                el.style.opacity = '0';
+                setTimeout(() => el.remove(), 300);
+            }
         }
 
-        const fakeNames = ["Jonas_K.", "Lukas_P.", "Karolis_B.", "Mantas_S.", "Tomas_G.", "Deividas_M.", "Paulius_A.", "Rokas_Z."];
-        const fakeActions = [{ text: "nusipirko VIP Gold", icon: "fa-crown", color: "#ffc107" }, { text: "užpildė Policijos anketą", icon: "fa-shield-alt", color: "#0070f3" }, { text: "laimėjo Kazino", icon: "fa-dice", color: "#e91e63" }];
-        function showFakeNotification() {
-            const container = document.getElementById('live-toast-container'); const randomName = fakeNames[Math.floor(Math.random() * fakeNames.length)]; const randomAction = fakeActions[Math.floor(Math.random() * fakeActions.length)]; const toast = document.createElement('div'); toast.className = 'live-toast'; toast.innerHTML = `<i class="fas ${randomAction.icon}" style="color: ${randomAction.color}"></i><div class="live-toast-content"><div>${randomName}</div><div>${randomAction.text}</div></div>`; container.appendChild(toast); setTimeout(() => { toast.classList.add('hide'); setTimeout(() => toast.remove(), 500); }, 4000);
-        }
-
-        function animateValue(obj, start, end, duration, suffix = '') { let startTimestamp = null; const step = (timestamp) => { if (!startTimestamp) startTimestamp = timestamp; const progress = Math.min((timestamp - startTimestamp) / duration, 1); obj.innerHTML = Math.floor(progress * (end - start) + start) + suffix; if (progress < 1) window.requestAnimationFrame(step); }; window.requestAnimationFrame(step); }
-        function createParticles() { const container = document.getElementById('particles'); for(let i=0; i<20; i++) { let part = document.createElement('div'); part.className = 'particle'; let size = Math.random() * 3 + 1; part.style.width = `${size}px`; part.style.height = `${size}px`; part.style.left = `${Math.random() * 100}vw`; part.style.top = `${Math.random() * 100}vh`; part.style.animationDuration = `${Math.random() * 10 + 10}s`; part.style.animationDelay = `-${Math.random() * 20}s`; container.appendChild(part); } }
-        function initTilt() { document.querySelectorAll('.rule-card, .vip-card').forEach(card => { card.addEventListener('mousemove', (e) => { const rect = card.getBoundingClientRect(); const x = e.clientX - rect.left; const y = e.clientY - rect.top; const rotateX = ((y - rect.height / 2) / rect.height / 2) * -5; const rotateY = ((x - rect.width / 2) / rect.width / 2) * 5; card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`; }); card.addEventListener('mouseleave', () => card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)'); }); }
-        function initDashboard() { const setupCard = (id, isOpen, openText) => { const btn = document.getElementById(`btn-${id}`); const txt = document.getElementById(`text-${id}`); if(isOpen) { txt.innerText = "ATIDARYTA"; txt.className = "status-text st-green"; btn.innerText = "PILDYTI ANKETĄ"; btn.className = "apply-btn btn-open"; btn.onclick = () => window.openApp(openText); } else { txt.innerText = "UŽDARYTA"; txt.className = "status-text st-red"; btn.innerText = "LAIKINAI UŽDARYTA"; btn.className = "apply-btn btn-closed"; btn.onclick = null; } }; setupCard('policija', window.SERVER_CONFIG.status.policija, 'Policija'); setupCard('medikai', window.SERVER_CONFIG.status.medikai, 'Medikai'); setupCard('mechanikai', window.SERVER_CONFIG.status.mechanikai, 'Mechanikai'); }
-        function fetchStats() { if(window.SERVER_CONFIG.fivem_code !== 'SOON') { fetch(`https://servers-frontend.fivem.net/api/servers/single/${window.SERVER_CONFIG.fivem_code}`).then(res => res.json()).then(data => { if(data && data.Data) { const players = data.Data.clients; const maxPlayers = data.Data.sv_maxclients; document.getElementById('pCount').innerHTML = `${players}<span style="font-size:1.5rem; color:#888;">/${maxPlayers}</span>`; const cops = Math.floor(players / 8) + Math.floor(Math.random() * 2); animateValue(document.getElementById('pCops'), 0, cops > 0 ? cops : 0, 2000); } }).catch(() => console.log('FiveM Offline')); } fetch(`https://discord.com/api/guilds/${window.SERVER_CONFIG.discord_server_id}/widget.json`).then(res => res.json()).then(data => { if(data.presence_count) animateValue(document.getElementById('pDiscord'), 0, data.presence_count * 6, 2000); }).catch(() => console.log('Discord Widget Error')); }
-
-        const token = new URLSearchParams(window.location.hash.slice(1)).get('access_token') || localStorage.getItem('discord_token');
-        if(token) { 
-            localStorage.setItem('discord_token', token); 
-            if(window.location.hash) window.history.replaceState({}, document.title, "/"); 
-            fetchDiscordUser(token);
-        } else {
-            setTimeout(() => document.getElementById('preloader').classList.add('hidden'), 1500);
-        }
-
-        createParticles(); initTilt(); initDashboard();
-        setTimeout(() => { setInterval(showFakeNotification, 12000); showFakeNotification(); }, 10000);
-        
-        document.getElementById('pCount').innerHTML = '0<span style="font-size:1.5rem; color:#888;">/128</span>'; document.getElementById('pCops').innerHTML = '0'; document.getElementById('pDiscord').innerHTML = '0';
-        if(window.SERVER_CONFIG.fivem_code === 'SOON') { setTimeout(() => { animateValue(document.getElementById('pCount'), 0, 60 + Math.floor(Math.random() * 15), 2000, '<span style="font-size:1.5rem; color:#888;">/128</span>'); animateValue(document.getElementById('pCops'), 0, 7, 2000); animateValue(document.getElementById('pDiscord'), 0, 1420, 2000); }, 1600); }
-        fetchStats();
-
-        window.addEventListener('scroll', () => { let current = ''; document.querySelectorAll('section').forEach(section => { if(getComputedStyle(section).display === 'none') return; if (pageYOffset >= (section.offsetTop - 200)) current = section.getAttribute('id'); }); document.querySelectorAll('.nav-links a').forEach(li => { li.classList.remove('active'); if (li.id === `link-${current}`) li.classList.add('active'); }); });
+        init();
     </script>
 </body>
 </html>
