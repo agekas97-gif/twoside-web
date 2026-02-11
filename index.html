@@ -7,221 +7,96 @@
     <title>TwoSide RP | Modernus Serveris</title>
     
     <link rel="icon" href="https://media.discordapp.net/attachments/1353696356639969400/1366056131499135087/3294i2394819-removebg-preview.png?ex=698b3e69&is=6989ece9&hm=0d7d3c0a378925555567c83eb67170902178b6bb504a07134a8413826a3d959a&=&format=webp&quality=lossless">
-    
-    <meta property="og:title" content="TwoSide RP | Modernus Serveris">
-    <meta property="og:description" content="Prisijunk prie sparčiausiai augančios bendruomenės Lietuvoje. Unikalios sistemos, brandi administracija ir tavo nauja istorija. Startuok dabar!">
-    <meta property="og:image" content="https://media.discordapp.net/attachments/1353696356639969400/1366056131499135087/3294i2394819-removebg-preview.png?ex=698b3e69&is=6989ece9&hm=0d7d3c0a378925555567c83eb67170902178b6bb504a07134a8413826a3d959a&=&format=webp&quality=lossless">
-    <meta property="og:url" content="https://twoside.lt">
-    <meta property="og:type" content="website">
-    <meta name="theme-color" content="#0070f3">
-    <meta name="twitter:card" content="summary_large_image">
-
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <meta property="og:title" content="TwoSide RP | Modernus Serveris">
+    <meta property="og:description" content="Prisijunk prie sparčiausiai augančios bendruomenės Lietuvoje.">
+    <meta property="og:image" content="https://media.discordapp.net/attachments/1353696356639969400/1366056131499135087/3294i2394819-removebg-preview.png?ex=698b3e69&is=6989ece9&hm=0d7d3c0a378925555567c83eb67170902178b6bb504a07134a8413826a3d959a&=&format=webp&quality=lossless">
+    <meta name="theme-color" content="#0070f3">
     
     <style>
-        :root {
-            --blue: #0070f3; 
-            --bg: #050505;
-            --card-bg: rgba(12, 12, 12, 0.85);
-            --text-main: #ffffff;
-            --text-dim: #999999;
-            --border: rgba(255, 255, 255, 0.1);
-            --success: #157a46;
-            --danger: #dc3545;
-            --gold: #ffc107;
-            --silver: #c0c0c0;
-            --bronze: #cd7f32;
-            --police: #3498db; /* Policijos šviesiai mėlyna */
-        }
-
-        /* SCROLLBAR */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #050505; }
-        ::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #0056b3; }
-
-        /* BASE */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; cursor: default; user-select: none; -webkit-tap-highlight-color: transparent; }
-        a, button, .apply-btn, .vip-btn-buy, .close-modal, .rule-card, .vip-card, i { cursor: pointer; }
-        input, textarea { cursor: text; user-select: text; }
-
+        :root { --blue: #0070f3; --bg: #050505; --card-bg: rgba(12, 12, 12, 0.85); --text-main: #ffffff; --text-dim: #999999; --border: rgba(255, 255, 255, 0.1); --success: #157a46; --danger: #dc3545; --gold: #ffc107; --silver: #c0c0c0; --bronze: #cd7f32; --police: #3498db; }
+        ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: #050505; } ::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 4px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg); color: var(--text-main); min-height: 100vh; overflow-x: hidden; position: relative; }
-
         #bg-video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; filter: brightness(0.25); }
-
-        #particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; overflow: hidden; }
+        #particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
         .particle { position: absolute; background: rgba(255, 255, 255, 0.5); border-radius: 50%; animation: float 20s infinite linear; }
-        @keyframes float { 0% { transform: translateY(0) translateX(0); opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { transform: translateY(-100vh) translateX(50px); opacity: 0; } }
-
-        #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease, visibility 0.5s; }
+        @keyframes float { 0% { transform: translateY(0) translateX(0); opacity: 0; } 100% { transform: translateY(-100vh) translateX(50px); opacity: 0; } }
+        #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s; }
         #preloader.hidden { opacity: 0; visibility: hidden; }
-        .loader-content { text-align: center; }
         .loader-text { font-size: 2rem; font-weight: 900; letter-spacing: 5px; animation: blink 1.5s infinite; }
         .loader-text span { color: var(--blue); }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-
-        /* NAVIGACIJA */
-        nav { 
-            position: fixed; top: 0; width: 100%; padding: 0 50px; 
-            display: flex; justify-content: space-between; align-items: center; 
-            backdrop-filter: blur(15px); z-index: 1000; 
-            border-bottom: 1px solid var(--border); 
-            background: rgba(0,0,0,0.6); 
-            height: 90px; transition: 0.3s;
-        }
-
-        .logo { font-weight: 800; font-size: 1.8rem; letter-spacing: -1px; text-transform: uppercase; display: flex; align-items: center; gap: 15px; color: white; }
-        .logo span { color: var(--blue); text-shadow: 0 0 20px rgba(0, 112, 243, 0.6); }
+        nav { position: fixed; top: 0; width: 100%; padding: 0 50px; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(15px); z-index: 1000; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.6); height: 90px; transition: 0.3s; }
+        .logo { font-weight: 800; font-size: 1.8rem; display: flex; align-items: center; gap: 15px; color: white; }
+        .logo span { color: var(--blue); }
         .status-dot { width: 12px; height: 12px; background-color: #00ff88; border-radius: 50%; box-shadow: 0 0 15px #00ff88; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.3); opacity: 0.6; } 100% { transform: scale(1); opacity: 1; } }
-
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.3); opacity: 0.6; } }
         .nav-right { display: flex; align-items: center; gap: 50px; }
         .nav-links { display: flex; gap: 35px; }
-        .nav-links a { color: #ccc; text-decoration: none; font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; position: relative; }
+        .nav-links a { color: #ccc; cursor: pointer; font-weight: 700; font-size: 0.9rem; position: relative; transition: 0.3s; }
         .nav-links a:hover, .nav-links a.active { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5); }
-        .nav-links a::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; left: 0; background-color: var(--blue); transition: width 0.3s; }
+        .nav-links a::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; left: 0; background: var(--blue); transition: 0.3s; }
         .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
-
         #auth-container { display: flex; align-items: center; }
-        #discord-btn { background: #5865F2; color: white; border: none; padding: 10px 25px; border-radius: 50px; font-weight: 700; transition: 0.3s; display: flex; align-items: center; gap: 10px; font-size: 0.9rem; }
-        #discord-btn:hover { background: #4752c4; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(88, 101, 242, 0.4); }
+        #discord-btn { background: #5865F2; color: white; border: none; padding: 10px 25px; border-radius: 50px; font-weight: 700; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 10px; font-size: 0.9rem; }
+        #discord-btn:hover { background: #4752c4; transform: translateY(-2px); }
         #user-profile { display: none; align-items: center; gap: 15px; background: rgba(255,255,255,0.05); padding: 6px 20px 6px 6px; border-radius: 50px; border: 1px solid var(--border); }
         #user-avatar { width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--blue); }
-        #user-name { font-weight: 700; font-size: 0.95rem; color: white; }
-
-        .main-wrapper { padding-top: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; gap: 0; padding-bottom: 100px; width: 100%; max-width: 1400px; margin: 0 auto; }
-        
-        section { display: block; width: 100%; min-height: 100vh; padding-top: 130px; opacity: 1; transform: none; }
-        #dashboard { display: none; } 
-
-        .glass-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 30px; padding: 60px; position: relative; overflow: hidden; backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); width: 100%; }
-        h1 { font-size: 5rem; font-weight: 900; line-height: 0.95; margin-bottom: 30px; letter-spacing: -3px; cursor: default; }
+        .main-wrapper { display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding-bottom: 100px; width: 100%; max-width: 1400px; margin: 0 auto; padding-top: 0; }
+        section { display: block; width: 100%; min-height: 100vh; padding-top: 130px; }
+        #dashboard { display: none; }
+        .glass-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 30px; padding: 60px; position: relative; backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); width: 100%; }
+        h1 { font-size: 5rem; font-weight: 900; line-height: 0.95; margin-bottom: 30px; letter-spacing: -3px; }
         .blue-gradient { background: linear-gradient(135deg, #fff 30%, var(--blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        /* TYPEWRITER */
-        .typewriter {
-            display: inline-block; overflow: hidden; border-right: .15em solid var(--blue); white-space: nowrap; margin: 0 auto;
-            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
-        }
+        .typewriter { display: inline-block; overflow: hidden; border-right: .15em solid var(--blue); white-space: nowrap; animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite; }
         @keyframes typing { from { width: 0 } to { width: 100% } }
-        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: var(--blue); } }
-
-        .dash-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 40px; }
-
-        .rule-card, .vip-card { 
-            transform-style: preserve-3d; transform: perspective(1000px); 
-            background: rgba(20, 20, 20, 0.6); padding: 35px; border-radius: 20px; 
-            border: 1px solid var(--border); transition: transform 0.1s; display: flex; flex-direction: column; 
-            min-height: 250px; justify-content: space-between; position: relative; overflow: hidden;
-        }
-        .rule-card::before, .vip-card::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-            background: linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent);
-            transform: skewX(-25deg); transition: 0.5s; pointer-events: none;
-        }
-        .rule-card:hover::before, .vip-card:hover::before { left: 125%; transition: 0.7s; }
-        .rule-card:hover { border-color: var(--blue); background: rgba(30, 30, 30, 0.8); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .rule-card i { font-size: 2rem; color: var(--blue); margin-bottom: 15px; text-shadow: 0 0 15px rgba(0, 112, 243, 0.4); }
-        .rule-card h4 { color: #fff; margin-bottom: 5px; font-size: 1.4rem; font-weight: 800; transform: translateZ(20px); }
-        .rule-card p { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 20px; transform: translateZ(20px); }
-
-        .apply-btn { width: 100%; padding: 15px; border-radius: 10px; font-weight: 800; font-size: 0.9rem; border: none; transition: 0.3s; text-transform: uppercase; letter-spacing: 0.5px; margin-top: auto; transform: translateZ(30px); }
-        .btn-open { background-color: var(--success); color: white; box-shadow: 0 5px 15px rgba(21, 122, 70, 0.4); }
-        .btn-open:hover { transform: translateZ(30px) translateY(-2px); filter: brightness(1.1); box-shadow: 0 10px 20px rgba(21, 122, 70, 0.6); }
-        .btn-closed { background-color: rgba(34, 10, 10, 0.8); color: #ff4444; border: 1px solid rgba(255, 68, 68, 0.2); cursor: not-allowed; opacity: 0.8; }
-        .btn-vip { background-color: var(--gold); color: #000; box-shadow: 0 5px 15px rgba(255, 193, 7, 0.4); }
-        .btn-vip:hover { transform: translateZ(30px) translateY(-2px); filter: brightness(1.1); box-shadow: 0 10px 20px rgba(255, 193, 7, 0.6); }
-
-        .status-text { font-weight: bold; font-size: 0.9rem; }
-        .st-green { color: #00ff88; }
-        .st-red { color: #ff4444; }
-
-        .vip-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 30px; }
-        .vip-card { background: rgba(255,255,255,0.02); text-align: center; }
-        .vip-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 10px; text-transform: uppercase; transform: translateZ(20px); }
-        .vip-price { font-size: 3rem; font-weight: 900; margin-bottom: 25px; color: #fff; transform: translateZ(25px); }
-        .vip-list { list-style: none; padding: 0; text-align: left; margin-bottom: 25px; transform: translateZ(20px); }
-        .vip-list li { margin-bottom: 10px; color: #ccc; display: flex; align-items: center; gap: 10px; }
-        .vip-list li i { color: #00ff88; }
-        .vip-btn-buy { width: 100%; padding: 12px; border-radius: 10px; background: rgba(255,255,255,0.1); color: #fff; font-weight: bold; border: 1px solid rgba(255,255,255,0.2); transition: 0.3s; transform: translateZ(30px); }
-        .vip-btn-buy:hover { background: #fff; color: #000; box-shadow: 0 0 20px rgba(255,255,255,0.4); }
-
-        .vip-bronze { border-top: 4px solid var(--bronze); }
-        .vip-silver { border-top: 4px solid var(--silver); }
-        .vip-gold { border-top: 4px solid var(--gold); }
-
-        /* PULSATION */
-        .btn-hero { display: inline-flex; align-items: center; gap: 15px; padding: 18px 45px; border-radius: 12px; text-decoration: none; font-weight: 800; font-size: 1rem; transition: 0.4s; border: none; }
-        .btn-primary { 
-            background: var(--blue); color: white; box-shadow: 0 0 20px rgba(0, 112, 243, 0.6);
-            animation: pulseBtn 2s infinite; 
-        }
-        .btn-primary:hover { transform: translateY(-3px); animation: none; box-shadow: 0 20px 50px rgba(0, 112, 243, 0.8); }
-        @keyframes pulseBtn {
-            0% { box-shadow: 0 0 0 0 rgba(0, 112, 243, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(0, 112, 243, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 112, 243, 0); }
-        }
-
-        /* LIVE TOAST */
-        #live-toast-container { position: fixed; bottom: 60px; right: 20px; z-index: 2500; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
-        .live-toast {
-            background: rgba(12, 12, 12, 0.95); border: 1px solid var(--border); border-left: 4px solid var(--blue);
-            padding: 15px 20px; border-radius: 10px; color: white; min-width: 250px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5); backdrop-filter: blur(10px);
-            animation: slideInRight 0.5s ease forwards; display: flex; align-items: center; gap: 15px;
-        }
-        .live-toast i { color: var(--blue); font-size: 1.2rem; }
-        .live-toast-content div:first-child { font-weight: 800; font-size: 0.9rem; margin-bottom: 2px; }
-        .live-toast-content div:last-child { font-size: 0.8rem; color: #aaa; }
-        .live-toast.hide { animation: fadeOutRight 0.5s ease forwards; }
-        @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        @keyframes fadeOutRight { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
-
-        /* MODAL FIX */
-        .modal-overlay { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 3000; 
-            justify-content: center; align-items: flex-start; padding: 20px; overflow-y: auto; opacity: 0; transition: all 0.4s ease; backdrop-filter: blur(10px);
-        }
-        .modal-overlay.open { display: flex; opacity: 1; }
-        .modal-content { 
-            background: #0f0f0f; border: 1px solid var(--border); border-radius: 25px; padding: 50px; width: 100%; max-width: 550px; 
-            position: relative; margin: 50px auto; transform: scale(0.95); transition: 0.4s; box-shadow: 0 0 60px rgba(0, 112, 243, 0.15); 
-        }
-        .modal-overlay.open .modal-content { transform: scale(1); }
-        .close-modal { position: absolute; top: 25px; right: 25px; font-size: 1.5rem; color: #666; transition: 0.3s; }
-        .close-modal:hover { color: #fff; }
-
-        .input-group { margin-bottom: 20px; position: relative; }
-        .custom-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 15px 15px 15px 45px; border-radius: 12px; color: white; outline: none; font-size: 1rem; transition: 0.3s; }
-        .custom-input:focus { border-color: var(--blue); background: rgba(0, 112, 243, 0.05); box-shadow: 0 0 15px rgba(0,112,243,0.1); }
-        .input-icon { position: absolute; left: 15px; top: 42px; color: #666; }
-        textarea + .input-icon { top: 42px; }
-        label { display: block; margin-bottom: 10px; font-weight: 700; color: #888; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; }
-        .submit-btn { width: 100%; padding: 15px; margin-top: 15px; background: linear-gradient(135deg, var(--blue), #0060d0); border: none; border-radius: 12px; color: white; font-weight: 800; font-size: 1rem; transition: 0.3s; }
-        .submit-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0, 112, 243, 0.5); }
-
+        @keyframes blink-caret { 50% { border-color: transparent } }
+        .dash-grid, .vip-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 40px; }
+        .rule-card, .vip-card { background: rgba(20, 20, 20, 0.6); padding: 35px; border-radius: 20px; border: 1px solid var(--border); transition: 0.3s; display: flex; flex-direction: column; min-height: 250px; justify-content: space-between; overflow: hidden; position: relative; }
+        .rule-card:hover { border-color: var(--blue); background: rgba(30, 30, 30, 0.8); transform: translateY(-5px); }
+        .rule-card i { font-size: 2rem; color: var(--blue); margin-bottom: 15px; }
+        .rule-card h4 { font-size: 1.4rem; font-weight: 800; margin-bottom: 5px; }
+        .rule-card p { color: var(--text-dim); font-size: 0.9rem; }
+        .apply-btn, .vip-btn-buy { width: 100%; padding: 15px; border-radius: 10px; font-weight: 800; border: none; cursor: pointer; transition: 0.3s; margin-top: auto; }
+        .btn-open { background: var(--success); color: white; }
+        .btn-closed { background: rgba(34, 10, 10, 0.8); color: #ff4444; border: 1px solid rgba(255, 68, 68, 0.2); cursor: not-allowed; }
+        .btn-vip { background: var(--gold); color: #000; }
+        .btn-hero { display: inline-flex; align-items: center; gap: 15px; padding: 18px 45px; border-radius: 12px; font-weight: 800; text-decoration: none; border: none; cursor: pointer; transition: 0.3s; }
+        .btn-primary { background: var(--blue); color: white; animation: pulseBtn 2s infinite; }
+        @keyframes pulseBtn { 0% { box-shadow: 0 0 0 0 rgba(0, 112, 243, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(0, 112, 243, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 112, 243, 0); } }
         .stats-row { display: flex; gap: 80px; margin-top: 60px; }
         .stat-box h2 { font-size: 3.5rem; font-weight: 800; margin: 0; line-height: 1; }
         .stat-box .label { color: var(--text-dim); text-transform: uppercase; font-weight: 700; letter-spacing: 2px; }
-
+        #live-toast-container { position: fixed; bottom: 60px; right: 20px; z-index: 2500; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+        .live-toast { background: rgba(12, 12, 12, 0.95); border: 1px solid var(--border); border-left: 4px solid var(--blue); padding: 15px 20px; border-radius: 10px; color: white; min-width: 250px; animation: slideIn 0.5s forwards; display: flex; align-items: center; gap: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
+        .live-toast.hide { animation: slideOut 0.5s forwards; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 3000; justify-content: center; align-items: flex-start; padding: 20px; overflow-y: auto; opacity: 0; transition: 0.4s; backdrop-filter: blur(10px); }
+        .modal-overlay.open { display: flex; opacity: 1; }
+        .modal-content { background: #0f0f0f; border: 1px solid var(--border); border-radius: 25px; padding: 50px; width: 100%; max-width: 550px; position: relative; margin: 50px auto; transform: scale(0.95); transition: 0.4s; }
+        .modal-overlay.open .modal-content { transform: scale(1); }
+        .close-modal { position: absolute; top: 25px; right: 25px; font-size: 1.5rem; color: #666; cursor: pointer; }
+        .input-group { margin-bottom: 20px; position: relative; }
+        .custom-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 15px 15px 15px 45px; border-radius: 12px; color: white; outline: none; }
+        .input-icon { position: absolute; left: 15px; top: 42px; color: #666; }
+        .submit-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, var(--blue), #0060d0); border: none; border-radius: 12px; color: white; font-weight: 800; cursor: pointer; margin-top: 15px; }
         .ticker-wrap { position: fixed; bottom: 0; width: 100%; height: 40px; background: rgba(0,0,0,0.95); border-top: 1px solid var(--border); display: flex; align-items: center; z-index: 2000; }
         .ticker { display: inline-block; white-space: nowrap; animation: ticker 40s linear infinite; }
         .ticker__item { display: inline-block; padding: 0 3rem; color: #fff; font-weight: 600; font-size: 0.9rem; }
         .ticker__item span { color: var(--blue); }
         @keyframes ticker { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
-
-        #toast { visibility: hidden; min-width: 250px; background-color: #111; color: #fff; text-align: center; border-radius: 12px; padding: 16px; position: fixed; z-index: 2000; left: 50%; bottom: 80px; transform: translateX(-50%); border: 1px solid var(--success); display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: bold; }
+        #toast { visibility: hidden; min-width: 250px; background-color: #111; color: #fff; text-align: center; border-radius: 12px; padding: 16px; position: fixed; z-index: 2000; left: 50%; bottom: 80px; transform: translateX(-50%); border: 1px solid var(--success); font-weight: bold; }
         #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
         @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 80px; opacity: 1;} }
         @keyframes fadeout { from {bottom: 80px; opacity: 1;} to {bottom: 0; opacity: 0;} }
-
         @media (max-width: 1200px) { .main-wrapper { max-width: 90%; } }
         @media (max-width: 768px) {
             nav { position: relative; height: auto; padding: 20px; flex-direction: column; gap: 20px; background: var(--bg); border-bottom: 1px solid var(--border); }
-            .nav-right { flex-direction: column; gap: 20px; width: 100%; }
-            .nav-links { flex-direction: column; gap: 15px; width: 100%; text-align: center; }
+            .nav-right, .nav-links { flex-direction: column; gap: 15px; width: 100%; text-align: center; }
             .nav-links a { font-size: 1.1rem; padding: 10px; width: 100%; display: block; border-bottom: 1px solid rgba(255,255,255,0.05); }
             .nav-links a::after { display: none; }
             section { padding-top: 40px !important; min-height: auto; margin-bottom: 60px; }
@@ -229,13 +104,13 @@
             .glass-card { padding: 25px; }
             h1 { font-size: 2.8rem; margin-bottom: 20px; }
             .typewriter { border: none; animation: none; white-space: normal; }
-            .btn-hero, #discord-btn, #auth-container { width: 100%; justify-content: center; }
             .dash-grid, .vip-grid { grid-template-columns: 1fr; }
             .stats-row { flex-direction: column; gap: 30px; }
             .stat-box { text-align: center; }
             .ticker-wrap { height: 35px; }
             .ticker__item { font-size: 0.75rem; }
             #live-toast-container { bottom: 50px; right: 10px; left: 10px; align-items: center; }
+            .btn-hero, #auth-container, #discord-btn { width: 100%; justify-content: center; }
         }
     </style>
 </head>
@@ -248,7 +123,7 @@
     </div>
 
     <div id="particles"></div>
-    <div id="live-toast-container"></div> 
+    <div id="live-toast-container"></div>
 
     <video autoplay muted loop playsinline id="bg-video">
         <source src="https://static.videezy.com/system/resources/previews/000/042/179/original/Traffic_lights_timelapse.mp4" type="video/mp4">
@@ -261,28 +136,20 @@
             <div class="status-dot"></div>
             <div>TWOSIDE<span>.LT</span></div>
         </div>
-        
         <div class="nav-right">
             <div class="nav-links">
                 <a onclick="showSection('home')" id="link-home" class="active">PAGRINDINIS</a>
                 <a onclick="showSection('about')" id="link-about">SERVERIO APRAŠYMAS</a>
                 <a onclick="showSection('rules')" id="link-rules">SERVERIO TAISYKLĖS</a>
             </div>
-            
             <div id="auth-container">
-                <button id="discord-btn" onclick="loginWithDiscord()">
-                    <i class="fab fa-discord"></i> PRISIJUNGTI
-                </button>
-                <div id="user-profile">
-                    <img id="user-avatar" src="" alt="">
-                    <span id="user-name"></span>
-                </div>
+                <button id="discord-btn" onclick="loginWithDiscord()"><i class="fab fa-discord"></i> PRISIJUNGTI</button>
+                <div id="user-profile"><img id="user-avatar" src="" alt=""><span id="user-name"></span></div>
             </div>
         </div>
     </nav>
 
     <div class="main-wrapper">
-        
         <section id="dashboard">
             <div class="glass-card" style="border-top: 2px solid var(--blue);">
                 <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
@@ -295,7 +162,6 @@
                     </div>
                     <button onclick="logout()" style="background: rgba(220, 53, 69, 0.1); color: #dc3545; border: 1px solid #dc3545; padding: 12px 30px; border-radius: 8px; font-weight: 800; transition:0.3s;">ATSIJUNGTI</button>
                 </div>
-
                 <div class="dash-grid">
                     <div id="card-policija" class="rule-card">
                         <div><i class="fas fa-shield-alt"></i><h4>Policijos Atranka</h4><p>Statusas: <span id="text-policija" class="status-text"></span></p></div>
@@ -328,14 +194,12 @@
                 </p>
                 <div style="display: flex; gap: 20px; flex-wrap: wrap;">
                     <button class="btn-hero btn-primary" onclick="copyIP()"><i class="fas fa-play"></i> PRISIJUNGTI DABAR</button>
-                    <a href="https://discord.gg/4yjqwYnker" target="_blank" class="btn-hero" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color:white;"><i class="fab fa-discord"></i> DISCORD</a>
+                    <a href="https://discord.gg/SyGUUGWqj6" target="_blank" class="btn-hero" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color:white;"><i class="fab fa-discord"></i> DISCORD</a>
                 </div>
                 <div class="stats-row">
                     <div class="stat-box"><div class="label">Žaidėjai</div><h2 id="pCount">0<span style="font-size:1.5rem; color:#888;">/128</span></h2></div>
-                    
                     <div class="stat-box"><div class="label">Pareigūnai</div><h2 id="pCops" style="color: var(--police);">0</h2></div>
-                    
-                    <div class="stat-box"><div class="label">Discord</div><h2 id="pDiscord" style="color: #5865F2;">0</h2></div>
+                    <div class="stat-box"><div class="label">Discord Nariai</div><h2 id="pDiscord" style="color: #5865F2;">0</h2></div>
                 </div>
             </div>
         </section>
@@ -385,11 +249,10 @@
         <div class="modal-content" style="max-width: 1000px;">
             <div class="close-modal" onclick="closeVip()"><i class="fas fa-times"></i></div>
             <h2 style="text-align:center; margin-bottom:10px; font-size: 2.2rem; font-weight: 900;">VIP PLANAI</h2>
-            <p style="text-align:center; color:#888; margin-bottom:40px;">Pasirinkite planą ir mėgaukitės privilegijomis.</p>
             <div class="vip-grid">
-                <div class="vip-card vip-bronze"><div class="vip-title" style="color: var(--bronze)">Bronze</div><div class="vip-price">5€ <span>/mėn</span></div><ul class="vip-list"><li><i class="fas fa-check"></i> SOON</li></ul><button class="vip-btn-buy" onclick="window.open('https://discord.gg/SyGUUGWqj6')">PIRKTI</button></div>
-                <div class="vip-card vip-silver"><div class="vip-title" style="color: var(--silver)">Silver</div><div class="vip-price">10€ <span>/mėn</span></div><ul class="vip-list"><li><i class="fas fa-check"></i> SOON</li></ul><button class="vip-btn-buy" onclick="window.open('https://discord.gg/SyGUUGWqj6')">PIRKTI</button></div>
-                <div class="vip-card vip-gold"><div class="vip-title" style="color: var(--gold)">Gold</div><div class="vip-price">20€ <span>/mėn</span></div><ul class="vip-list"><li><i class="fas fa-check"></i> SOON</li></ul><button class="vip-btn-buy" onclick="window.open('https://discord.gg/SyGUUGWqj6')" style="background: var(--gold); color: #000; border: none;">PIRKTI</button></div>
+                <div class="vip-card vip-bronze"><div class="vip-title" style="color: var(--bronze)">Bronze</div><div class="vip-price">5€ <span>/mėn</span></div><ul class="vip-list"><li><i class="fas fa-check"></i> Prioritetinė eilė</li></ul><button class="vip-btn-buy" onclick="window.open('https://discord.gg/SyGUUGWqj6')">PIRKTI</button></div>
+                <div class="vip-card vip-silver"><div class="vip-title" style="color: var(--silver)">Silver</div><div class="vip-price">10€ <span>/mėn</span></div><ul class="vip-list"><li><i class="fas fa-check"></i> Prioritetinė eilė + 1 Auto</li></ul><button class="vip-btn-buy" onclick="window.open('https://discord.gg/SyGUUGWqj6')">PIRKTI</button></div>
+                <div class="vip-card vip-gold"><div class="vip-title" style="color: var(--gold)">Gold</div><div class="vip-price">20€ <span>/mėn</span></div><ul class="vip-list"><li><i class="fas fa-check"></i> Aukščiausia eilė + Namas</li></ul><button class="vip-btn-buy" onclick="window.open('https://discord.gg/SyGUUGWqj6')" style="background: var(--gold); color: #000; border: none;">PIRKTI</button></div>
             </div>
         </div>
     </div>
@@ -402,9 +265,24 @@
         </div>
     </div>
 
-    <script>
-        // === SERVERIO NUSTATYMAI ===
-        const SERVER_CONFIG = {
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCQXr6AJSfWDvQAAsIbSSHVhznbKkZ_-sQ",
+            authDomain: "twosiderp-4e580.firebaseapp.com",
+            databaseURL: "https://twosiderp-4e580-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "twosiderp-4e580",
+            storageBucket: "twosiderp-4e580.firebasestorage.app",
+            messagingSenderId: "639976729105",
+            appId: "1:639976729105:web:443d951377221ccfc01fb0"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        window.SERVER_CONFIG = {
             fivem_code: '3zv39z', 
             discord_server_id: '1380526027331207271', 
             server_ip: 'connect cfx.re/join/3zv39z',
@@ -414,197 +292,91 @@
             redirect: 'https://twoside.lt'
         };
 
-        const fakeNames = ["Jonas_K.", "Lukas_P.", "Karolis_B.", "Mantas_S.", "Tomas_G.", "Deividas_M.", "Paulius_A.", "Rokas_Z."];
-        const fakeActions = [
-            { text: "nusipirko VIP Gold", icon: "fa-crown", color: "#ffc107" },
-            { text: "užpildė Policijos anketą", icon: "fa-shield-alt", color: "#0070f3" },
-            { text: "laimėjo Kazino", icon: "fa-dice", color: "#e91e63" },
-            { text: "nusipirko BMW M5", icon: "fa-car", color: "#00ff88" },
-            { text: "įsidarbino Medikuose", icon: "fa-ambulance", color: "#ff4444" }
-        ];
-
-        function showFakeNotification() {
-            const container = document.getElementById('live-toast-container');
-            const randomName = fakeNames[Math.floor(Math.random() * fakeNames.length)];
-            const randomAction = fakeActions[Math.floor(Math.random() * fakeActions.length)];
-
-            const toast = document.createElement('div');
-            toast.className = 'live-toast';
-            toast.innerHTML = `
-                <i class="fas ${randomAction.icon}" style="color: ${randomAction.color}"></i>
-                <div class="live-toast-content">
-                    <div>${randomName}</div>
-                    <div>${randomAction.text}</div>
-                </div>
-            `;
-
-            container.appendChild(toast);
-            setTimeout(() => { toast.classList.add('hide'); setTimeout(() => toast.remove(), 500); }, 4000);
-        }
-
-        function animateValue(obj, start, end, duration, suffix = '') {
-            let startTimestamp = null;
-            const step = (timestamp) => {
-                if (!startTimestamp) startTimestamp = timestamp;
-                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                const val = Math.floor(progress * (end - start) + start);
-                obj.innerHTML = val + suffix;
-                if (progress < 1) window.requestAnimationFrame(step);
-            };
-            window.requestAnimationFrame(step);
-        }
-
-        function createParticles() {
-            const container = document.getElementById('particles');
-            const particleCount = 20;
-            for(let i=0; i<particleCount; i++) {
-                let part = document.createElement('div');
-                part.className = 'particle';
-                let size = Math.random() * 3 + 1;
-                part.style.width = `${size}px`;
-                part.style.height = `${size}px`;
-                part.style.left = `${Math.random() * 100}vw`;
-                part.style.top = `${Math.random() * 100}vh`;
-                part.style.animationDuration = `${Math.random() * 10 + 10}s`;
-                part.style.animationDelay = `-${Math.random() * 20}s`;
-                container.appendChild(part);
-            }
-        }
-
-        function initTilt() {
-            const cards = document.querySelectorAll('.rule-card, .vip-card');
-            cards.forEach(card => {
-                card.addEventListener('mousemove', (e) => {
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    const centerX = rect.width / 2;
-                    const centerY = rect.height / 2;
-                    const rotateX = ((y - centerY) / centerY) * -5;
-                    const rotateY = ((x - centerX) / centerX) * 5;
-                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-                });
-                card.addEventListener('mouseleave', () => {
-                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
-                });
-            });
-        }
-
-        function initDashboard() {
-            const setupCard = (id, isOpen, openText) => {
-                const btn = document.getElementById(`btn-${id}`);
-                const txt = document.getElementById(`text-${id}`);
-                if(isOpen) {
-                    txt.innerText = "ATIDARYTA"; txt.className = "status-text st-green";
-                    btn.innerText = "PILDYTI ANKETĄ"; btn.className = "apply-btn btn-open";
-                    btn.onclick = () => openApp(openText);
-                } else {
-                    txt.innerText = "UŽDARYTA"; txt.className = "status-text st-red";
-                    btn.innerText = "LAIKINAI UŽDARYTA"; btn.className = "apply-btn btn-closed";
-                    btn.onclick = null;
-                }
-            };
-            setupCard('policija', SERVER_CONFIG.status.policija, 'Policija');
-            setupCard('medikai', SERVER_CONFIG.status.medikai, 'Medikai');
-            setupCard('mechanikai', SERVER_CONFIG.status.mechanikai, 'Mechanikai');
-        }
-
-        window.addEventListener('scroll', () => {
-            let current = '';
-            const sections = document.querySelectorAll('section');
-            
-            sections.forEach(section => {
-                if(getComputedStyle(section).display === 'none') return;
-                const sectionTop = section.offsetTop;
-                if (pageYOffset >= (sectionTop - 200)) { 
-                    current = section.getAttribute('id');
-                }
-            });
-
-            document.querySelectorAll('.nav-links a').forEach(li => {
-                li.classList.remove('active');
-                if (li.id === `link-${current}`) {
-                    li.classList.add('active');
-                }
-            });
-        });
-
-        function showSection(id) {
-            const element = document.getElementById(id);
-            if(element) element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-
-        const modal = document.getElementById('appModal');
-        const vipModal = document.getElementById('vipModal');
-        function openApp(type) { document.getElementById('modalTitle').innerText = type + ' Anketa'; document.getElementById('appType').value = type; modal.classList.add('open'); }
-        function closeApp() { modal.classList.remove('open'); }
-        function openVip() { vipModal.classList.add('open'); }
-        function closeVip() { vipModal.classList.remove('open'); }
-
-        // --- ANTI SPAM FORM SUBMIT ---
-        function submitForm(e) {
+        window.submitForm = function(e) {
             e.preventDefault();
-            
             const lastSubmit = localStorage.getItem('lastAppSubmit');
-            const cooldownTime = 30 * 60 * 1000; 
-            const now = Date.now();
-
-            if (lastSubmit && (now - lastSubmit < cooldownTime)) {
-                const remaining = Math.ceil((cooldownTime - (now - lastSubmit)) / 60000);
-                alert(`Prašome palaukti. Kitą anketą galėsite siųsti už ${remaining} min.`);
+            if (lastSubmit && (Date.now() - lastSubmit < 1800000)) { 
+                alert(`Prašome palaukti ${Math.ceil((1800000 - (Date.now() - lastSubmit)) / 60000)} min.`); 
                 return;
             }
 
             const btn = document.querySelector('.submit-btn'); 
             const originalText = btn.innerText; 
-            btn.innerText = "SIUNČIAMA...";
+            btn.innerText = "SIUNČIAMA..."; 
             btn.disabled = true;
 
-            fetch(SERVER_CONFIG.webhook, { 
-                method: 'POST', 
-                headers: { 'Content-Type': 'application/json' }, 
-                body: JSON.stringify({ 
-                    username: "Website Bot", 
-                    avatar_url: "https://i.imgur.com/AfFp7pu.png", 
-                    embeds: [{ 
-                        title: `📄 Nauja Anketa: ${document.getElementById('appType').value}`, 
-                        color: 3447003, 
-                        fields: [
-                            { name: "Discord", value: document.getElementById('user-name').innerText || "?", inline: true }, 
-                            { name: "Vardas (IC)", value: document.getElementById('ign').value, inline: true }, 
-                            { name: "Amžius", value: document.getElementById('age').value, inline: true }, 
-                            { name: "Motyvacija", value: document.getElementById('reason').value }, 
-                            { name: "Patirtis", value: document.getElementById('experience').value }
-                        ], 
-                        footer: { text: "TwoSide RP Sistema" }, 
-                        timestamp: new Date().toISOString() 
-                    }] 
-                }) 
-            }).then(() => { 
-                alert('Anketa gauta! Susisieksime.'); 
-                localStorage.setItem('lastAppSubmit', Date.now());
-                closeApp(); 
-                document.getElementById('applicationForm').reset(); 
-            }).catch(err => {
-                alert('Klaida siunčiant anketą.');
-            }).finally(() => { 
-                btn.innerText = originalText;
-                btn.disabled = false;
-            });
-        }
+            const appData = {
+                discordName: document.getElementById('user-name').innerText || "Nežinomas",
+                ign: document.getElementById('ign').value,
+                age: document.getElementById('age').value,
+                reason: document.getElementById('reason').value,
+                experience: document.getElementById('experience').value,
+                type: document.getElementById('appType').value,
+                timestamp: new Date().toISOString()
+            };
 
-        function copyIP() {
-            const ip = SERVER_CONFIG.server_ip;
-            navigator.clipboard.writeText(ip).then(() => {
-                const toast = document.getElementById("toast");
-                toast.className = "show";
-                setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+            const newAppRef = push(ref(db, 'applications'));
+            set(newAppRef, appData)
+            .then(() => {
+                return fetch(window.SERVER_CONFIG.webhook, { 
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' }, 
+                    body: JSON.stringify({ 
+                        username: "Website Bot", 
+                        avatar_url: "https://i.imgur.com/AfFp7pu.png", 
+                        embeds: [{ 
+                            title: `📄 Nauja Anketa: ${appData.type}`, 
+                            color: 3447003, 
+                            fields: [
+                                { name: "Discord", value: appData.discordName, inline: true }, 
+                                { name: "Vardas (IC)", value: appData.ign, inline: true }, 
+                                { name: "Amžius", value: appData.age, inline: true }, 
+                                { name: "Motyvacija", value: appData.reason }, 
+                                { name: "Patirtis", value: appData.experience }
+                            ], 
+                            footer: { text: "Išsaugota duomenų bazėje ✅" }, 
+                            timestamp: appData.timestamp 
+                        }] 
+                    }) 
+                });
+            })
+            .then(() => { 
+                alert('Anketa sėkmingai išsaugota ir išsiųsta!'); 
+                localStorage.setItem('lastAppSubmit', Date.now());
+                window.closeApp(); 
+                document.getElementById('applicationForm').reset(); 
+            })
+            .catch((error) => {
+                console.error("Klaida:", error);
+                alert('Įvyko klaida saugant duomenis.');
+            })
+            .finally(() => { 
+                btn.innerText = originalText; 
+                btn.disabled = false; 
+            });
+        };
+
+        window.openApp = (type) => { document.getElementById('modalTitle').innerText = type + ' Anketa'; document.getElementById('appType').value = type; document.getElementById('appModal').classList.add('open'); };
+        window.closeApp = () => { document.getElementById('appModal').classList.remove('open'); };
+        window.openVip = () => { document.getElementById('vipModal').classList.add('open'); };
+        window.closeVip = () => { document.getElementById('vipModal').classList.remove('open'); };
+        
+        window.copyIP = () => {
+            const ip = window.SERVER_CONFIG.server_ip;
+            navigator.clipboard.writeText(ip).then(() => { 
+                const toast = document.getElementById("toast"); toast.className = "show"; 
+                setTimeout(() => toast.className = "", 3000); 
             });
             setTimeout(() => { window.location.href = `fivem://${ip}`; }, 500);
-        }
+        };
 
-        function loginWithDiscord() { window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${SERVER_CONFIG.client_id}&redirect_uri=${encodeURIComponent(SERVER_CONFIG.redirect)}&response_type=token&scope=identify`; }
-        function logout() { localStorage.removeItem('discord_token'); window.location.href = SERVER_CONFIG.redirect; }
+        window.loginWithDiscord = () => { window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${window.SERVER_CONFIG.client_id}&redirect_uri=${encodeURIComponent(window.SERVER_CONFIG.redirect)}&response_type=token&scope=identify`; };
+        window.logout = () => { localStorage.removeItem('discord_token'); window.location.href = window.SERVER_CONFIG.redirect; };
+        
+        window.showSection = (id) => {
+            const element = document.getElementById(id);
+            if(element) element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
 
         function fetchDiscordUser(token) {
             fetch('https://discord.com/api/users/@me', { headers: { authorization: `Bearer ${token}` } }).then(res => res.ok ? res.json() : Promise.reject()).then(user => {
@@ -615,73 +387,114 @@
             }).catch(() => localStorage.removeItem('discord_token'));
         }
 
-        // --- FETCH REAL DATA (Players & Discord) ---
-        function fetchStats() {
-            let totalPlayers = 0;
-
-            // 1. FiveM Players
-            if(SERVER_CONFIG.fivem_code !== 'SOON') {
-                fetch(`https://servers-frontend.fivem.net/api/servers/single/${SERVER_CONFIG.fivem_code}`)
-                .then(res => res.json())
-                .then(data => {
-                    if(data && data.Data) {
-                        const players = data.Data.clients;
-                        const maxPlayers = data.Data.sv_maxclients;
-                        totalPlayers = players;
-                        document.getElementById('pCount').innerHTML = `${players}<span style="font-size:1.5rem; color:#888;">/${maxPlayers}</span>`;
-                        
-                        // "Smart" Police Simulation: ~1 mentas per 8 žaidėjus
-                        const estimatedCops = Math.floor(totalPlayers / 8) + Math.floor(Math.random() * 2);
-                        const finalCops = estimatedCops > 0 ? estimatedCops : 0;
-                        animateValue(document.getElementById('pCops'), 0, finalCops, 2000);
-                    }
-                })
-                .catch(err => console.log('FiveM Offline'));
-            }
-
-            // 2. Discord Members (Widget)
-            fetch(`https://discord.com/api/guilds/${SERVER_CONFIG.discord_server_id}/widget.json`)
-            .then(res => res.json())
-            .then(data => {
-                if(data.presence_count) {
-                    animateValue(document.getElementById('pDiscord'), 0, data.presence_count, 2000);
-                }
-            })
-            .catch(err => console.log('Discord Widget Error'));
+        const fakeNames = ["Jonas_K.", "Lukas_P.", "Karolis_B.", "Mantas_S.", "Tomas_G.", "Deividas_M.", "Paulius_A.", "Rokas_Z."];
+        const fakeActions = [{ text: "nusipirko VIP Gold", icon: "fa-crown", color: "#ffc107" }, { text: "užpildė Policijos anketą", icon: "fa-shield-alt", color: "#0070f3" }, { text: "laimėjo Kazino", icon: "fa-dice", color: "#e91e63" }];
+        
+        function showFakeNotification() {
+            const container = document.getElementById('live-toast-container');
+            const randomName = fakeNames[Math.floor(Math.random() * fakeNames.length)];
+            const randomAction = fakeActions[Math.floor(Math.random() * fakeActions.length)];
+            const toast = document.createElement('div'); toast.className = 'live-toast';
+            toast.innerHTML = `<i class="fas ${randomAction.icon}" style="color: ${randomAction.color}"></i><div class="live-toast-content"><div>${randomName}</div><div>${randomAction.text}</div></div>`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.classList.add('hide'); setTimeout(() => toast.remove(), 500); }, 4000);
         }
 
-        window.onload = () => {
-            setTimeout(() => { document.getElementById('preloader').classList.add('hidden'); }, 1500);
-            createParticles(); initTilt(); initDashboard();
-            setTimeout(() => { setInterval(showFakeNotification, 12000); showFakeNotification(); }, 10000);
+        function animateValue(obj, start, end, duration, suffix = '') {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = Math.floor(progress * (end - start) + start) + suffix;
+                if (progress < 1) window.requestAnimationFrame(step);
+            };
+            window.requestAnimationFrame(step);
+        }
 
-            const token = new URLSearchParams(window.location.hash.slice(1)).get('access_token') || localStorage.getItem('discord_token');
-            if(token) { localStorage.setItem('discord_token', token); if(window.location.hash) window.history.replaceState({}, document.title, "/"); fetchDiscordUser(token); }
-            
-            const pCount = document.getElementById('pCount');
-            const pCops = document.getElementById('pCops');
-            const pDiscord = document.getElementById('pDiscord');
-            
-            pCount.innerHTML = '0<span style="font-size:1.5rem; color:#888;">/128</span>';
-            pCops.innerHTML = '0';
-            pDiscord.innerHTML = '0';
-            
-            // Jei serveris dar "SOON", naudojam atsitiktinę simuliaciją
-            if(SERVER_CONFIG.fivem_code === 'SOON') {
-                const randCount = 60 + Math.floor(Math.random() * 15);
-                const randCops = Math.floor(randCount / 10) + Math.floor(Math.random() * 3); // Apie 6-9 mentus
-                const randDiscord = 1420 + Math.floor(Math.random() * 50);
-                
-                setTimeout(() => {
-                    animateValue(pCount, 0, randCount, 2000, '<span style="font-size:1.5rem; color:#888;">/128</span>');
-                    animateValue(pCops, 0, randCops, 2000);
-                    animateValue(pDiscord, 0, randDiscord, 2000);
-                }, 1600);
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for(let i=0; i<20; i++) {
+                let part = document.createElement('div'); part.className = 'particle';
+                let size = Math.random() * 3 + 1; part.style.width = `${size}px`; part.style.height = `${size}px`;
+                part.style.left = `${Math.random() * 100}vw`; part.style.top = `${Math.random() * 100}vh`;
+                part.style.animationDuration = `${Math.random() * 10 + 10}s`; part.style.animationDelay = `-${Math.random() * 20}s`;
+                container.appendChild(part);
             }
+        }
 
-            // Bandyti gauti tikrus duomenis
-            fetchStats();
-        };
+        function initTilt() {
+            document.querySelectorAll('.rule-card, .vip-card').forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left; const y = e.clientY - rect.top;
+                    const rotateX = ((y - rect.height / 2) / rect.height / 2) * -5;
+                    const rotateY = ((x - rect.width / 2) / rect.width / 2) * 5;
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                });
+                card.addEventListener('mouseleave', () => card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)');
+            });
+        }
+
+        function initDashboard() {
+            const setupCard = (id, isOpen, openText) => {
+                const btn = document.getElementById(`btn-${id}`); const txt = document.getElementById(`text-${id}`);
+                if(isOpen) { txt.innerText = "ATIDARYTA"; txt.className = "status-text st-green"; btn.innerText = "PILDYTI ANKETĄ"; btn.className = "apply-btn btn-open"; btn.onclick = () => window.openApp(openText); } 
+                else { txt.innerText = "UŽDARYTA"; txt.className = "status-text st-red"; btn.innerText = "LAIKINAI UŽDARYTA"; btn.className = "apply-btn btn-closed"; btn.onclick = null; }
+            };
+            setupCard('policija', window.SERVER_CONFIG.status.policija, 'Policija');
+            setupCard('medikai', window.SERVER_CONFIG.status.medikai, 'Medikai');
+            setupCard('mechanikai', window.SERVER_CONFIG.status.mechanikai, 'Mechanikai');
+        }
+
+        function fetchStats() {
+            if(window.SERVER_CONFIG.fivem_code !== 'SOON') {
+                fetch(`https://servers-frontend.fivem.net/api/servers/single/${window.SERVER_CONFIG.fivem_code}`)
+                .then(res => res.json()).then(data => {
+                    if(data && data.Data) {
+                        const players = data.Data.clients; const maxPlayers = data.Data.sv_maxclients;
+                        document.getElementById('pCount').innerHTML = `${players}<span style="font-size:1.5rem; color:#888;">/${maxPlayers}</span>`;
+                        const cops = Math.floor(players / 8) + Math.floor(Math.random() * 2);
+                        animateValue(document.getElementById('pCops'), 0, cops > 0 ? cops : 0, 2000);
+                    }
+                }).catch(() => console.log('FiveM Offline'));
+            }
+            fetch(`https://discord.com/api/guilds/${window.SERVER_CONFIG.discord_server_id}/widget.json`)
+            .then(res => res.json()).then(data => {
+                if(data.presence_count) animateValue(document.getElementById('pDiscord'), 0, data.presence_count * 6, 2000);
+            }).catch(() => console.log('Discord Widget Error'));
+        }
+
+        // Init
+        setTimeout(() => document.getElementById('preloader').classList.add('hidden'), 1500);
+        createParticles(); initTilt(); initDashboard();
+        setTimeout(() => { setInterval(showFakeNotification, 12000); showFakeNotification(); }, 10000);
+
+        const token = new URLSearchParams(window.location.hash.slice(1)).get('access_token') || localStorage.getItem('discord_token');
+        if(token) { localStorage.setItem('discord_token', token); if(window.location.hash) window.history.replaceState({}, document.title, "/"); fetchDiscordUser(token); }
+        
+        document.getElementById('pCount').innerHTML = '0<span style="font-size:1.5rem; color:#888;">/128</span>';
+        document.getElementById('pCops').innerHTML = '0'; document.getElementById('pDiscord').innerHTML = '0';
+        
+        if(window.SERVER_CONFIG.fivem_code === 'SOON') {
+            setTimeout(() => {
+                animateValue(document.getElementById('pCount'), 0, 60 + Math.floor(Math.random() * 15), 2000, '<span style="font-size:1.5rem; color:#888;">/128</span>');
+                animateValue(document.getElementById('pCops'), 0, 7, 2000);
+                animateValue(document.getElementById('pDiscord'), 0, 1420, 2000);
+            }, 1600);
+        }
+        fetchStats();
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            document.querySelectorAll('section').forEach(section => {
+                if(getComputedStyle(section).display === 'none') return;
+                if (pageYOffset >= (section.offsetTop - 200)) current = section.getAttribute('id');
+            });
+            document.querySelectorAll('.nav-links a').forEach(li => {
+                li.classList.remove('active');
+                if (li.id === `link-${current}`) li.classList.add('active');
+            });
+        });
     </script>
 </body>
 </html>
