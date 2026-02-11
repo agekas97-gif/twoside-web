@@ -82,15 +82,30 @@
         .live-toast.hide { animation: slideOut 0.5s forwards; }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+        
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 3000; justify-content: center; align-items: flex-start; padding: 20px; overflow-y: auto; opacity: 0; transition: 0.4s; backdrop-filter: blur(10px); }
         .modal-overlay.open { display: flex; opacity: 1; }
-        .modal-content { background: #0f0f0f; border: 1px solid var(--border); border-radius: 25px; padding: 50px; width: 100%; max-width: 550px; position: relative; margin: 50px auto; transform: scale(0.95); transition: 0.4s; }
+        .modal-content { background: #0f0f0f; border: 1px solid var(--border); border-radius: 25px; padding: 50px; width: 100%; max-width: 650px; position: relative; margin: 50px auto; transform: scale(0.95); transition: 0.4s; }
         .modal-overlay.open .modal-content { transform: scale(1); }
         .close-modal { position: absolute; top: 25px; right: 25px; font-size: 1.5rem; color: #666; cursor: pointer; }
+        
+        /* FORM STYLES */
         .input-group { margin-bottom: 20px; position: relative; }
-        .custom-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 15px 15px 15px 45px; border-radius: 12px; color: white; outline: none; }
-        .input-icon { position: absolute; left: 15px; top: 42px; color: #666; }
+        .custom-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 15px; border-radius: 12px; color: white; outline: none; transition: 0.3s; }
+        .custom-input:focus { border-color: var(--blue); background: rgba(255,255,255,0.1); }
+        textarea.custom-input { min-height: 100px; resize: vertical; }
+        .input-label { display: block; margin-bottom: 8px; font-weight: 700; color: #ccc; }
+        
         .submit-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, var(--blue), #0060d0); border: none; border-radius: 12px; color: white; font-weight: 800; cursor: pointer; margin-top: 15px; }
+        
+        /* ADMIN APP CARD */
+        .admin-app-card { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; margin-bottom: 20px; border-left: 4px solid var(--blue); }
+        .admin-app-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .admin-app-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .admin-answer-box { background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; }
+        .admin-answer-label { font-size: 0.75rem; text-transform: uppercase; color: var(--text-dim); font-weight: 800; display: block; margin-bottom: 5px; }
+        .admin-actions { display: flex; gap: 10px; margin-top: 15px; }
+        
         .ticker-wrap { position: fixed; bottom: 0; width: 100%; height: 40px; background: rgba(0,0,0,0.95); border-top: 1px solid var(--border); display: flex; align-items: center; z-index: 2000; }
         .ticker { display: inline-block; white-space: nowrap; animation: ticker 40s linear infinite; }
         .ticker__item { display: inline-block; padding: 0 3rem; color: #fff; font-weight: 600; font-size: 0.9rem; }
@@ -104,9 +119,7 @@
         /* ADMIN CONTROLS */
         .admin-controls { display: none; margin-top: 10px; gap: 10px; }
         .admin-controls.visible { display: flex; }
-        .toggle-btn { flex: 1; padding: 5px; font-size: 0.8rem; font-weight: bold; border-radius: 5px; border: 1px solid var(--border); background: rgba(255,255,255,0.1); color: #fff; cursor: pointer; }
-        .toggle-btn:hover { background: rgba(255,255,255,0.2); }
-
+        
         @media (max-width: 1200px) { .main-wrapper { max-width: 90%; } }
         @media (max-width: 768px) {
             nav { position: relative; height: auto; padding: 20px; flex-direction: column; gap: 20px; background: var(--bg); border-bottom: 1px solid var(--border); }
@@ -118,7 +131,7 @@
             .glass-card { padding: 25px; }
             h1 { font-size: 2.8rem; margin-bottom: 20px; }
             .typewriter { border: none; animation: none; white-space: normal; }
-            .dash-grid, .vip-grid { grid-template-columns: 1fr; }
+            .dash-grid, .vip-grid, .admin-app-grid { grid-template-columns: 1fr; }
             .stats-row { flex-direction: column; gap: 30px; }
             .stat-box { text-align: center; }
             .ticker-wrap { height: 35px; }
@@ -176,21 +189,25 @@
                     </div>
                     <button onclick="logout()" style="background: rgba(220, 53, 69, 0.1); color: #dc3545; border: 1px solid #dc3545; padding: 12px 30px; border-radius: 8px; font-weight: 800; transition:0.3s;">ATSIJUNGTI</button>
                 </div>
-                <div class="dash-grid">
+                
+                <div style="margin-top: 40px; padding: 20px; background: rgba(255,255,255,0.03); border-radius: 15px; border: 1px solid var(--border);">
+                    <h3 style="margin-bottom: 10px; display:flex; align-items:center; gap:10px;"><i class="fas fa-id-card" style="color: var(--blue);"></i> WHITELIST STATUSAS</h3>
+                    <p id="wl-status-text" style="color: var(--text-dim); margin-bottom: 20px;">Norėdamas žaisti serveryje, privalai užpildyti anketą.</p>
+                    <button id="btn-wl-apply" class="apply-btn btn-open" onclick="openWhitelistApp()">PILDYTI ANKETĄ</button>
+                </div>
+
+                <div id="admin-area" style="display: none; margin-top: 40px; border-top: 1px solid var(--border); padding-top: 30px;">
+                    <h2 style="color: var(--danger); margin-bottom: 20px;"><i class="fas fa-user-shield"></i> ADMIN ZONA: Gautos Anketos</h2>
+                    <div id="applications-list">
+                        <p style="color: #666; text-align: center;">Kraunama...</p>
+                    </div>
+                </div>
+
+                <div class="dash-grid" style="margin-top: 40px;">
                     <div id="card-policija" class="rule-card">
                         <div><i class="fas fa-shield-alt"></i><h4>Policijos Atranka</h4><p>Statusas: <span id="text-policija" class="status-text"></span></p></div>
                         <button id="btn-policija" class="apply-btn">KRAUNAMA...</button>
                         <div id="admin-policija" class="admin-controls"><button class="toggle-btn" onclick="toggleAppStatus('policija')">KEISTI STATUSĄ</button></div>
-                    </div>
-                    <div id="card-medikai" class="rule-card">
-                        <div><i class="fas fa-ambulance"></i><h4>Medikų Atranka</h4><p>Statusas: <span id="text-medikai" class="status-text"></span></p></div>
-                        <button id="btn-medikai" class="apply-btn">KRAUNAMA...</button>
-                        <div id="admin-medikai" class="admin-controls"><button class="toggle-btn" onclick="toggleAppStatus('medikai')">KEISTI STATUSĄ</button></div>
-                    </div>
-                    <div id="card-mechanikai" class="rule-card">
-                        <div><i class="fas fa-wrench"></i><h4>Mechanikų Atranka</h4><p>Statusas: <span id="text-mechanikai" class="status-text"></span></p></div>
-                        <button id="btn-mechanikai" class="apply-btn">KRAUNAMA...</button>
-                        <div id="admin-mechanikai" class="admin-controls"><button class="toggle-btn" onclick="toggleAppStatus('mechanikai')">KEISTI STATUSĄ</button></div>
                     </div>
                     <div class="rule-card" style="border-top: 4px solid var(--gold);">
                         <div><i class="fas fa-crown" style="color: var(--gold);"></i><h4>VIP Narystė</h4><p>Norėdami įsigyti VIP statusą, kreipkitės Discord Ticket.</p></div>
@@ -247,17 +264,32 @@
         </section>
     </div>
 
-    <div class="modal-overlay" id="appModal">
+    <div class="modal-overlay" id="whitelistModal">
         <div class="modal-content">
-            <div class="close-modal" onclick="closeApp()"><i class="fas fa-times"></i></div>
-            <h2 id="modalTitle" style="margin-bottom: 20px; font-weight: 800;">Pildyti Anketą</h2>
-            <form id="applicationForm" onsubmit="submitForm(event)">
-                <input type="hidden" id="appType" value="">
-                <div class="input-group"><label>Vardas Pavardė (Žaidime)</label><input type="text" id="ign" class="custom-input" placeholder="Vardenis_Pavardenis" required><i class="fas fa-user input-icon"></i></div>
-                <div class="input-group"><label>Tikras Amžius</label><input type="number" id="age" class="custom-input" placeholder="Pvz: 17" required><i class="fas fa-birthday-cake input-icon"></i></div>
-                <div class="input-group"><label>Motyvacinis laiškelis</label><textarea id="reason" class="custom-input" placeholder="Kodėl norite prisijungti?" required></textarea><i class="fas fa-comment-dots input-icon"></i></div>
-                <div class="input-group"><label>RP Patirtis</label><textarea id="experience" class="custom-input" placeholder="Kur žaidei?" required></textarea><i class="fas fa-history input-icon"></i></div>
-                <button type="submit" class="submit-btn" style="margin-top: 20px;">SIŲSTI ANKETĄ</button>
+            <div class="close-modal" onclick="closeWhitelistApp()"><i class="fas fa-times"></i></div>
+            <h2 style="text-align: center; margin-bottom: 20px; font-weight: 800;">WHITELIST ANKETA</h2>
+            <form id="wlForm" onsubmit="submitWhitelistForm(event)">
+                <div class="input-group">
+                    <label class="input-label">1. Kiek tau metų?</label>
+                    <input type="number" id="wl_age" class="custom-input" placeholder="Pvz: 16" required>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">2. Kokiuose projektuose žaidei anksčiau?</label>
+                    <textarea id="wl_history" class="custom-input" placeholder="Išvardink projektus..." required></textarea>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">3. Kas yra NLR? (Paaiškink)</label>
+                    <textarea id="wl_nlr" class="custom-input" placeholder="New Life Rule yra..." required></textarea>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">4. Kas yra FEARRP? (Paaiškink)</label>
+                    <textarea id="wl_fearrp" class="custom-input" placeholder="Fear Roleplay yra..." required></textarea>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">5. Kodėl nusprendei žaisti šiame serveryje?</label>
+                    <textarea id="wl_why" class="custom-input" placeholder="Mane sudomino..." required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">SIŲSTI ANKETĄ</button>
             </form>
         </div>
     </div>
@@ -286,7 +318,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, push, set, onValue, get, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // TAVO NAUJAS HTTPS URL (TUNELIS) - NEREIKIA NIEKO KEISTI
+        // --- KONFIGŪRACIJA (TAVO VPS) ---
         const replitURL = "https://twoside-serveris-official.loca.lt"; 
 
         const firebaseConfig = {
@@ -301,7 +333,6 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
-
         window.db = db; window.ref = ref; window.update = update; window.get = get;
 
         window.SERVER_CONFIG = {
@@ -309,11 +340,13 @@
             discord_server_id: '1380526027331207271', 
             server_ip: 'connect cfx.re/join/3zv39z',
             status: { policija: false, medikai: false, mechanikai: false },
-            webhook: 'https://discord.com/api/webhooks/1470572886614999092/oINMatnjGC7OVERaD0wieIZIErb7x3MBpnKzC9SjabTqMEWNB_rhiGOHNldTB9c4AIlp',
             client_id: '1470568120921100423',
             redirect: 'https://twoside.lt'
         };
 
+        let CURRENT_USER = null;
+
+        // --- DASHBOARD FUNKCIJOS ---
         const statusRef = ref(db, 'serverStatus');
         onValue(statusRef, (snapshot) => {
             const data = snapshot.val();
@@ -326,31 +359,13 @@
         window.toggleAppStatus = async function(job) {
             const currentRef = ref(db, `serverStatus/${job}`);
             const snapshot = await get(currentRef);
-            const currentVal = snapshot.val();
-            const updates = {};
-            updates[`serverStatus/${job}`] = !currentVal;
+            const updates = {}; updates[`serverStatus/${job}`] = !snapshot.val();
             update(ref(db), updates);
             alert(`${job} statusas pakeistas!`);
         };
 
-        window.submitForm = function(e) {
-            e.preventDefault();
-            const lastSubmit = localStorage.getItem('lastAppSubmit');
-            if (lastSubmit && (Date.now() - lastSubmit < 1800000)) { 
-                alert(`Prašome palaukti ${Math.ceil((1800000 - (Date.now() - lastSubmit)) / 60000)} min.`); 
-                return;
-            }
-            const btn = document.querySelector('.submit-btn'); const originalText = btn.innerText; btn.innerText = "SIUNČIAMA..."; btn.disabled = true;
-            const appData = { discordName: document.getElementById('user-name').innerText || "Nežinomas", ign: document.getElementById('ign').value, age: document.getElementById('age').value, reason: document.getElementById('reason').value, experience: document.getElementById('experience').value, type: document.getElementById('appType').value, timestamp: new Date().toISOString() };
-            const newAppRef = push(ref(db, 'applications'));
-            set(newAppRef, appData).then(() => {
-                return fetch(window.SERVER_CONFIG.webhook, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: "Website Bot", avatar_url: "https://i.imgur.com/AfFp7pu.png", embeds: [{ title: `📄 Nauja Anketa: ${appData.type}`, color: 3447003, fields: [{ name: "Discord", value: appData.discordName, inline: true }, { name: "Vardas (IC)", value: appData.ign, inline: true }, { name: "Amžius", value: appData.age, inline: true }, { name: "Motyvacija", value: appData.reason }, { name: "Patirtis", value: appData.experience }], footer: { text: "Išsaugota duomenų bazėje ✅" }, timestamp: appData.timestamp }] }) });
-            }).then(() => { alert('Anketa sėkmingai išsaugota ir išsiųsta!'); localStorage.setItem('lastAppSubmit', Date.now()); window.closeApp(); document.getElementById('applicationForm').reset(); })
-            .catch((error) => { console.error("Klaida:", error); alert('Įvyko klaida saugant duomenis.'); }).finally(() => { btn.innerText = originalText; btn.disabled = false; });
-        };
-
-        window.openApp = (type) => { document.getElementById('modalTitle').innerText = type + ' Anketa'; document.getElementById('appType').value = type; document.getElementById('appModal').classList.add('open'); };
-        window.closeApp = () => { document.getElementById('appModal').classList.remove('open'); };
+        window.openWhitelistApp = () => { document.getElementById('whitelistModal').classList.add('open'); };
+        window.closeWhitelistApp = () => { document.getElementById('whitelistModal').classList.remove('open'); };
         window.openVip = () => { document.getElementById('vipModal').classList.add('open'); };
         window.closeVip = () => { document.getElementById('vipModal').classList.remove('open'); };
         
@@ -364,11 +379,112 @@
         window.logout = () => { localStorage.removeItem('discord_token'); window.location.href = window.SERVER_CONFIG.redirect; };
         window.showSection = (id) => { const element = document.getElementById(id); if(element) element.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
 
-        // --- PAKEISTA LOGIKA (LOADING SCREEN + ADMIN) ---
+        // --- WHITELIST FORMA (SIUNČIA Į VPS) ---
+        window.submitWhitelistForm = async function(e) {
+            e.preventDefault();
+            if(!CURRENT_USER) return alert("Klaida: Neprisijungta.");
+
+            const payload = {
+                discordId: CURRENT_USER.id,
+                discordName: CURRENT_USER.username,
+                answers: {
+                    age: document.getElementById('wl_age').value,
+                    history: document.getElementById('wl_history').value,
+                    nlr: document.getElementById('wl_nlr').value,
+                    fearrp: document.getElementById('wl_fearrp').value,
+                    why: document.getElementById('wl_why').value
+                }
+            };
+
+            const btn = e.target.querySelector('button');
+            const originalText = btn.innerText;
+            btn.innerText = "SIUNČIAMA...";
+            btn.disabled = true;
+
+            try {
+                const res = await fetch(`${replitURL}/submit-app`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                
+                if(data.success) {
+                    alert("Anketa sėkmingai išsiųsta! Administratoriai ją peržiūrės.");
+                    closeWhitelistApp();
+                    document.getElementById('wlForm').reset();
+                    document.getElementById('wl-status-text').innerText = "✅ Jūsų anketa išsiųsta ir laukia patvirtinimo.";
+                    document.getElementById('btn-wl-apply').style.display = 'none';
+                } else {
+                    alert("Klaida siunčiant anketą.");
+                }
+            } catch(err) {
+                console.error(err);
+                alert("Nepavyko susisiekti su serveriu.");
+            }
+            btn.innerText = originalText;
+            btn.disabled = false;
+        };
+
+        // --- ADMINO FUNKCIJOS ---
+        async function loadAdminPanel(adminId) {
+            try {
+                const res = await fetch(`${replitURL}/get-apps?adminId=${adminId}`);
+                const apps = await res.json();
+                const list = document.getElementById('applications-list');
+                
+                if(apps.length === 0) {
+                    list.innerHTML = '<p style="text-align:center; color:#888;">Nėra naujų anketų.</p>';
+                    return;
+                }
+
+                list.innerHTML = apps.map(app => `
+                    <div class="admin-app-card" id="app-${app.id}">
+                        <div class="admin-app-header">
+                            <h3 style="margin:0;">${app.discordName} <span style="font-size:0.8rem; color:#666;">(ID: ${app.discordId})</span></h3>
+                            <span style="font-size:0.8rem; color:#888;">${new Date(parseInt(app.id)).toLocaleTimeString()}</span>
+                        </div>
+                        <div class="admin-app-grid">
+                            <div class="admin-answer-box"><span class="admin-answer-label">Amžius</span>${app.answers.age}</div>
+                            <div class="admin-answer-box"><span class="admin-answer-label">Istorija</span>${app.answers.history}</div>
+                            <div class="admin-answer-box"><span class="admin-answer-label">NLR</span>${app.answers.nlr}</div>
+                            <div class="admin-answer-box"><span class="admin-answer-label">FearRP</span>${app.answers.fearrp}</div>
+                            <div class="admin-answer-box" style="grid-column: span 2;"><span class="admin-answer-label">Kodėl mes?</span>${app.answers.why}</div>
+                        </div>
+                        <div class="admin-actions">
+                            <button class="toggle-btn" style="background:var(--success); border:none;" onclick="handleApp('${app.id}', 'approve')">PRIIMTI (Uždėti Rolę)</button>
+                            <button class="toggle-btn" style="background:var(--danger); border:none;" onclick="handleApp('${app.id}', 'reject')">ATMESTI</button>
+                        </div>
+                    </div>
+                `).join('');
+                
+                document.getElementById('admin-area').style.display = 'block';
+            } catch(e) { console.error("Admin Load Error:", e); }
+        }
+
+        window.handleApp = async function(appId, action) {
+            if(!confirm(action === 'approve' ? "Priimti ir uždėti rolę?" : "Atmesti anketą?")) return;
+            
+            try {
+                const res = await fetch(`${replitURL}/handle-app`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ adminId: CURRENT_USER.id, appId, action })
+                });
+                const data = await res.json();
+                alert(data.msg);
+                if(data.success) {
+                    document.getElementById(`app-${appId}`).remove();
+                }
+            } catch(e) { alert("Serverio klaida."); }
+        }
+
+        // --- AUTH & LOAD ---
         function fetchDiscordUser(token) {
             fetch('https://discord.com/api/users/@me', { headers: { authorization: `Bearer ${token}` } })
             .then(res => res.ok ? res.json() : Promise.reject())
             .then(async user => {
+                CURRENT_USER = user;
                 document.getElementById('discord-btn').style.display = 'none'; 
                 document.getElementById('user-profile').style.display = 'flex';
                 document.getElementById('user-name').innerText = user.username; 
@@ -379,38 +495,31 @@
                 document.getElementById('dash-id').innerText = `ID: ${user.id}`; 
                 document.getElementById('dash-avatar').src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
                 
-                // VPS CHECK
                 try {
                     const response = await fetch(`${replitURL}/check-admin?id=${user.id}`);
                     const data = await response.json();
 
                     if (data.isAdmin === true) {
-                        // 1. Pakeičiame loaderį
                         const loaderText = document.getElementById('loaderText');
                         loaderText.innerHTML = "TWOSIDE <span style='color:red;'>ADMIN</span>";
                         loaderText.classList.add('admin-load-text');
                         
-                        // 2. Parodome kontrolę
                         document.querySelectorAll('.admin-controls').forEach(el => el.classList.add('visible'));
-                        
-                        // 3. Vizualiniai efektai adminui
                         const dashCard = document.getElementById('dash-card');
                         dashCard.classList.add('admin-mode-card');
                         document.getElementById('dash-welcome').innerHTML += ' <span class="admin-badge">ADMIN</span>';
 
-                        // 4. Toast pranešimas
                         const container = document.getElementById('live-toast-container');
                         const toast = document.createElement('div'); toast.className = 'live-toast';
                         toast.style.borderLeft = "4px solid red";
                         toast.innerHTML = `<i class="fas fa-unlock" style="color: red"></i><div class="live-toast-content"><div>SISTEMA</div><div>Administratoriaus teisės patvirtintos.</div></div>`;
                         container.appendChild(toast);
                         
-                        // 5. Užlaikome loaderį kad pasimėgautum efektu
-                        setTimeout(() => { document.getElementById('preloader').classList.add('hidden'); }, 1500);
+                        // UŽKRAUNAM ADMIN PANELĘ
+                        loadAdminPanel(user.id);
                         
-                        console.log("Adminas atpažintas per VPS!");
+                        setTimeout(() => { document.getElementById('preloader').classList.add('hidden'); }, 1500);
                     } else {
-                        // Jei ne adminas - slepiam iškart
                         document.getElementById('preloader').classList.add('hidden');
                     }
                 } catch (e) {
@@ -433,17 +542,15 @@
         function animateValue(obj, start, end, duration, suffix = '') { let startTimestamp = null; const step = (timestamp) => { if (!startTimestamp) startTimestamp = timestamp; const progress = Math.min((timestamp - startTimestamp) / duration, 1); obj.innerHTML = Math.floor(progress * (end - start) + start) + suffix; if (progress < 1) window.requestAnimationFrame(step); }; window.requestAnimationFrame(step); }
         function createParticles() { const container = document.getElementById('particles'); for(let i=0; i<20; i++) { let part = document.createElement('div'); part.className = 'particle'; let size = Math.random() * 3 + 1; part.style.width = `${size}px`; part.style.height = `${size}px`; part.style.left = `${Math.random() * 100}vw`; part.style.top = `${Math.random() * 100}vh`; part.style.animationDuration = `${Math.random() * 10 + 10}s`; part.style.animationDelay = `-${Math.random() * 20}s`; container.appendChild(part); } }
         function initTilt() { document.querySelectorAll('.rule-card, .vip-card').forEach(card => { card.addEventListener('mousemove', (e) => { const rect = card.getBoundingClientRect(); const x = e.clientX - rect.left; const y = e.clientY - rect.top; const rotateX = ((y - rect.height / 2) / rect.height / 2) * -5; const rotateY = ((x - rect.width / 2) / rect.width / 2) * 5; card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`; }); card.addEventListener('mouseleave', () => card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)'); }); }
-        function initDashboard() { const setupCard = (id, isOpen, openText) => { const btn = document.getElementById(`btn-${id}`); const txt = document.getElementById(`text-${id}`); if(isOpen) { txt.innerText = "ATIDARYTA"; txt.className = "status-text st-green"; btn.innerText = "PILDYTI ANKETĄ"; btn.className = "apply-btn btn-open"; btn.onclick = () => window.openApp(openText); } else { txt.innerText = "UŽDARYTA"; txt.className = "status-text st-red"; btn.innerText = "LAIKINAI UŽDARYTA"; btn.className = "apply-btn btn-closed"; btn.onclick = null; } }; setupCard('policija', window.SERVER_CONFIG.status.policija, 'Policija'); setupCard('medikai', window.SERVER_CONFIG.status.medikai, 'Medikai'); setupCard('mechanikai', window.SERVER_CONFIG.status.mechanikai, 'Mechanikai'); }
+        function initDashboard() { const setupCard = (id, isOpen, openText) => { const btn = document.getElementById(`btn-${id}`); const txt = document.getElementById(`text-${id}`); if(isOpen) { txt.innerText = "ATIDARYTA"; txt.className = "status-text st-green"; btn.innerText = "PILDYTI ANKETĄ"; btn.className = "apply-btn btn-open"; btn.onclick = null; } else { txt.innerText = "UŽDARYTA"; txt.className = "status-text st-red"; btn.innerText = "LAIKINAI UŽDARYTA"; btn.className = "apply-btn btn-closed"; btn.onclick = null; } }; setupCard('policija', window.SERVER_CONFIG.status.policija, 'Policija'); setupCard('medikai', window.SERVER_CONFIG.status.medikai, 'Medikai'); setupCard('mechanikai', window.SERVER_CONFIG.status.mechanikai, 'Mechanikai'); }
         function fetchStats() { if(window.SERVER_CONFIG.fivem_code !== 'SOON') { fetch(`https://servers-frontend.fivem.net/api/servers/single/${window.SERVER_CONFIG.fivem_code}`).then(res => res.json()).then(data => { if(data && data.Data) { const players = data.Data.clients; const maxPlayers = data.Data.sv_maxclients; document.getElementById('pCount').innerHTML = `${players}<span style="font-size:1.5rem; color:#888;">/${maxPlayers}</span>`; const cops = Math.floor(players / 8) + Math.floor(Math.random() * 2); animateValue(document.getElementById('pCops'), 0, cops > 0 ? cops : 0, 2000); } }).catch(() => console.log('FiveM Offline')); } fetch(`https://discord.com/api/guilds/${window.SERVER_CONFIG.discord_server_id}/widget.json`).then(res => res.json()).then(data => { if(data.presence_count) animateValue(document.getElementById('pDiscord'), 0, data.presence_count * 6, 2000); }).catch(() => console.log('Discord Widget Error')); }
 
-        // Svarbu: Jei nėra tokeno, slepiam loaderį iškart (standartinis elgesys)
         const token = new URLSearchParams(window.location.hash.slice(1)).get('access_token') || localStorage.getItem('discord_token');
         if(token) { 
             localStorage.setItem('discord_token', token); 
             if(window.location.hash) window.history.replaceState({}, document.title, "/"); 
-            fetchDiscordUser(token); // Loaderį slėpsime viduje po patikrinimo
+            fetchDiscordUser(token);
         } else {
-            // Jei svečias - slepiam loaderį greitai
             setTimeout(() => document.getElementById('preloader').classList.add('hidden'), 1500);
         }
 
