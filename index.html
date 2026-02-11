@@ -50,6 +50,7 @@
         section { display: block; width: 100%; min-height: 100vh; padding-top: 130px; }
         #dashboard { display: none; }
         
+        /* CARD STYLES */
         .glass-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 30px; padding: 60px; position: relative; backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); width: 100%; transition: 0.5s; margin-bottom: 30px; }
         .admin-mode-card { border-top: 2px solid red !important; box-shadow: 0 0 40px rgba(255, 0, 0, 0.3) !important; }
         .admin-badge { background: red; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; margin-left: 10px; vertical-align: middle; box-shadow: 0 0 10px red; }
@@ -106,10 +107,33 @@
         #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
         @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 80px; opacity: 1;} }
         @keyframes fadeout { from {bottom: 80px; opacity: 1;} to {bottom: 0; opacity: 0;} }
-        .admin-controls { display: none; margin-top: 10px; gap: 10px; }
+        
+        /* ADMIN CONTROLS */
+        .admin-controls { display: none; margin-top: 15px; gap: 10px; width: 100%; }
         .admin-controls.visible { display: flex; }
-        .toggle-btn { flex: 1; padding: 5px; font-size: 0.8rem; font-weight: bold; border-radius: 5px; border: 1px solid var(--border); background: rgba(255,255,255,0.1); color: #fff; cursor: pointer; }
-        .toggle-btn:hover { background: rgba(255,255,255,0.2); }
+        
+        /* NAUJAS MODERNAUS MYGTUKO STILIUS */
+        .toggle-btn {
+            flex: 1;
+            padding: 12px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.4);
+            color: #ccc;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+        .toggle-btn:hover {
+            background: rgba(0, 112, 243, 0.2);
+            border-color: var(--blue);
+            color: white;
+            box-shadow: 0 0 15px rgba(0, 112, 243, 0.3);
+        }
 
         @media (max-width: 1200px) { .main-wrapper { max-width: 90%; } }
         @media (max-width: 768px) {
@@ -542,7 +566,7 @@
         function animateValue(obj, start, end, duration, suffix = '') { let startTimestamp = null; const step = (timestamp) => { if (!startTimestamp) startTimestamp = timestamp; const progress = Math.min((timestamp - startTimestamp) / duration, 1); obj.innerHTML = Math.floor(progress * (end - start) + start) + suffix; if (progress < 1) window.requestAnimationFrame(step); }; window.requestAnimationFrame(step); }
         function createParticles() { const container = document.getElementById('particles'); for(let i=0; i<20; i++) { let part = document.createElement('div'); part.className = 'particle'; let size = Math.random() * 3 + 1; part.style.width = `${size}px`; part.style.height = `${size}px`; part.style.left = `${Math.random() * 100}vw`; part.style.top = `${Math.random() * 100}vh`; part.style.animationDuration = `${Math.random() * 10 + 10}s`; part.style.animationDelay = `-${Math.random() * 20}s`; container.appendChild(part); } }
         function initTilt() { document.querySelectorAll('.rule-card, .vip-card').forEach(card => { card.addEventListener('mousemove', (e) => { const rect = card.getBoundingClientRect(); const x = e.clientX - rect.left; const y = e.clientY - rect.top; const rotateX = ((y - rect.height / 2) / rect.height / 2) * -5; const rotateY = ((x - rect.width / 2) / rect.width / 2) * 5; card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`; }); card.addEventListener('mouseleave', () => card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)'); }); }
-        function initDashboard() { const setupCard = (id, isOpen, openText) => { const btn = document.getElementById(`btn-${id}`); const txt = document.getElementById(`text-${id}`); if(isOpen) { txt.innerText = "ATIDARYTA"; txt.className = "status-text st-green"; btn.innerText = "PILDYTI ANKETĄ"; btn.className = "apply-btn btn-open"; btn.onclick = null; } else { txt.innerText = "UŽDARYTA"; txt.className = "status-text st-red"; btn.innerText = "LAIKINAI UŽDARYTA"; btn.className = "apply-btn btn-closed"; btn.onclick = null; } }; setupCard('policija', window.SERVER_CONFIG.status.policija, 'Policija'); setupCard('medikai', window.SERVER_CONFIG.status.medikai, 'Medikai'); setupCard('mechanikai', window.SERVER_CONFIG.status.mechanikai, 'Mechanikai'); }
+        function initDashboard() { const setupCard = (id, isOpen, openText) => { const btn = document.getElementById(`btn-${id}`); const txt = document.getElementById(`text-${id}`); if(isOpen) { txt.innerText = "ATIDARYTA"; txt.className = "status-text st-green"; btn.innerText = "PILDYTI ANKETĄ"; btn.className = "apply-btn btn-open"; btn.onclick = () => window.openApp(openText); } else { txt.innerText = "UŽDARYTA"; txt.className = "status-text st-red"; btn.innerText = "LAIKINAI UŽDARYTA"; btn.className = "apply-btn btn-closed"; btn.onclick = null; } }; setupCard('policija', window.SERVER_CONFIG.status.policija, 'Policija'); setupCard('medikai', window.SERVER_CONFIG.status.medikai, 'Medikai'); setupCard('mechanikai', window.SERVER_CONFIG.status.mechanikai, 'Mechanikai'); }
         function fetchStats() { if(window.SERVER_CONFIG.fivem_code !== 'SOON') { fetch(`https://servers-frontend.fivem.net/api/servers/single/${window.SERVER_CONFIG.fivem_code}`).then(res => res.json()).then(data => { if(data && data.Data) { const players = data.Data.clients; const maxPlayers = data.Data.sv_maxclients; document.getElementById('pCount').innerHTML = `${players}<span style="font-size:1.5rem; color:#888;">/${maxPlayers}</span>`; const cops = Math.floor(players / 8) + Math.floor(Math.random() * 2); animateValue(document.getElementById('pCops'), 0, cops > 0 ? cops : 0, 2000); } }).catch(() => console.log('FiveM Offline')); } fetch(`https://discord.com/api/guilds/${window.SERVER_CONFIG.discord_server_id}/widget.json`).then(res => res.json()).then(data => { if(data.presence_count) animateValue(document.getElementById('pDiscord'), 0, data.presence_count * 6, 2000); }).catch(() => console.log('Discord Widget Error')); }
 
         const token = new URLSearchParams(window.location.hash.slice(1)).get('access_token') || localStorage.getItem('discord_token');
