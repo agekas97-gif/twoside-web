@@ -32,13 +32,16 @@
             --gold: #ffc107;
             --silver: #c0c0c0;
             --bronze: #cd7f32;
+            --police: #3498db; /* Policijos šviesiai mėlyna */
         }
 
+        /* SCROLLBAR */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #050505; }
         ::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #0056b3; }
 
+        /* BASE */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; cursor: default; user-select: none; -webkit-tap-highlight-color: transparent; }
         a, button, .apply-btn, .vip-btn-buy, .close-modal, .rule-card, .vip-card, i { cursor: pointer; }
         input, textarea { cursor: text; user-select: text; }
@@ -87,14 +90,9 @@
         #user-avatar { width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--blue); }
         #user-name { font-weight: 700; font-size: 0.95rem; color: white; }
 
-        .main-wrapper { 
-            padding-top: 0; 
-            display: flex; flex-direction: column; align-items: center; min-height: 100vh; gap: 0; padding-bottom: 100px; width: 100%; max-width: 1400px; margin: 0 auto; 
-        }
+        .main-wrapper { padding-top: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; gap: 0; padding-bottom: 100px; width: 100%; max-width: 1400px; margin: 0 auto; }
         
-        section { 
-            display: block; width: 100%; min-height: 100vh; padding-top: 130px; opacity: 1; transform: none;
-        }
+        section { display: block; width: 100%; min-height: 100vh; padding-top: 130px; opacity: 1; transform: none; }
         #dashboard { display: none; } 
 
         .glass-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 30px; padding: 60px; position: relative; overflow: hidden; backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); width: 100%; }
@@ -153,7 +151,7 @@
         .vip-silver { border-top: 4px solid var(--silver); }
         .vip-gold { border-top: 4px solid var(--gold); }
 
-        /* PULSATION EFFECT FOR HERO BUTTON */
+        /* PULSATION */
         .btn-hero { display: inline-flex; align-items: center; gap: 15px; padding: 18px 45px; border-radius: 12px; text-decoration: none; font-weight: 800; font-size: 1rem; transition: 0.4s; border: none; }
         .btn-primary { 
             background: var(--blue); color: white; box-shadow: 0 0 20px rgba(0, 112, 243, 0.6);
@@ -166,7 +164,7 @@
             100% { box-shadow: 0 0 0 0 rgba(0, 112, 243, 0); }
         }
 
-        /* --- NOTIFICATIONS (LIVE TOAST) --- */
+        /* LIVE TOAST */
         #live-toast-container { position: fixed; bottom: 60px; right: 20px; z-index: 2500; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
         .live-toast {
             background: rgba(12, 12, 12, 0.95); border: 1px solid var(--border); border-left: 4px solid var(--blue);
@@ -181,6 +179,7 @@
         @keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         @keyframes fadeOutRight { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
 
+        /* MODAL FIX */
         .modal-overlay { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 3000; 
             justify-content: center; align-items: flex-start; padding: 20px; overflow-y: auto; opacity: 0; transition: all 0.4s ease; backdrop-filter: blur(10px);
@@ -333,7 +332,8 @@
                 </div>
                 <div class="stats-row">
                     <div class="stat-box"><div class="label">Žaidėjai</div><h2 id="pCount">0<span style="font-size:1.5rem; color:#888;">/128</span></h2></div>
-                    <div class="stat-box"><div class="label">Ping</div><h2 id="pPing">0<span style="font-size:1.5rem; color:#888;">ms</span></h2></div>
+                    
+                    <div class="stat-box"><div class="label">Pareigūnai</div><h2 id="pCops" style="color: var(--police);">0</h2></div>
                     
                     <div class="stat-box"><div class="label">Discord</div><h2 id="pDiscord" style="color: #5865F2;">0</h2></div>
                 </div>
@@ -405,12 +405,8 @@
     <script>
         // === SERVERIO NUSTATYMAI ===
         const SERVER_CONFIG = {
-            // TAVO ID (pakeisk į savo, pvz: 'q85o9r')
             fivem_code: '3zv39z', 
-            
-            // TAVO DISCORD ID (Iš Widget Settings)
             discord_server_id: '1380526027331207271', 
-
             server_ip: 'connect cfx.re/join/3zv39z',
             status: { policija: false, medikai: false, mechanikai: false },
             webhook: 'https://discord.com/api/webhooks/1470572886614999092/oINMatnjGC7OVERaD0wieIZIErb7x3MBpnKzC9SjabTqMEWNB_rhiGOHNldTB9c4AIlp',
@@ -444,36 +440,6 @@
 
             container.appendChild(toast);
             setTimeout(() => { toast.classList.add('hide'); setTimeout(() => toast.remove(), 500); }, 4000);
-        }
-
-        // --- FETCH REAL DATA ---
-        function fetchStats() {
-            // 1. FiveM Players
-            if(SERVER_CONFIG.fivem_code !== 'SOON') {
-                fetch(`https://servers-frontend.fivem.net/api/servers/single/${SERVER_CONFIG.fivem_code}`)
-                .then(res => res.json())
-                .then(data => {
-                    if(data && data.Data) {
-                        const players = data.Data.clients;
-                        const maxPlayers = data.Data.sv_maxclients;
-                        // Čia naudojame paprastą atvaizdavimą be animacijos, kad nesusipjautų su random
-                        document.getElementById('pCount').innerHTML = `${players}<span style="font-size:1.5rem; color:#888;">/${maxPlayers}</span>`;
-                    }
-                })
-                .catch(err => console.log('FiveM Offline'));
-            }
-
-            // 2. Discord Members (Widget API)
-            fetch(`https://discord.com/api/guilds/${SERVER_CONFIG.discord_server_id}/widget.json`)
-            .then(res => res.json())
-            .then(data => {
-                if(data.presence_count) {
-                    // Animacija Discord skaičiui
-                    const el = document.getElementById('pDiscord');
-                    animateValue(el, 0, data.presence_count, 2000);
-                }
-            })
-            .catch(err => console.log('Discord Widget Error'));
         }
 
         function animateValue(obj, start, end, duration, suffix = '') {
@@ -546,14 +512,20 @@
         window.addEventListener('scroll', () => {
             let current = '';
             const sections = document.querySelectorAll('section');
+            
             sections.forEach(section => {
                 if(getComputedStyle(section).display === 'none') return;
                 const sectionTop = section.offsetTop;
-                if (pageYOffset >= (sectionTop - 200)) { current = section.getAttribute('id'); }
+                if (pageYOffset >= (sectionTop - 200)) { 
+                    current = section.getAttribute('id');
+                }
             });
+
             document.querySelectorAll('.nav-links a').forEach(li => {
                 li.classList.remove('active');
-                if (li.id === `link-${current}`) { li.classList.add('active'); }
+                if (li.id === `link-${current}`) {
+                    li.classList.add('active');
+                }
             });
         });
 
@@ -572,6 +544,7 @@
         // --- ANTI SPAM FORM SUBMIT ---
         function submitForm(e) {
             e.preventDefault();
+            
             const lastSubmit = localStorage.getItem('lastAppSubmit');
             const cooldownTime = 30 * 60 * 1000; 
             const now = Date.now();
@@ -642,6 +615,41 @@
             }).catch(() => localStorage.removeItem('discord_token'));
         }
 
+        // --- FETCH REAL DATA (Players & Discord) ---
+        function fetchStats() {
+            let totalPlayers = 0;
+
+            // 1. FiveM Players
+            if(SERVER_CONFIG.fivem_code !== 'SOON') {
+                fetch(`https://servers-frontend.fivem.net/api/servers/single/${SERVER_CONFIG.fivem_code}`)
+                .then(res => res.json())
+                .then(data => {
+                    if(data && data.Data) {
+                        const players = data.Data.clients;
+                        const maxPlayers = data.Data.sv_maxclients;
+                        totalPlayers = players;
+                        document.getElementById('pCount').innerHTML = `${players}<span style="font-size:1.5rem; color:#888;">/${maxPlayers}</span>`;
+                        
+                        // "Smart" Police Simulation: ~1 mentas per 8 žaidėjus
+                        const estimatedCops = Math.floor(totalPlayers / 8) + Math.floor(Math.random() * 2);
+                        const finalCops = estimatedCops > 0 ? estimatedCops : 0;
+                        animateValue(document.getElementById('pCops'), 0, finalCops, 2000);
+                    }
+                })
+                .catch(err => console.log('FiveM Offline'));
+            }
+
+            // 2. Discord Members (Widget)
+            fetch(`https://discord.com/api/guilds/${SERVER_CONFIG.discord_server_id}/widget.json`)
+            .then(res => res.json())
+            .then(data => {
+                if(data.presence_count) {
+                    animateValue(document.getElementById('pDiscord'), 0, data.presence_count, 2000);
+                }
+            })
+            .catch(err => console.log('Discord Widget Error'));
+        }
+
         window.onload = () => {
             setTimeout(() => { document.getElementById('preloader').classList.add('hidden'); }, 1500);
             createParticles(); initTilt(); initDashboard();
@@ -650,24 +658,28 @@
             const token = new URLSearchParams(window.location.hash.slice(1)).get('access_token') || localStorage.getItem('discord_token');
             if(token) { localStorage.setItem('discord_token', token); if(window.location.hash) window.history.replaceState({}, document.title, "/"); fetchDiscordUser(token); }
             
-            // Startuojam su nuliniais, kol fetchas neįvyko
             const pCount = document.getElementById('pCount');
-            const pPing = document.getElementById('pPing');
+            const pCops = document.getElementById('pCops');
             const pDiscord = document.getElementById('pDiscord');
             
             pCount.innerHTML = '0<span style="font-size:1.5rem; color:#888;">/128</span>';
-            pPing.innerHTML = '0<span style="font-size:1.5rem; color:#888;">ms</span>';
+            pCops.innerHTML = '0';
+            pDiscord.innerHTML = '0';
             
-            // Jei nėra ID, rodom fake duomenis
+            // Jei serveris dar "SOON", naudojam atsitiktinę simuliaciją
             if(SERVER_CONFIG.fivem_code === 'SOON') {
                 const randCount = 60 + Math.floor(Math.random() * 15);
+                const randCops = Math.floor(randCount / 10) + Math.floor(Math.random() * 3); // Apie 6-9 mentus
+                const randDiscord = 1420 + Math.floor(Math.random() * 50);
+                
                 setTimeout(() => {
                     animateValue(pCount, 0, randCount, 2000, '<span style="font-size:1.5rem; color:#888;">/128</span>');
-                    animateValue(pPing, 0, 24, 2000, '<span style="font-size:1.5rem; color:#888;">ms</span>');
+                    animateValue(pCops, 0, randCops, 2000);
+                    animateValue(pDiscord, 0, randDiscord, 2000);
                 }, 1600);
             }
 
-            // Paimam tikrus duomenis
+            // Bandyti gauti tikrus duomenis
             fetchStats();
         };
     </script>
