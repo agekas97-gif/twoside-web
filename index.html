@@ -1,394 +1,86 @@
 <!DOCTYPE html>
-<html lang="lt" style="scroll-behavior: smooth;">
+<html lang="lt">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TwoSide RP | Modernus Serveris</title>
-    
-    <link rel="icon" href="logo.png">
-    <meta name="theme-color" content="#0070f3">
-
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagrindinis Puslapis</title>
     <style>
-        :root { --blue: #0070f3; --bg: #050505; --glass: rgba(20, 20, 20, 0.7); --border: rgba(255, 255, 255, 0.08); --success: #00e676; --danger: #ff1744; --gold: #ffd700; }
-        ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: #000; } ::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 10px; }
+        body { font-family: sans-serif; margin: 0; padding: 20px; }
         
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg); color: white; min-height: 100vh; overflow-x: hidden; }
-        
-        #bg-video { position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; filter: brightness(0.3) blur(2px); }
-        
-        /* MODERN CARD STYLE (GLASSMORPHISM) */
-        .glass-card, .rule-card, .vip-card, .admin-app-card {
-            background: var(--glass);
-            backdrop-filter: blur(16px) saturate(180%);
-            -webkit-backdrop-filter: blur(16px) saturate(180%);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 40px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-            margin-bottom: 30px;
+        /* Admin mygtukas viršuje kairėje (Pagal nutylėjimą paslėptas) */
+        #admin-btn {
+            display: none; /* Paslėpta */
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            background-color: #ff9800;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
-        
-        .rule-card:hover, .vip-card:hover {
-            transform: translateY(-5px) scale(1.01);
-            border-color: var(--blue);
-            box-shadow: 0 15px 40px rgba(0, 112, 243, 0.2);
-        }
+        #admin-btn:hover { background-color: #e68a00; }
 
-        /* NAVIGATION */
-        nav { position: fixed; top: 0; width: 100%; padding: 20px 50px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); transition: 0.3s; }
-        .logo { font-weight: 800; font-size: 1.5rem; display: flex; align-items: center; gap: 10px; }
-        .logo span { color: var(--blue); }
-        
-        .nav-links { display: flex; gap: 30px; }
-        .nav-links a { color: #aaa; text-decoration: none; font-weight: 600; position: relative; transition: 0.3s; cursor: pointer; }
-        .nav-links a:hover, .nav-links a.active { color: white; }
-        .nav-links a::after { content: ''; position: absolute; width: 0; height: 2px; bottom: -5px; left: 0; background: var(--blue); transition: 0.3s; }
-        .nav-links a.active::after { width: 100%; }
-
-        /* BUTTONS */
-        .btn-hero { padding: 15px 40px; border-radius: 12px; background: var(--blue); color: white; font-weight: 800; border: none; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 1px; }
-        .btn-hero:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(0, 112, 243, 0.6); }
-        
-        /* ADMIN TOGGLE BUTTON (MODERN) */
-        .toggle-btn {
-            width: 100%; padding: 12px; margin-top: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #ccc; font-weight: 700; font-size: 0.8rem;
-            border-radius: 8px; cursor: pointer; transition: 0.3s;
-            text-transform: uppercase; letter-spacing: 1px;
-            display: flex; justify-content: center; align-items: center; gap: 8px;
-        }
-        .toggle-btn:hover { background: var(--blue); color: white; border-color: var(--blue); box-shadow: 0 0 15px rgba(0, 112, 243, 0.4); }
-
-        /* LOADING & ADMIN STYLES */
-        #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; justify-content: center; align-items: center; transition: 0.5s; flex-direction: column; }
-        #preloader.hidden { opacity: 0; pointer-events: none; }
-        .admin-load-text { color: var(--danger) !important; text-shadow: 0 0 20px red; }
-        .admin-controls { display: none; } /* Paslėpta paprastiems */
-        .admin-controls.visible { display: block; } /* Matoma tik adminams */
-        
-        .dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 30px; }
-        
-        /* INPUTS */
-        input, textarea { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border); padding: 15px; border-radius: 12px; color: white; margin-bottom: 15px; }
-        input:focus, textarea:focus { border-color: var(--blue); outline: none; }
-        
-        /* ADMIN PANEL LAYOUT */
-        .admin-layout { display: flex; gap: 30px; min-height: 400px; }
-        .admin-sidebar { width: 200px; border-right: 1px solid var(--border); }
-        .admin-nav-btn { padding: 15px; cursor: pointer; color: #aaa; transition: 0.3s; border-radius: 8px; font-weight: 600; display:flex; align-items:center; gap:10px;}
-        .admin-nav-btn.active, .admin-nav-btn:hover { background: rgba(0, 112, 243, 0.15); color: var(--blue); }
-        
-        .admin-app-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 15px; }
-        .admin-app-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .admin-answer-box { background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; }
-        .admin-label { font-size: 0.7rem; color: #888; text-transform: uppercase; font-weight: bold; }
-        
-        /* MODAL */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-        .modal-overlay.open { display: flex; }
-        .modal-content { background: #111; padding: 40px; border-radius: 24px; width: 90%; max-width: 600px; border: 1px solid var(--blue); }
-
-        @media (max-width: 768px) {
-            nav { flex-direction: column; height: auto; padding: 20px; }
-            .admin-layout { flex-direction: column; }
-            .admin-sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+        /* Paprastas prisijungimo mygtukas apačioje */
+        #login-btn {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            background: #333;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 4px;
         }
     </style>
 </head>
 <body>
 
-    <div id="preloader">
-        <h1 style="font-size: 3rem; font-weight: 900;" id="loaderText">TWOSIDE<span style="color:var(--blue)">.LT</span></h1>
-    </div>
+    <a href="admin.html" id="admin-btn">⚙️ Admin Panel</a>
 
-    <video autoplay muted loop playsinline id="bg-video">
-        <source src="https://static.videezy.com/system/resources/previews/000/042/179/original/Traffic_lights_timelapse.mp4" type="video/mp4">
-    </video>
+    <h1 style="text-align: center; margin-top: 50px;">Sveiki atvykę į projektą!</h1>
+    <p style="text-align: center;">Čia tavo pagrindinės svetainės turinys...</p>
 
-    <nav>
-        <div class="logo">TWOSIDE<span>.LT</span></div>
-        <div class="nav-links">
-            <a onclick="scrollToSection('home')" id="link-home" class="active">PAGRINDINIS</a>
-            <a onclick="scrollToSection('about')" id="link-about">APRAŠYMAS</a>
-            <a onclick="scrollToSection('rules')" id="link-rules">TAISYKLĖS</a>
-        </div>
-        <button id="discord-btn" class="btn-hero" onclick="loginWithDiscord()" style="padding: 10px 20px; font-size: 0.9rem;">
-            <i class="fab fa-discord"></i> PRISIJUNGTI
-        </button>
-        <div id="user-profile" style="display:none; align-items:center; gap:10px;">
-            <img id="user-avatar" src="" style="width:40px; border-radius:50%; border:2px solid var(--blue);">
-            <span id="user-name" style="font-weight:bold;"></span>
-        </div>
-    </nav>
-
-    <div class="main-wrapper" style="max-width: 1200px; margin: 0 auto; padding: 120px 20px;">
-        
-        <section id="dashboard" style="display:none;">
-            <div class="glass-card" id="dash-card">
-                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;">
-                    <div>
-                        <h2 id="dash-welcome" style="margin:0; font-size:2.5rem;">Sveikas!</h2>
-                        <p style="color:#888;">Tavo ID: <span id="dash-id" style="color:white; font-family:monospace;"></span></p>
-                    </div>
-                    <button onclick="logout()" class="toggle-btn" style="background:rgba(220,53,69,0.2); color:#ff4444; border-color:#ff4444; width:auto;">ATSIJUNGTI</button>
-                </div>
-            </div>
-
-            <div id="admin-area" class="glass-card" style="display:none; border-top: 2px solid var(--danger);">
-                <h2 style="color:var(--danger); margin-bottom:20px;"><i class="fas fa-shield-alt"></i> ADMIN VALDYMO PULTAS</h2>
-                <div class="admin-layout">
-                    <div class="admin-sidebar">
-                        <div class="admin-nav-btn active" onclick="switchTab('apps')"><i class="fas fa-list"></i> Anketos</div>
-                        <div class="admin-nav-btn" onclick="switchTab('actions')"><i class="fas fa-cogs"></i> Veiksmai</div>
-                    </div>
-                    <div class="admin-content">
-                        <div id="tab-apps"><div id="app-list"><p style="color:#666;">Kraunamos anketos...</p></div></div>
-                        <div id="tab-actions" style="display:none;">
-                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
-                                <div class="glass-card" style="padding:20px; text-align:center; cursor:pointer;" onclick="alert('Cache išvalytas!')">
-                                    <i class="fas fa-broom" style="font-size:2rem; margin-bottom:10px;"></i>
-                                    <h4>Išvalyti Cache</h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="wl-card" class="glass-card" style="border-top: 2px solid var(--blue);">
-                <h3 style="margin-bottom:10px;">WHITELIST STATUSAS</h3>
-                <p id="wl-status-text" style="color:#ccc; margin-bottom:20px;">Tikrinama...</p>
-                <button id="btn-wl-apply" class="btn-hero" onclick="openModal()" style="display:none;">PILDYTI ANKETĄ</button>
-            </div>
-
-            <div class="dash-grid">
-                <div class="rule-card">
-                    <div style="text-align:center;">
-                        <i class="fas fa-shield-alt"></i>
-                        <h4>Policija</h4>
-                        <p id="status-policija" style="color:var(--success);">ATIDARYTA</p>
-                    </div>
-                    <div class="admin-controls" id="adm-policija">
-                        <button class="toggle-btn" onclick="toggleJob('policija')">KEISTI STATUSĄ</button>
-                    </div>
-                </div>
-                <div class="rule-card">
-                    <div style="text-align:center;">
-                        <i class="fas fa-user-md"></i>
-                        <h4>Medikai</h4>
-                        <p id="status-medikai" style="color:var(--danger);">UŽDARYTA</p>
-                    </div>
-                    <div class="admin-controls" id="adm-medikai">
-                        <button class="toggle-btn" onclick="toggleJob('medikai')">KEISTI STATUSĄ</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="home">
-            <div class="glass-card" style="padding: 80px 40px; text-align: left;">
-                <h1 style="font-weight:900;">TWOSIDE <span class="blue-gradient">ROLEPLAY</span></h1>
-                <p style="font-size:1.2rem; color:#aaa; max-width:600px; margin-bottom:30px;">
-                    Moderniausias serveris Lietuvoje. Prisijunk ir kurk savo istoriją.
-                </p>
-                <button class="btn-hero" onclick="copyIP()"><i class="fas fa-play"></i> PRISIJUNGTI</button>
-            </div>
-        </section>
-
-        <section id="about" style="margin-top:100px;">
-            <div class="glass-card"><h2>APIE <span class="blue-gradient">PROJEKTĄ</span></h2></div>
-        </section>
-
-        <section id="rules" style="margin-top:100px;">
-            <div class="glass-card"><h2>SERVERIO <span class="blue-gradient">TAISYKLĖS</span></h2></div>
-        </section>
-
-    </div>
-
-    <div class="modal-overlay" id="appModal">
-        <div class="modal-content">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                <h2>Anketa</h2>
-                <i class="fas fa-times" style="cursor:pointer;" onclick="closeModal()"></i>
-            </div>
-            <form onsubmit="submitForm(event)">
-                <label>1. Kiek tau metų?</label>
-                <input type="number" id="q1" required>
-                <label>2. RP Patirtis?</label>
-                <textarea id="q2" required></textarea>
-                <label>3. Kas yra NLR?</label>
-                <textarea id="q3" required></textarea>
-                <label>4. Kas yra FEARRP?</label>
-                <textarea id="q4" required></textarea>
-                <label>5. Kodėl mes?</label>
-                <textarea id="q5" required></textarea>
-                <button type="submit" class="btn-hero" style="width:100%;">SIŲSTI</button>
-            </form>
-        </div>
-    </div>
+    <button id="login-btn" onclick="askForId()">Prisijungti (Darbuotojams)</button>
 
     <script>
-        const API_URL = "https://twoside-final-v3.loca.lt";
-        const CLIENT_ID = "1470568120921100423"; 
-        const REDIRECT_URI = "https://twoside.lt";
+        // TAVO BACKEND URL (Pakeisk į tikrąjį, kai įkelsi serverį, pvz. https://tavo-botas.onrender.com)
+        const BACKEND_URL = 'http://localhost:3000';
 
-        let currentUser = null;
-
-        // SCROLL SPY
-        window.addEventListener('scroll', () => {
-            let current = "";
-            document.querySelectorAll("section").forEach(section => {
-                const sectionTop = section.offsetTop;
-                if (pageYOffset >= sectionTop - 250) current = section.getAttribute("id");
-            });
-            document.querySelectorAll(".nav-links a").forEach(li => {
-                li.classList.remove("active");
-                if (li.id === `link-${current}`) li.classList.add("active");
-            });
-        });
-
-        function scrollToSection(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
-        function loginWithDiscord() { window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=token&scope=identify`; }
-        function logout() { localStorage.removeItem('token'); window.location.reload(); }
-        function openModal() { document.getElementById('appModal').classList.add('open'); }
-        function closeModal() { document.getElementById('appModal').classList.remove('open'); }
-        function copyIP() { navigator.clipboard.writeText('connect cfx.re/join/3zv39z'); alert("IP Nukopijuotas!"); }
-
-        function switchTab(tab) {
-            document.querySelectorAll('.admin-content > div').forEach(d => d.style.display='none');
-            document.getElementById(`tab-${tab}`).style.display='block';
-            document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-        }
-
-        async function init() {
-            const fragment = new URLSearchParams(window.location.hash.slice(1));
-            let token = fragment.get('access_token') || localStorage.getItem('token');
-
-            if (token) {
-                localStorage.setItem('token', token);
-                try {
-                    const userRes = await fetch('https://discord.com/api/users/@me', { headers: { authorization: `Bearer ${token}` } });
-                    const user = await userRes.json();
-                    currentUser = user;
-
-                    // UI Updates
-                    document.getElementById('discord-btn').style.display = 'none';
-                    document.getElementById('user-profile').style.display = 'flex';
-                    document.getElementById('user-name').innerText = user.username;
-                    document.getElementById('user-avatar').src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
-                    document.getElementById('dashboard').style.display = 'block';
-                    document.getElementById('dash-welcome').innerText = `Sveikas, ${user.username}!`;
-                    document.getElementById('dash-id').innerText = user.id;
-
-                    // Check Status from VPS
-                    const statusRes = await fetch(`${API_URL}/check-status?id=${user.id}`);
-                    const status = await statusRes.json();
-
-                    if (status.isAdmin) {
-                        document.getElementById('loaderText').innerHTML = "TWOSIDE <span style='color:red'>ADMIN</span>";
-                        document.getElementById('admin-area').style.display = 'block';
-                        document.querySelectorAll('.admin-controls').forEach(el => el.classList.add('visible'));
-                        document.getElementById('dash-card').classList.add('admin-mode-card');
-                        loadApps(user.id);
-                    }
-
-                    const wlCard = document.getElementById('wl-card');
-                    const wlText = document.getElementById('wl-status-text');
-                    const wlBtn = document.getElementById('btn-wl-apply');
-
-                    if (status.isWhitelisted) {
-                        wlCard.style.borderTop = "2px solid #00e676";
-                        wlText.innerHTML = "✅ <b style='color:#00e676'>JŪS TURITE WHITELIST</b>";
-                    } else if (status.cooldown) {
-                        wlCard.style.borderTop = "2px solid #ff1744";
-                        wlText.innerHTML = `⛔ <b>ATMESTA.</b> Bandykite už ${status.timeLeft} val.`;
-                    } else {
-                        wlText.innerText = "Norėdamas žaisti, privalai užpildyti anketą.";
-                        wlBtn.style.display = "inline-block";
-                    }
-
-                } catch (e) { console.error(e); }
-            }
-            setTimeout(() => document.getElementById('preloader').classList.add('hidden'), 1000);
-        }
-
-        async function submitForm(e) {
-            e.preventDefault();
-            const btn = e.target.querySelector('button');
-            btn.innerText = "Siunčiama...";
-            
-            const payload = {
-                discordId: currentUser.id,
-                discordName: currentUser.username,
-                answers: {
-                    age: document.getElementById('q1').value,
-                    history: document.getElementById('q2').value,
-                    nlr: document.getElementById('q3').value,
-                    fearrp: document.getElementById('q4').value,
-                    why: document.getElementById('q5').value
-                }
-            };
+        // Funkcija, kuri patikrina, ar išsaugotas ID turi rolę
+        async function checkRole() {
+            const myId = localStorage.getItem('discordId');
+            if (!myId) return; // Jei nėra ID, nieko nedarom
 
             try {
-                const res = await fetch(`${API_URL}/submit-app`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(payload)
-                });
-                if (res.ok) {
-                    alert("Išsiųsta!");
-                    window.location.reload();
+                const res = await fetch(`${BACKEND_URL}/check-teamlead?id=${myId}`);
+                const data = await res.json();
+
+                if (data.isLead) {
+                    // Jei jis Team Lead, parodome mygtuką ir paslepiame login mygtuką
+                    document.getElementById('admin-btn').style.display = 'block';
+                    document.getElementById('login-btn').style.display = 'none';
                 }
-            } catch (e) { alert("Klaida! Patikrink ar serveris veikia."); }
+            } catch (e) {
+                console.error("Klaida tikrinant rolę:", e);
+            }
         }
 
-        async function loadApps(adminId) {
-            const res = await fetch(`${API_URL}/get-apps?adminId=${adminId}`);
-            const apps = await res.json();
-            const list = document.getElementById('app-list');
-            
-            if(apps.length === 0) { list.innerHTML = "Nėra naujų anketų."; return; }
-
-            list.innerHTML = apps.map(app => `
-                <div class="admin-app-card" id="app-${app.id}">
-                    <div class="admin-app-header">
-                        <h3>${app.discordName}</h3>
-                        <small>${new Date(parseInt(app.id)).toLocaleTimeString()}</small>
-                    </div>
-                    <div class="admin-app-grid">
-                        <div class="admin-answer-box"><span class="admin-label">Amžius</span>${app.answers.age}</div>
-                        <div class="admin-answer-box"><span class="admin-label">Istorija</span>${app.answers.history}</div>
-                        <div class="admin-answer-box"><span class="admin-label">NLR</span>${app.answers.nlr}</div>
-                        <div class="admin-answer-box"><span class="admin-label">FearRP</span>${app.answers.fearrp}</div>
-                    </div>
-                    <div class="admin-actions">
-                        <button class="toggle-btn" style="background:#00e676;" onclick="handle('${app.id}', 'approve')">PRIIMTI</button>
-                        <button class="toggle-btn" style="background:#ff1744;" onclick="handle('${app.id}', 'reject')">ATMESTI</button>
-                    </div>
-                </div>
-            `).join('');
+        // Funkcija paprašyti ID
+        function askForId() {
+            const id = prompt("Įveskite savo Discord ID (Skaičiai):");
+            if (id) {
+                localStorage.setItem('discordId', id); // Išsaugome naršyklėje
+                checkRole(); // Patikriname rolę iškart
+                alert("ID išsaugotas! Jei turite teises, viršuje atsiras mygtukas.");
+            }
         }
 
-        async function handle(id, action) {
-            const res = await fetch(`${API_URL}/handle-app`, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ adminId: currentUser.id, appId: id, action })
-            });
-            const data = await res.json();
-            alert(data.msg);
-            if(data.success) document.getElementById(`app-${id}`).remove();
-        }
-
-        init();
+        // Kai puslapis užsikrauna, automatiškai patikriname, ar jau turime išsaugotą ID
+        window.onload = checkRole;
     </script>
 </body>
 </html>
