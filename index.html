@@ -5,10 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>TwoSide RP | Modernus Serveris</title>
     
-    <link rel="icon" href="https://media.discordapp.net/attachments/1353696356639969400/1366056131499135087/3294i2394819-removebg-preview.png?ex=698b3e69&is=6989ece9&hm=0d7d3c0a378925555567c83eb67170902178b6bb504a07134a8413826a3d959a&=&format=webp&quality=lossless">
+    <link rel="icon" href="https://media.discordapp.net/attachments/1353696356639969400/1366056131499135087/3294i2394819-removebg-preview.png">
     <meta property="og:title" content="TwoSide RP | Modernus Serveris">
     <meta property="og:description" content="Prisijunk prie sparčiausiai augančios bendruomenės Lietuvoje.">
-    <meta property="og:image" content="https://media.discordapp.net/attachments/1353696356639969400/1366056131499135087/3294i2394819-removebg-preview.png?ex=698b3e69&is=6989ece9&hm=0d7d3c0a378925555567c83eb67170902178b6bb504a07134a8413826a3d959a&=&format=webp&quality=lossless">
     <meta name="theme-color" content="#0070f3">
 
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -278,8 +277,9 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, push, set, onValue, get, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // --- KONFIGŪRACIJA ---
-        const replitURL = "https://node-server--agekas97.replit.app"; 
+        // --- KONFIGŪRACIJA (VPS IP) ---
+        // ⚠️ SVARBU: Įrašyk savo VPS IP adresą čia!
+        const replitURL = "http://TAVO_VPS_IP"; 
 
         const firebaseConfig = {
             apiKey: "AIzaSyCQXr6AJSfWDvQAAsIbSSHVhznbKkZ_-sQ",
@@ -408,7 +408,6 @@
             if(element) element.scrollIntoView({ behavior: 'smooth', block: 'start' });
         };
 
-        // --- ATNAUJINTA DISCORD USER FUNKCIJA SU REPLIT PATIKRA ---
         function fetchDiscordUser(token) {
             fetch('https://discord.com/api/users/@me', { headers: { authorization: `Bearer ${token}` } })
             .then(res => res.ok ? res.json() : Promise.reject())
@@ -423,17 +422,18 @@
                 document.getElementById('dash-id').innerText = `ID: ${user.id}`; 
                 document.getElementById('dash-avatar').src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
                 
-                // Kreipiamės į Replit patikrinti Admin teises
+                // --- VPS CHECK ---
                 try {
+                    // Siunčiame užklausą į tavo VPS
                     const response = await fetch(`${replitURL}/check-admin?id=${user.id}`);
                     const data = await response.json();
 
                     if (data.isAdmin === true) {
                         document.querySelectorAll('.admin-controls').forEach(el => el.classList.add('visible'));
-                        console.log("Adminas atpažintas per Replit!");
+                        console.log("Adminas atpažintas per VPS!");
                     }
                 } catch (e) {
-                    console.error("Klaida susisiekiant su Replit serveriu:", e);
+                    console.error("Klaida susisiekiant su VPS:", e);
                 }
 
             }).catch(() => localStorage.removeItem('discord_token'));
