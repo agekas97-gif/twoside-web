@@ -3,17 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
     <title>TwoSide RP | Modernus Serveris</title>
     
     <link rel="icon" href="https://media.discordapp.net/attachments/1353696356639969400/1366056131499135087/3294i2394819-removebg-preview.png?ex=698b3e69&is=6989ece9&hm=0d7d3c0a378925555567c83eb67170902178b6bb504a07134a8413826a3d959a&=&format=webp&quality=lossless">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
     <meta property="og:title" content="TwoSide RP | Modernus Serveris">
     <meta property="og:description" content="Prisijunk prie sparčiausiai augančios bendruomenės Lietuvoje.">
     <meta property="og:image" content="https://media.discordapp.net/attachments/1353696356639969400/1366056131499135087/3294i2394819-removebg-preview.png?ex=698b3e69&is=6989ece9&hm=0d7d3c0a378925555567c83eb67170902178b6bb504a07134a8413826a3d959a&=&format=webp&quality=lossless">
     <meta name="theme-color" content="#0070f3">
+
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
         :root { --blue: #0070f3; --bg: #050505; --card-bg: rgba(12, 12, 12, 0.85); --text-main: #ffffff; --text-dim: #999999; --border: rgba(255, 255, 255, 0.1); --success: #157a46; --danger: #dc3545; --gold: #ffc107; --silver: #c0c0c0; --bronze: #cd7f32; --police: #3498db; }
@@ -93,6 +92,13 @@
         #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
         @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 80px; opacity: 1;} }
         @keyframes fadeout { from {bottom: 80px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+        
+        /* ADMIN CONTROLS */
+        .admin-controls { display: none; margin-top: 10px; gap: 10px; }
+        .admin-controls.visible { display: flex; }
+        .toggle-btn { flex: 1; padding: 5px; font-size: 0.8rem; font-weight: bold; border-radius: 5px; border: 1px solid var(--border); background: rgba(255,255,255,0.1); color: #fff; cursor: pointer; }
+        .toggle-btn:hover { background: rgba(255,255,255,0.2); }
+
         @media (max-width: 1200px) { .main-wrapper { max-width: 90%; } }
         @media (max-width: 768px) {
             nav { position: relative; height: auto; padding: 20px; flex-direction: column; gap: 20px; background: var(--bg); border-bottom: 1px solid var(--border); }
@@ -166,14 +172,17 @@
                     <div id="card-policija" class="rule-card">
                         <div><i class="fas fa-shield-alt"></i><h4>Policijos Atranka</h4><p>Statusas: <span id="text-policija" class="status-text"></span></p></div>
                         <button id="btn-policija" class="apply-btn">KRAUNAMA...</button>
+                        <div id="admin-policija" class="admin-controls"><button class="toggle-btn" onclick="toggleAppStatus('policija')">KEISTI STATUSĄ</button></div>
                     </div>
                     <div id="card-medikai" class="rule-card">
                         <div><i class="fas fa-ambulance"></i><h4>Medikų Atranka</h4><p>Statusas: <span id="text-medikai" class="status-text"></span></p></div>
                         <button id="btn-medikai" class="apply-btn">KRAUNAMA...</button>
+                        <div id="admin-medikai" class="admin-controls"><button class="toggle-btn" onclick="toggleAppStatus('medikai')">KEISTI STATUSĄ</button></div>
                     </div>
                     <div id="card-mechanikai" class="rule-card">
                         <div><i class="fas fa-wrench"></i><h4>Mechanikų Atranka</h4><p>Statusas: <span id="text-mechanikai" class="status-text"></span></p></div>
                         <button id="btn-mechanikai" class="apply-btn">KRAUNAMA...</button>
+                        <div id="admin-mechanikai" class="admin-controls"><button class="toggle-btn" onclick="toggleAppStatus('mechanikai')">KEISTI STATUSĄ</button></div>
                     </div>
                     <div class="rule-card" style="border-top: 4px solid var(--gold);">
                         <div><i class="fas fa-crown" style="color: var(--gold);"></i><h4>VIP Narystė</h4><p>Norėdami įsigyti VIP statusą, kreipkitės Discord Ticket.</p></div>
@@ -267,7 +276,10 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+        import { getDatabase, ref, push, set, onValue, get, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        // --- ĮRAŠYK SAVO DUOMENIS ČIA ---
+        const ADMIN_IDS = ["771407889087725578", "Kitas_Admin_ID_Jei_Reikia"]; // TAVO DISCORD ID ČIA
 
         const firebaseConfig = {
             apiKey: "AIzaSyCQXr6AJSfWDvQAAsIbSSHVhznbKkZ_-sQ",
@@ -278,20 +290,49 @@
             messagingSenderId: "639976729105",
             appId: "1:639976729105:web:443d951377221ccfc01fb0"
         };
+        // --------------------------------
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
+
+        // Globalūs kintamieji valdymui
+        window.db = db;
+        window.ref = ref;
+        window.update = update;
+        window.get = get;
 
         window.SERVER_CONFIG = {
             fivem_code: '3zv39z', 
             discord_server_id: '1380526027331207271', 
             server_ip: 'connect cfx.re/join/3zv39z',
-            status: { policija: false, medikai: false, mechanikai: false },
+            status: { policija: true, medikai: false, mechanikai: false }, // Bus perrašyta iš DB
             webhook: 'https://discord.com/api/webhooks/1470572886614999092/oINMatnjGC7OVERaD0wieIZIErb7x3MBpnKzC9SjabTqMEWNB_rhiGOHNldTB9c4AIlp',
             client_id: '1470568120921100423',
             redirect: 'https://twoside.lt'
         };
 
+        // --- REAL-TIME STATUS LISTENER ---
+        const statusRef = ref(db, 'serverStatus');
+        onValue(statusRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                window.SERVER_CONFIG.status = data;
+                initDashboard(); // Atnaujinam UI visiems
+            }
+        });
+
+        // --- ADMIN FUNKCIJOS ---
+        window.toggleAppStatus = async function(job) {
+            const currentRef = ref(db, `serverStatus/${job}`);
+            const snapshot = await get(currentRef);
+            const currentVal = snapshot.val();
+            const updates = {};
+            updates[`serverStatus/${job}`] = !currentVal;
+            update(ref(db), updates);
+            alert(`${job} statusas pakeistas!`);
+        };
+
+        // --- STANDARTINĖS FUNKCIJOS ---
         window.submitForm = function(e) {
             e.preventDefault();
             const lastSubmit = localStorage.getItem('lastAppSubmit');
@@ -346,14 +387,8 @@
                 window.closeApp(); 
                 document.getElementById('applicationForm').reset(); 
             })
-            .catch((error) => {
-                console.error("Klaida:", error);
-                alert('Įvyko klaida saugant duomenis.');
-            })
-            .finally(() => { 
-                btn.innerText = originalText; 
-                btn.disabled = false; 
-            });
+            .catch((error) => { console.error("Klaida:", error); alert('Įvyko klaida saugant duomenis.'); })
+            .finally(() => { btn.innerText = originalText; btn.disabled = false; });
         };
 
         window.openApp = (type) => { document.getElementById('modalTitle').innerText = type + ' Anketa'; document.getElementById('appType').value = type; document.getElementById('appModal').classList.add('open'); };
@@ -384,6 +419,12 @@
                 document.getElementById('user-name').innerText = user.username; document.getElementById('user-avatar').src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
                 document.getElementById('dashboard').style.display = 'block'; document.getElementById('dash-welcome').innerText = `Sveikas, ${user.username}! 👋`;
                 document.getElementById('dash-id').innerText = `ID: ${user.id}`; document.getElementById('dash-avatar').src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
+                
+                // ADMIN CHECK
+                if(ADMIN_IDS.includes(user.id)) {
+                    document.querySelectorAll('.admin-controls').forEach(el => el.classList.add('visible'));
+                }
+
             }).catch(() => localStorage.removeItem('discord_token'));
         }
 
@@ -498,3 +539,4 @@
     </script>
 </body>
 </html>
+
