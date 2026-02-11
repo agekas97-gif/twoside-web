@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>TwoSide RP | Modernus Serveris</title>
     
-    <link rel="icon" href="3294i2394819-removebg-preview.png">
+    <link rel="icon" href="logo.png">
     <meta property="og:title" content="TwoSide RP | Modernus Serveris">
     <meta name="theme-color" content="#0070f3">
 
@@ -22,11 +22,12 @@
         .particle { position: absolute; background: rgba(255, 255, 255, 0.5); border-radius: 50%; animation: float 20s infinite linear; }
         @keyframes float { 0% { transform: translateY(0) translateX(0); opacity: 0; } 100% { transform: translateY(-100vh) translateX(50px); opacity: 0; } }
         
-        /* LOADING */
         #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s; flex-direction: column; }
         #preloader.hidden { opacity: 0; visibility: hidden; }
         .loader-text { font-size: 2rem; font-weight: 900; letter-spacing: 5px; animation: blink 1.5s infinite; transition: 0.3s; }
         .loader-text span { color: var(--blue); }
+        .admin-load-text { color: #ff0000 !important; text-shadow: 0 0 20px red; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
         
         nav { position: fixed; top: 0; width: 100%; padding: 0 50px; display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(15px); z-index: 1000; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.6); height: 90px; transition: 0.3s; }
         .logo { font-weight: 800; font-size: 1.8rem; display: flex; align-items: center; gap: 15px; color: white; }
@@ -252,7 +253,7 @@
                 <h3 style="margin-bottom: 10px; display:flex; align-items:center; gap:10px;"><i class="fas fa-id-card" style="color: var(--blue);"></i> WHITELIST STATUSAS</h3>
                 <p id="wl-status-text" style="color: var(--text-dim); margin-bottom: 20px; font-size: 1.1rem;">Norėdamas žaisti serveryje, privalai užpildyti anketą.</p>
                 <div id="wl-action-container">
-                    <button id="btn-wl-apply" class="apply-btn btn-open" onclick="openWhitelistApp()" style="max-width: 300px;">PILDYTI ANKETĄ</button>
+                    <button id="btn-wl-apply" class="btn-hero" onclick="openWhitelistApp()" style="max-width: 300px;">PILDYTI ANKETĄ</button>
                 </div>
             </div>
 
@@ -435,9 +436,14 @@
 
         // --- NAUJA: ADMIN TAB SISTEMA ---
         window.switchAdminTab = function(tabId) {
+            // Paslepiam visus tabus
             document.querySelectorAll('.admin-content > div').forEach(div => div.style.display = 'none');
+            // Nuimam active nuo visų mygtukų
             document.querySelectorAll('.admin-nav-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // Parodom pasirinktą
             document.getElementById(`tab-${tabId}`).style.display = 'block';
+            // Pridedam active paspaustam mygtukui
             event.currentTarget.classList.add('active');
         };
 
@@ -556,45 +562,50 @@
                 document.getElementById('dash-id').innerText = `ID: ${user.id}`; 
                 document.getElementById('dash-avatar').src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
                 
-                // NAUJAS PATIKRINIMAS (Statusas)
                 try {
-                    const statusRes = await fetch(`${replitURL}/check-status?id=${user.id}`);
-                    const status = await statusRes.json();
+                    const response = await fetch(`${replitURL}/check-status?id=${user.id}`);
+                    const data = await response.json();
 
                     // 1. ADMIN CHECK
-                    if (status.isAdmin === true) {
-                        document.getElementById('loaderText').innerHTML = "TWOSIDE <span style='color:red;'>ADMIN</span>";
-                        document.getElementById('loaderText').classList.add('admin-load-text');
+                    if (data.isAdmin === true) {
+                        const loaderText = document.getElementById('loaderText');
+                        loaderText.innerHTML = "TWOSIDE <span style='color:red;'>ADMIN</span>";
+                        loaderText.classList.add('admin-load-text');
                         
                         document.querySelectorAll('.admin-controls').forEach(el => el.classList.add('visible'));
-                        document.getElementById('dash-card').classList.add('admin-mode-card');
-                        document.getElementById('admin-area').style.display = 'block'; // Visada rodoma adminams
+                        const dashCard = document.getElementById('dash-card');
+                        dashCard.classList.add('admin-mode-card');
+                        
+                        // Rodyti Admin Panelę
+                        document.getElementById('admin-area').style.display = 'block';
                         
                         loadAdminPanel(user.id);
+                        
+                        setTimeout(() => { document.getElementById('preloader').classList.add('hidden'); }, 1500);
+                    } else {
+                        document.getElementById('preloader').classList.add('hidden');
                     }
 
-                    // 2. WHITELIST UI CHECK
+                    // 2. WHITELIST STATUS CHECK
                     const wlText = document.getElementById('wl-status-text');
                     const wlBtn = document.getElementById('btn-wl-apply');
                     const wlCard = document.getElementById('wl-card');
 
-                    if (status.isWhitelisted) {
+                    if (data.isWhitelisted) {
                         wlCard.style.borderTop = "2px solid #00ff88";
                         wlText.innerHTML = "✅ <b style='color:#00ff88'>JŪS JAU ESATE WHITELISTED</b>";
                         wlBtn.style.display = 'none';
-                    } else if (status.cooldown) {
+                    } else if (data.cooldown) {
                         wlCard.style.borderTop = "2px solid #dc3545";
-                        wlText.innerHTML = `⛔ <b>JŪSŲ ANKETA ATMESTA.</b><br>Bandykite vėl už: <span style='color:#dc3545'>${status.timeLeft} val.</span>`;
+                        wlText.innerHTML = `⛔ <b>JŪSŲ ANKETA ATMESTA.</b><br>Bandykite vėl už: <span style='color:#dc3545'>${data.timeLeft} val.</span>`;
                         wlBtn.style.display = 'none';
                     } else {
                         // Nieko neturi - leidžiam pildyti
                         wlCard.style.borderTop = "2px solid var(--blue)";
                     }
 
-                    setTimeout(() => document.getElementById('preloader').classList.add('hidden'), 1500);
-
                 } catch (e) {
-                    console.error("Klaida:", e);
+                    console.error("Klaida susisiekiant su VPS:", e);
                     document.getElementById('preloader').classList.add('hidden');
                 }
 
