@@ -7,7 +7,6 @@
     
     <link rel="icon" href="https://media.discordapp.net/attachments/1353696356639969400/1366056131499135087/3294i2394819-removebg-preview.png">
     <meta property="og:title" content="TwoSide RP | Modernus Serveris">
-    <meta property="og:description" content="Prisijunk prie sparčiausiai augančios bendruomenės Lietuvoje.">
     <meta name="theme-color" content="#0070f3">
 
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -50,7 +49,9 @@
         .main-wrapper { display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding-bottom: 100px; width: 100%; max-width: 1400px; margin: 0 auto; padding-top: 0; }
         section { display: block; width: 100%; min-height: 100vh; padding-top: 130px; }
         #dashboard { display: none; }
-        .glass-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 30px; padding: 60px; position: relative; backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); width: 100%; transition: 0.5s; }
+        
+        /* CARD STYLES */
+        .glass-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 30px; padding: 60px; position: relative; backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); width: 100%; transition: 0.5s; margin-bottom: 30px; }
         
         /* ADMIN MODE STYLES */
         .admin-mode-card { border-top: 2px solid red !important; box-shadow: 0 0 30px rgba(255, 0, 0, 0.2) !important; }
@@ -61,7 +62,10 @@
         .typewriter { display: inline-block; overflow: hidden; border-right: .15em solid var(--blue); white-space: nowrap; animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite; }
         @keyframes typing { from { width: 0 } to { width: 100% } }
         @keyframes blink-caret { 50% { border-color: transparent } }
-        .dash-grid, .vip-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 40px; }
+        
+        /* GRID LAYOUT FIX */
+        .dash-grid, .vip-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 20px; }
+        
         .rule-card, .vip-card { background: rgba(20, 20, 20, 0.6); padding: 35px; border-radius: 20px; border: 1px solid var(--border); transition: 0.3s; display: flex; flex-direction: column; min-height: 250px; justify-content: space-between; overflow: hidden; position: relative; }
         .rule-card:hover { border-color: var(--blue); background: rgba(30, 30, 30, 0.8); transform: translateY(-5px); }
         .rule-card i { font-size: 2rem; color: var(--blue); margin-bottom: 15px; }
@@ -189,30 +193,40 @@
                     </div>
                     <button onclick="logout()" style="background: rgba(220, 53, 69, 0.1); color: #dc3545; border: 1px solid #dc3545; padding: 12px 30px; border-radius: 8px; font-weight: 800; transition:0.3s;">ATSIJUNGTI</button>
                 </div>
-                
-                <div style="margin-top: 40px; padding: 20px; background: rgba(255,255,255,0.03); border-radius: 15px; border: 1px solid var(--border);">
-                    <h3 style="margin-bottom: 10px; display:flex; align-items:center; gap:10px;"><i class="fas fa-id-card" style="color: var(--blue);"></i> WHITELIST STATUSAS</h3>
-                    <p id="wl-status-text" style="color: var(--text-dim); margin-bottom: 20px;">Norėdamas žaisti serveryje, privalai užpildyti anketą.</p>
-                    <button id="btn-wl-apply" class="apply-btn btn-open" onclick="openWhitelistApp()">PILDYTI ANKETĄ</button>
-                </div>
+            </div>
 
-                <div id="admin-area" style="display: none; margin-top: 40px; border-top: 1px solid var(--border); padding-top: 30px;">
-                    <h2 style="color: var(--danger); margin-bottom: 20px;"><i class="fas fa-user-shield"></i> ADMIN ZONA: Gautos Anketos</h2>
-                    <div id="applications-list">
-                        <p style="color: #666; text-align: center;">Kraunama...</p>
-                    </div>
-                </div>
+            <div class="glass-card" style="border-top: 2px solid #00ff88; padding: 30px;">
+                <h3 style="margin-bottom: 10px; display:flex; align-items:center; gap:10px;"><i class="fas fa-id-card" style="color: var(--blue);"></i> WHITELIST STATUSAS</h3>
+                <p id="wl-status-text" style="color: var(--text-dim); margin-bottom: 20px; font-size: 1.1rem;">Norėdamas žaisti serveryje, privalai užpildyti anketą.</p>
+                <button id="btn-wl-apply" class="apply-btn btn-open" onclick="openWhitelistApp()" style="max-width: 300px;">PILDYTI ANKETĄ</button>
+            </div>
 
-                <div class="dash-grid" style="margin-top: 40px;">
-                    <div id="card-policija" class="rule-card">
-                        <div><i class="fas fa-shield-alt"></i><h4>Policijos Atranka</h4><p>Statusas: <span id="text-policija" class="status-text"></span></p></div>
-                        <button id="btn-policija" class="apply-btn">KRAUNAMA...</button>
-                        <div id="admin-policija" class="admin-controls"><button class="toggle-btn" onclick="toggleAppStatus('policija')">KEISTI STATUSĄ</button></div>
-                    </div>
-                    <div class="rule-card" style="border-top: 4px solid var(--gold);">
-                        <div><i class="fas fa-crown" style="color: var(--gold);"></i><h4>VIP Narystė</h4><p>Norėdami įsigyti VIP statusą, kreipkitės Discord Ticket.</p></div>
-                        <button class="apply-btn btn-vip" onclick="openVip()">PERŽIŪRĖTI PLANUS</button>
-                    </div>
+            <div id="admin-area" class="glass-card" style="display: none; border-top: 2px solid red;">
+                <h2 style="color: var(--danger); margin-bottom: 20px;"><i class="fas fa-user-shield"></i> ADMIN ZONA: Gautos Anketos</h2>
+                <div id="applications-list">
+                    <p style="color: #666; text-align: center;">Kraunama...</p>
+                </div>
+            </div>
+
+            <div class="dash-grid">
+                <div id="card-policija" class="rule-card">
+                    <div><i class="fas fa-shield-alt"></i><h4>Policijos Atranka</h4><p>Statusas: <span id="text-policija" class="status-text"></span></p></div>
+                    <button id="btn-policija" class="apply-btn">KRAUNAMA...</button>
+                    <div id="admin-policija" class="admin-controls"><button class="toggle-btn" onclick="toggleAppStatus('policija')">KEISTI STATUSĄ</button></div>
+                </div>
+                <div id="card-medikai" class="rule-card">
+                    <div><i class="fas fa-ambulance"></i><h4>Medikų Atranka</h4><p>Statusas: <span id="text-medikai" class="status-text"></span></p></div>
+                    <button id="btn-medikai" class="apply-btn">KRAUNAMA...</button>
+                    <div id="admin-medikai" class="admin-controls"><button class="toggle-btn" onclick="toggleAppStatus('medikai')">KEISTI STATUSĄ</button></div>
+                </div>
+                <div id="card-mechanikai" class="rule-card">
+                    <div><i class="fas fa-wrench"></i><h4>Mechanikų Atranka</h4><p>Statusas: <span id="text-mechanikai" class="status-text"></span></p></div>
+                    <button id="btn-mechanikai" class="apply-btn">KRAUNAMA...</button>
+                    <div id="admin-mechanikai" class="admin-controls"><button class="toggle-btn" onclick="toggleAppStatus('mechanikai')">KEISTI STATUSĄ</button></div>
+                </div>
+                <div class="rule-card" style="border-top: 4px solid var(--gold);">
+                    <div><i class="fas fa-crown" style="color: var(--gold);"></i><h4>VIP Narystė</h4><p>Norėdami įsigyti VIP statusą, kreipkitės Discord Ticket.</p></div>
+                    <button class="apply-btn btn-vip" onclick="openVip()">PERŽIŪRĖTI PLANUS</button>
                 </div>
             </div>
         </section>
