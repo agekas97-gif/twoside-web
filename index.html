@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TwoSide RP | Modernus Serveris</title>
+    <title>TwoSide RP | Valdymo Pultas</title>
     
     <link rel="icon" href="https://media.discordapp.net/attachments/1353696356639969400/1366056131499135087/3294i2394819-removebg-preview.png">
     <meta property="og:title" content="TwoSide RP | Modernus Serveris">
@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <style>
-        :root { --blue: #0070f3; --bg: #050505; --card-bg: rgba(12, 12, 12, 0.90); --text-main: #ffffff; --text-dim: #999999; --border: rgba(255, 255, 255, 0.1); --success: #157a46; --danger: #dc3545; --gold: #ffc107; --silver: #c0c0c0; --bronze: #cd7f32; --police: #3498db; }
+        :root { --blue: #0070f3; --bg: #050505; --card-bg: rgba(12, 12, 12, 0.90); --text-main: #ffffff; --text-dim: #999999; --border: rgba(255, 255, 255, 0.1); --success: #157a46; --danger: #dc3545; --gold: #ffc107; --silver: #c0c0c0; }
         ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: #050505; } ::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 4px; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg); color: var(--text-main); min-height: 100vh; overflow-x: hidden; position: relative; }
@@ -22,7 +22,7 @@
         .particle { position: absolute; background: rgba(255, 255, 255, 0.5); border-radius: 50%; animation: float 20s infinite linear; }
         @keyframes float { 0% { transform: translateY(0) translateX(0); opacity: 0; } 100% { transform: translateY(-100vh) translateX(50px); opacity: 0; } }
         
-        /* LOADING SCREEN */
+        /* LOADING */
         #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s; flex-direction: column; }
         #preloader.hidden { opacity: 0; visibility: hidden; }
         .loader-text { font-size: 2rem; font-weight: 900; letter-spacing: 5px; animation: blink 1.5s infinite; transition: 0.3s; }
@@ -51,8 +51,8 @@
         #dashboard { display: none; }
         
         /* CARD STYLES */
-        .glass-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 30px; padding: 60px; position: relative; backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); width: 100%; transition: 0.5s; margin-bottom: 30px; }
-        .admin-mode-card { border-top: 2px solid red !important; box-shadow: 0 0 40px rgba(255, 0, 0, 0.3) !important; }
+        .glass-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 30px; padding: 40px; position: relative; backdrop-filter: blur(20px); box-shadow: 0 20px 60px rgba(0,0,0,0.5); width: 100%; transition: 0.5s; margin-bottom: 30px; }
+        .admin-mode-card { border-top: 2px solid red !important; box-shadow: 0 0 40px rgba(255, 0, 0, 0.2) !important; }
         .admin-badge { background: red; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; margin-left: 10px; vertical-align: middle; box-shadow: 0 0 10px red; }
         
         h1 { font-size: 5rem; font-weight: 900; line-height: 0.95; margin-bottom: 30px; letter-spacing: -3px; }
@@ -81,6 +81,7 @@
         .live-toast.hide { animation: slideOut 0.5s forwards; }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+        
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 3000; justify-content: center; align-items: flex-start; padding: 20px; overflow-y: auto; opacity: 0; transition: 0.4s; backdrop-filter: blur(10px); }
         .modal-overlay.open { display: flex; opacity: 1; }
         .modal-content { background: #0f0f0f; border: 1px solid var(--border); border-radius: 25px; padding: 50px; width: 100%; max-width: 650px; position: relative; margin: 50px auto; transform: scale(0.95); transition: 0.4s; }
@@ -92,12 +93,43 @@
         textarea.custom-input { min-height: 100px; resize: vertical; }
         .input-label { display: block; margin-bottom: 8px; font-weight: 700; color: #ccc; }
         .submit-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, var(--blue), #0060d0); border: none; border-radius: 12px; color: white; font-weight: 800; cursor: pointer; margin-top: 15px; }
-        .admin-app-card { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; margin-bottom: 20px; border-left: 4px solid var(--blue); }
+        
+        /* ADMIN PANEL NEW STYLES */
+        .admin-layout { display: flex; gap: 30px; height: 100%; min-height: 400px; }
+        .admin-sidebar { width: 250px; border-right: 1px solid var(--border); padding-right: 20px; display: flex; flex-direction: column; gap: 10px; }
+        .admin-content { flex: 1; padding-left: 10px; overflow-y: auto; max-height: 500px; }
+        
+        .admin-nav-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid transparent;
+            padding: 15px;
+            text-align: left;
+            border-radius: 10px;
+            color: #ccc;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 600;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .admin-nav-btn:hover, .admin-nav-btn.active {
+            background: rgba(220, 53, 69, 0.1);
+            color: #ff4444;
+            border-color: #ff4444;
+        }
+        
+        .admin-app-card { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; margin-bottom: 20px; border-left: 4px solid var(--blue); animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
         .admin-app-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .admin-app-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .admin-answer-box { background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; }
         .admin-answer-label { font-size: 0.75rem; text-transform: uppercase; color: var(--text-dim); font-weight: 800; display: block; margin-bottom: 5px; }
         .admin-actions { display: flex; gap: 10px; margin-top: 15px; }
+        
+        .action-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 20px; border-radius: 15px; text-align: center; cursor: pointer; transition: 0.3s; }
+        .action-card:hover { transform: translateY(-5px); border-color: var(--blue); background: rgba(0, 112, 243, 0.1); }
+        .action-card i { font-size: 2rem; color: var(--blue); margin-bottom: 10px; }
+        
         .ticker-wrap { position: fixed; bottom: 0; width: 100%; height: 40px; background: rgba(0,0,0,0.95); border-top: 1px solid var(--border); display: flex; align-items: center; z-index: 2000; }
         .ticker { display: inline-block; white-space: nowrap; animation: ticker 40s linear infinite; }
         .ticker__item { display: inline-block; padding: 0 3rem; color: #fff; font-weight: 600; font-size: 0.9rem; }
@@ -107,33 +139,10 @@
         #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
         @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 80px; opacity: 1;} }
         @keyframes fadeout { from {bottom: 80px; opacity: 1;} to {bottom: 0; opacity: 0;} }
-        
-        /* ADMIN CONTROLS */
-        .admin-controls { display: none; margin-top: 15px; gap: 10px; width: 100%; }
+        .admin-controls { display: none; margin-top: 10px; gap: 10px; }
         .admin-controls.visible { display: flex; }
-        
-        /* NAUJAS MODERNAUS MYGTUKO STILIUS */
-        .toggle-btn {
-            flex: 1;
-            padding: 12px;
-            font-size: 0.75rem;
-            font-weight: 800;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            background: rgba(0, 0, 0, 0.4);
-            color: #ccc;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 5px;
-        }
-        .toggle-btn:hover {
-            background: rgba(0, 112, 243, 0.2);
-            border-color: var(--blue);
-            color: white;
-            box-shadow: 0 0 15px rgba(0, 112, 243, 0.3);
-        }
+        .toggle-btn { flex: 1; padding: 10px; font-size: 0.8rem; font-weight: 800; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.4); color: #ccc; cursor: pointer; transition: 0.3s; text-transform: uppercase; }
+        .toggle-btn:hover { background: rgba(0, 112, 243, 0.2); border-color: var(--blue); color: white; }
 
         @media (max-width: 1200px) { .main-wrapper { max-width: 90%; } }
         @media (max-width: 768px) {
@@ -144,12 +153,11 @@
             section { padding-top: 40px !important; min-height: auto; margin-bottom: 60px; }
             #dashboard { padding-top: 40px !important; }
             .glass-card { padding: 25px; }
-            h1 { font-size: 2.8rem; margin-bottom: 20px; }
+            .admin-layout { flex-direction: column; }
+            .admin-sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
             .dash-grid, .vip-grid, .admin-app-grid { grid-template-columns: 1fr; }
             .stats-row { flex-direction: column; gap: 30px; }
             .stat-box { text-align: center; }
-            .ticker-wrap { height: 35px; }
-            .ticker__item { font-size: 0.75rem; }
             #live-toast-container { bottom: 50px; right: 10px; left: 10px; align-items: center; }
             .btn-hero, #auth-container, #discord-btn { width: 100%; justify-content: center; }
         }
@@ -205,17 +213,68 @@
                 </div>
             </div>
 
+            <div id="admin-area" class="glass-card" style="display: none; border-top: 2px solid #dc3545;">
+                <h2 style="color: #dc3545; margin-bottom: 25px; display:flex; align-items:center; gap:10px;">
+                    <i class="fas fa-shield-alt"></i> ADMIN VALDYMO PULTAS
+                </h2>
+                <div class="admin-layout">
+                    <div class="admin-sidebar">
+                        <div class="admin-nav-btn active" onclick="switchAdminTab('apps')">
+                            <i class="fas fa-clipboard-list"></i> Whitelist Anketos
+                        </div>
+                        <div class="admin-nav-btn" onclick="switchAdminTab('actions')">
+                            <i class="fas fa-bolt"></i> Serverio Veiksmai
+                        </div>
+                        <div class="admin-nav-btn" onclick="switchAdminTab('stats')">
+                            <i class="fas fa-chart-line"></i> Statistika
+                        </div>
+                    </div>
+                    
+                    <div class="admin-content">
+                        <div id="tab-apps">
+                            <h3 style="margin-bottom:15px; color:white;">Gautos Anketos</h3>
+                            <div id="applications-list">
+                                <p style="color:#666;">Kraunama...</p>
+                            </div>
+                        </div>
+
+                        <div id="tab-actions" style="display:none;">
+                            <h3 style="margin-bottom:15px; color:white;">Greitieji Veiksmai</h3>
+                            <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:15px;">
+                                <div class="action-card" onclick="alert('Serveris perkraunamas... (Simuliacija)')">
+                                    <i class="fas fa-redo"></i>
+                                    <h4>Perkrauti Serverį</h4>
+                                </div>
+                                <div class="action-card" onclick="alert('Cache sėkmingai išvalytas!')">
+                                    <i class="fas fa-trash-alt" style="color:#e74c3c;"></i>
+                                    <h4>Išvalyti Cache</h4>
+                                </div>
+                                <div class="action-card" onclick="alert('Pranešimas išsiųstas į Discord!')">
+                                    <i class="fas fa-bullhorn" style="color:#f1c40f;"></i>
+                                    <h4>Skelbti Pranešimą</h4>
+                                </div>
+                                <div class="action-card" onclick="alert('Visi žaidėjai atjungti.')">
+                                    <i class="fas fa-users-slash" style="color:#e74c3c;"></i>
+                                    <h4>Išmesti Visus</h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="tab-stats" style="display:none;">
+                            <h3 style="margin-bottom:15px; color:white;">Serverio Statistika</h3>
+                            <div style="background:rgba(255,255,255,0.05); padding:20px; border-radius:10px;">
+                                <p style="font-size:2rem; font-weight:900; color:var(--blue);">1,420</p>
+                                <p style="color:#888;">Registruotų Vartotojų</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="glass-card" style="border-top: 2px solid #00ff88; padding: 30px;">
                 <h3 style="margin-bottom: 10px; display:flex; align-items:center; gap:10px;"><i class="fas fa-id-card" style="color: var(--blue);"></i> WHITELIST STATUSAS</h3>
                 <p id="wl-status-text" style="color: var(--text-dim); margin-bottom: 20px; font-size: 1.1rem;">Norėdamas žaisti serveryje, privalai užpildyti anketą.</p>
                 <button id="btn-wl-apply" class="apply-btn btn-open" onclick="openWhitelistApp()" style="max-width: 300px;">PILDYTI ANKETĄ</button>
-            </div>
-
-            <div id="admin-area" class="glass-card" style="display: none; border-top: 2px solid red;">
-                <h2 style="color: var(--danger); margin-bottom: 20px;"><i class="fas fa-user-shield"></i> ADMIN ZONA: Gautos Anketos</h2>
-                <div id="applications-list">
-                    <p style="color: #666; text-align: center;">Kraunama...</p>
-                </div>
             </div>
 
             <div class="dash-grid">
@@ -402,6 +461,19 @@
         window.loginWithDiscord = () => { window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${window.SERVER_CONFIG.client_id}&redirect_uri=${encodeURIComponent(window.SERVER_CONFIG.redirect)}&response_type=token&scope=identify`; };
         window.logout = () => { localStorage.removeItem('discord_token'); window.location.href = window.SERVER_CONFIG.redirect; };
         window.showSection = (id) => { const element = document.getElementById(id); if(element) element.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+
+        // --- NAUJA: ADMIN TAB SISTEMA ---
+        window.switchAdminTab = function(tabId) {
+            // Paslepiam visus tabus
+            document.querySelectorAll('.admin-content > div').forEach(div => div.style.display = 'none');
+            // Nuimam active nuo visų mygtukų
+            document.querySelectorAll('.admin-nav-btn').forEach(btn => btn.classList.remove('active'));
+            
+            // Parodom pasirinktą
+            document.getElementById(`tab-${tabId}`).style.display = 'block';
+            // Pridedam active paspaustam mygtukui
+            event.currentTarget.classList.add('active');
+        };
 
         // --- WHITELIST FORMA (SIUNČIA Į VPS) ---
         window.submitWhitelistForm = async function(e) {
